@@ -547,6 +547,7 @@
     let attemptId = 0;
     let lastUserLine = "";
     const heard = { agent: "", prevAgent: "", user: "" };
+    let pendingBooking = null;
 
     // ---------- Passcode lock ----------
     const fromB64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
@@ -689,6 +690,7 @@
     const ASKED = /\b(sound|sounds|right|correct|good|ok|okay)\b[^.?!]*\?\s*$/i;
     const YES = /\b(yes|yep|yeah|yup|yes please|correct|that'?s (right|it)|all good|sounds (good|great|right|perfect)|perfect|spot on|absolutely|sure|too easy)\b/i;
     const NOPE = /(^\W*(no|nah)\b)|\b(wrong|incorrect|not right|not sure|actually|change|instead)\b/i;
+    const LOCKED_IN = /\b(locked (that |it |this |you )?in|booked (that |it |this |you )?in|all booked|text you shortly|send you a text|text you to confirm)\b/i;
     function summaryConfirmed(p) {
       const a = heard.agent, u = heard.user;
       const recent = `${heard.prevAgent} ${a}`.toLowerCase();
@@ -702,9 +704,22 @@
       if (required.some((v) => PLACEHOLDER.test(String(v ?? "").trim()))) {
         return "Not shown yet. Collect the missing details and confirm the summary with the caller first.";
       }
-      if (!urgent && !summaryConfirmed(p)) {
+      if (!urgent && !summaryConfirmed(p) && !LOCKED_IN.test(heard.agent)) {
+        pendingBooking = p;
         return "Not shown yet: the caller hasn't confirmed a full summary. Carry on the conversation naturally; once you have every detail, read the summary aloud including the address and preferred time, ask 'Sound right?', and call show_booking_summary again only after they say yes. Don't mention this to the caller.";
       }
+      renderBooking(p, urgent);
+      return "The booking summary is now showing on the caller's screen.";
+    }
+    // Held back by the check above, but the receptionist has told the caller it's
+    // booked: show it now so the screen matches what they just heard.
+    function maybeShowPending(agentText) {
+      if (!pendingBooking || !LOCKED_IN.test(agentText)) return;
+      const p = pendingBooking; pendingBooking = null;
+      renderBooking(p, false);
+    }
+    function renderBooking(p, urgent) {
+      pendingBooking = null;
       const rows = [
         ["Name", p.customer_name], ["Mobile", p.phone], ["Job", p.job],
         ["Where", p.suburb], ["When", p.preferred_time],
@@ -719,7 +734,6 @@
       els.cardTitle.textContent = urgent ? "Flagged for Jarryd to call back" : "Booking request sent to Jarryd";
       els.card.classList.add("show");
       els.captions.style.opacity = "0";
-      return "The booking summary is now showing on the caller's screen.";
     }
     if (location.hash === "#selftest") {
       window.__say = (text) => { heard.user = text; showCaption("user", text); convo?.sendUserMessage(text); };
@@ -823,6 +837,7 @@
           if (role === "agent") heard.prevAgent = heard.agent;
           heard[role] = clean(m.message);
           showCaption(role, m.message);
+          if (role === "agent") maybeShowPending(heard.agent);
         },
         onError: (msg) => console.warn("[voice] error:", msg),
         onDisconnect: (details) => {
@@ -841,6 +856,7 @@
       els.captions.innerHTML = "";
       lastUserLine = "";
       heard.agent = heard.prevAgent = heard.user = "";
+      pendingBooking = null;
       hideBooking();
       setState("connecting");
       keepAwake();
