@@ -361,6 +361,46 @@
 
     .ctl[hidden] { display: none !important; }
 
+    /* ---------- Passcode lock ---------- */
+    .lock { display: none; width: 100%; text-align: center; }
+    [data-locked="true"] .lock { display: block; }
+    [data-locked="true"] .picker,
+    [data-locked="true"] .controls,
+    [data-locked="true"] .notice { display: none; }
+    .lock-icon { width: 7cqw; height: 7cqw; margin: 0 auto 2cqh; color: var(--copper); }
+    .lock h2 { font-size: 4.6cqw; font-weight: 600; }
+    .lock-sub { font-size: 3.4cqw; color: var(--muted); margin-top: 0.8cqh; }
+    .lock form { margin-top: 3.2cqh; display: grid; gap: 2cqw; }
+    .lock input {
+      width: 100%;
+      background: var(--screen-lift);
+      border: 1px solid var(--hair);
+      border-radius: 4cqw;
+      padding: 1.9cqh 4cqw;
+      color: var(--ink);
+      font: 500 4.8cqw/1 var(--mono);
+      letter-spacing: 0.12em;
+      text-align: center;
+      text-transform: uppercase;
+      outline: none;
+      transition: border-color 200ms;
+    }
+    .lock input::placeholder { color: #5b616a; letter-spacing: 0.04em; text-transform: none; font-family: var(--body); }
+    .lock input:focus { border-color: var(--copper); }
+    .lock input.shake { animation: shake 360ms; border-color: var(--stop); }
+    @keyframes shake { 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+    .lock button {
+      background: var(--copper);
+      color: #1c1208;
+      font-weight: 600;
+      font-size: 4.2cqw;
+      border-radius: 4cqw;
+      padding: 1.8cqh 4cqw;
+      transition: opacity 200ms;
+    }
+    .lock button:disabled { opacity: 0.55; cursor: default; }
+    .lock-err { font-size: 3.4cqw; color: #ffb4ad; min-height: 1.4em; margin-top: 1.6cqh; }
+
     .credit {
       position: fixed;
       bottom: 18px;
@@ -392,7 +432,7 @@
 </head>
 <body>
   <main class="phone" aria-label="AI receptionist demo">
-    <div class="screen" id="screen" data-state="idle">
+    <div class="screen" id="screen" data-state="idle" data-locked="true">
       <div class="island" aria-hidden="true"></div>
 
       <div class="statusbar">
@@ -412,14 +452,25 @@
       </section>
 
       <section class="stage">
+        <div class="lock" id="lock">
+          <svg class="lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>
+          <h2>Private demo</h2>
+          <p class="lock-sub">Enter the passcode to continue.</p>
+          <form id="lock-form" autocomplete="off">
+            <input id="code" name="code" type="text" inputmode="text" autocapitalize="characters" autocorrect="off" spellcheck="false" placeholder="Passcode" aria-label="Passcode" required>
+            <button type="submit" id="unlock">Unlock</button>
+          </form>
+          <p class="lock-err" id="lock-err" role="alert"></p>
+        </div>
+
         <div class="picker" id="picker">
           <p class="picker-label">Choose a receptionist voice</p>
           <div class="voices" role="radiogroup" aria-label="Receptionist voice">
             <button class="voice" role="radio" aria-checked="true" data-voice="female">
-              <span class="vn">Jess</span><span class="vd">Australian · female</span>
+              <span class="vn">Kate</span><span class="vd">Australian · female</span>
             </button>
             <button class="voice" role="radio" aria-checked="false" data-voice="male">
-              <span class="vn">Tom</span><span class="vd">Australian · male</span>
+              <span class="vn">Steve</span><span class="vd">Australian · male</span>
             </button>
           </div>
         </div>
@@ -467,10 +518,13 @@
   <script type="module">
     import { Conversation } from "/demo/jr-dixon-electrical/eleven.js";
 
+    // Agent IDs are encrypted with the demo passcode (PBKDF2-SHA256 → AES-256-GCM).
+    const SEALED = {"s":"vsA0yXOc/qJdD1wcFmHFxg==","i":"YDWru43pbulr4ldE","c":"acztiwM/XOAmlA2wBHq6oI+3X6gqJ2A1JFgsOV4wabFq18n1pTv6od5a4D1l35q4f2DwxUstS4dOqDYg8dzNXbzBtO5EIfG35VVJBSGJ70VlmypMKj//JKqu9KcKVBQYfwbpyZJDS0Sf3ng="};
     const VOICES = {
-      female: { name: "Jess", agentId: "agent_8201m3cffdc6f7z8apcbx8pfyfb5" },
-      male:   { name: "Tom",  agentId: "agent_2701m3cfj9cqfk98s1nwq0skzy01" },
+      female: { name: "Kate",  agentId: null },
+      male:   { name: "Steve", agentId: null },
     };
+    const UNLOCK_KEY = "jrd-demo-unlock-v2";
     const TZ = "Australia/Melbourne";
 
     const $ = (id) => document.getElementById(id);
@@ -491,6 +545,45 @@
     let muted = false;
     let attemptId = 0;
     let lastUserLine = "";
+
+    // ---------- Passcode lock ----------
+    const fromB64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+    const validIds = (o) => o && /^agent_\w+$/.test(o.female) && /^agent_\w+$/.test(o.male);
+    async function openSeal(code) {
+      const norm = code.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(norm), "PBKDF2", false, ["deriveKey"]);
+      const key = await crypto.subtle.deriveKey({ name: "PBKDF2", salt: fromB64(SEALED.s), iterations: 600000, hash: "SHA-256" }, base, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+      const plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv: fromB64(SEALED.i) }, key, fromB64(SEALED.c));
+      return JSON.parse(new TextDecoder().decode(plain));
+    }
+    function setUnlocked(ids) {
+      VOICES.female.agentId = ids.female;
+      VOICES.male.agentId = ids.male;
+      screen.dataset.locked = "false";
+    }
+    try { const saved = JSON.parse(localStorage.getItem(UNLOCK_KEY) || "null"); if (validIds(saved)) setUnlocked(saved); } catch {}
+
+    const lockForm = $("lock-form"), codeInput = $("code"), lockErr = $("lock-err"), unlockBtn = $("unlock");
+    let failures = 0;
+    lockForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (unlockBtn.disabled) return;
+      unlockBtn.disabled = true; unlockBtn.textContent = "Checking…"; lockErr.textContent = "";
+      try {
+        const ids = await openSeal(codeInput.value);
+        if (!validIds(ids)) throw new Error("bad");
+        try { localStorage.setItem(UNLOCK_KEY, JSON.stringify(ids)); } catch {}
+        setUnlocked(ids);
+      } catch {
+        failures++;
+        codeInput.classList.remove("shake"); void codeInput.offsetWidth; codeInput.classList.add("shake");
+        lockErr.textContent = "That passcode isn't right. Check it and try again.";
+        await new Promise((r) => setTimeout(r, Math.min(8000, 600 * 2 ** (failures - 1))));
+      } finally {
+        unlockBtn.disabled = false; unlockBtn.textContent = "Unlock";
+      }
+    });
+    if (screen.dataset.locked === "true") setTimeout(() => codeInput.focus(), 300);
 
     // ---------- Voice picker ----------
     try { const saved = localStorage.getItem("jrd-voice"); if (saved && VOICES[saved]) voiceKey = saved; } catch {}
@@ -706,6 +799,7 @@
 
     async function startCall() {
       if (state === "connecting" || state === "live") return;
+      if (!VOICES[voiceKey].agentId) return;
       const id = ++attemptId;
       els.notice.textContent = "";
       els.captions.innerHTML = "";
@@ -777,7 +871,7 @@
 
     // Space bar starts / ends the call (handy when filming)
     document.addEventListener("keydown", (e) => {
-      if (e.code !== "Space" || e.repeat) return;
+      if (e.code !== "Space" || e.repeat || screen.dataset.locked === "true") return;
       e.preventDefault();
       if (state === "live" || state === "connecting") finishCall(); else startCall();
     });
