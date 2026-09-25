@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#dfe3e7">
+  <title>JR Dixon Electrical · AI Receptionist Demo</title>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112..125,600..900&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://api.elevenlabs.io">
+
+  <style>
+    :root {
+      --studio: #dfe3e7;
+      --studio-deep: #c9cfd5;
+      --handset: #16181b;
+      --screen: #0d0f12;
+      --screen-lift: #1a1d22;
+      --ink: #f3f4f6;
+      --muted: #8d949e;
+      --hair: rgba(255, 255, 255, 0.08);
+      --copper: #e58a3a;
+      --copper-soft: rgba(229, 138, 58, 0.16);
+      --go: #30c85a;
+      --stop: #ff3b30;
+      --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+      --body: "Instrument Sans", -apple-system, "Segoe UI", sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body { height: 100%; }
+
+    body {
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 42%, #eef0f2 0%, var(--studio) 55%, var(--studio-deep) 100%);
+      font-family: var(--body);
+      color: var(--ink);
+      display: grid;
+      place-items: center;
+      min-height: 100dvh;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; }
+    button:focus-visible { outline: 2px solid var(--copper); outline-offset: 3px; }
+
+    /* ---------- Handset ---------- */
+    .phone {
+      --h: min(860px, calc(100dvh - 104px));
+      margin-bottom: 22px;
+      height: var(--h);
+      aspect-ratio: 400 / 860;
+      background: var(--handset);
+      border-radius: calc(var(--h) * 0.068);
+      padding: calc(var(--h) * 0.013);
+      box-shadow:
+        0 0 0 1.5px #2b2e33,
+        0 0 0 3px #0b0c0e,
+        0 40px 80px -30px rgba(20, 26, 34, 0.55),
+        0 18px 30px -18px rgba(20, 26, 34, 0.4);
+      position: relative;
+    }
+
+    .screen {
+      position: relative;
+      height: 100%;
+      border-radius: calc(var(--h) * 0.056);
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 120% 55% at 50% 100%, #1b1712 0%, transparent 60%),
+        linear-gradient(180deg, #121418 0%, var(--screen) 100%);
+      display: flex;
+      flex-direction: column;
+      padding: calc(var(--h) * 0.018) calc(var(--h) * 0.03) calc(var(--h) * 0.03);
+      container-type: size;
+    }
+
+    .island {
+      position: absolute;
+      top: calc(var(--h) * 0.013);
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30%;
+      height: calc(var(--h) * 0.036);
+      background: #000;
+      border-radius: 999px;
+      z-index: 5;
+    }
+
+    .statusbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: calc(var(--h) * 0.036);
+      font-size: calc(var(--h) * 0.018);
+      font-weight: 600;
+      padding: 0 4%;
+      position: relative;
+      z-index: 6;
+    }
+
+    .demo-tag {
+      font-family: var(--mono);
+      font-size: calc(var(--h) * 0.0125);
+      letter-spacing: 0.14em;
+      color: var(--copper);
+      border: 1px solid rgba(229, 138, 58, 0.55);
+      border-radius: 5px;
+      padding: 0.2em 0.55em 0.15em;
+    }
+
+    /* ---------- Identity block ---------- */
+    .identity {
+      text-align: center;
+      margin-top: 9cqh;
+      transition: margin 600ms cubic-bezier(.2,.8,.2,1), transform 600ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .monogram {
+      width: 21cqw;
+      aspect-ratio: 1;
+      margin: 0 auto 4.5cqh;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(160deg, #262a31, #15171b);
+      box-shadow: inset 0 0 0 1px var(--hair);
+      position: relative;
+      transition: width 600ms cubic-bezier(.2,.8,.2,1), margin 600ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .monogram svg { width: 42%; height: 42%; }
+
+    .biz {
+      font-family: var(--display);
+      font-stretch: 125%;
+      font-weight: 850;
+      text-transform: uppercase;
+      line-height: 0.92;
+      letter-spacing: -0.01em;
+    }
+    .biz .l1 { display: block; font-size: 11.2cqw; }
+    .biz .l2 {
+      display: block;
+      font-size: 5.6cqw;
+      font-weight: 650;
+      letter-spacing: 0.34em;
+      margin-top: 1.4cqh;
+      padding-left: 0.34em;
+      color: #c8ccd2;
+    }
+
+    .who {
+      margin-top: 2.6cqh;
+      font-size: 3.9cqw;
+      color: var(--muted);
+      min-height: 1.3em;
+    }
+    .who b { color: var(--ink); font-weight: 600; }
+
+    .timer {
+      font-family: var(--mono);
+      font-size: 3.9cqw;
+      color: var(--muted);
+      margin-top: 0.8cqh;
+      height: 1.4em;
+      opacity: 0;
+      transition: opacity 300ms;
+    }
+
+    /* ---------- Middle stage ---------- */
+    .stage {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      min-height: 0;
+    }
+
+    /* voice picker */
+    .picker {
+      width: 100%;
+      transition: opacity 300ms, transform 300ms;
+    }
+    .picker-label {
+      font-size: 3.2cqw;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 1.8cqh;
+      letter-spacing: 0.02em;
+    }
+    .voices {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3cqw;
+    }
+    .voice {
+      text-align: left;
+      padding: 2.1cqh 4.4cqw 2cqh;
+      border-radius: 5cqw;
+      background: var(--screen-lift);
+      box-shadow: inset 0 0 0 1px var(--hair);
+      transition: box-shadow 200ms, background 200ms;
+    }
+    .voice .vn { display: block; font-size: 5cqw; font-weight: 600; }
+    .voice .vd { display: block; font-size: 3.2cqw; color: var(--muted); margin-top: 0.4cqh; }
+    .voice[aria-checked="true"] {
+      background: linear-gradient(160deg, #2a221a, #1d1915);
+      box-shadow: inset 0 0 0 1.5px var(--copper);
+    }
+    .voice[aria-checked="true"] .vd { color: #d9a878; }
+
+    /* waveform */
+    .wave-wrap {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 400ms;
+    }
+    canvas.wave { width: 100%; height: 26cqh; display: block; }
+    .mode {
+      font-size: 3.4cqw;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      height: 1.4em;
+      margin-top: 0.5cqh;
+      transition: color 250ms;
+    }
+    .mode.speaking { color: var(--copper); }
+    .wave-wrap { transition: opacity 400ms, transform 520ms cubic-bezier(.2,.9,.25,1); }
+    .stage:has(.card.show) .wave-wrap { transform: translateY(-24%) scale(0.85); }
+
+    .captions {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      text-align: center;
+      font-size: 4.1cqw;
+      line-height: 1.38;
+      color: #d8dbe0;
+      min-height: 4.2em;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 2cqw;
+      transition: opacity 300ms;
+    }
+    .captions .you { color: var(--muted); font-size: 3.5cqw; margin-bottom: 0.6em; }
+    .captions .line { animation: rise 380ms cubic-bezier(.2,.8,.2,1); }
+    @keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+    /* booking card */
+    .card {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      background: #f6f4f1;
+      color: #1b1d20;
+      border-radius: 5.5cqw;
+      padding: 4.2cqw 4.8cqw 3.6cqw;
+      box-shadow: 0 20px 40px -12px rgba(0,0,0,0.6);
+      transform: translateY(115%);
+      opacity: 0;
+      transition: transform 520ms cubic-bezier(.2,.9,.25,1.05), opacity 300ms;
+    }
+    .card.show { transform: none; opacity: 1; }
+    .card-head {
+      display: flex;
+      align-items: center;
+      gap: 2.4cqw;
+      font-size: 3.5cqw;
+      font-weight: 600;
+      padding-bottom: 2.6cqw;
+      border-bottom: 1px solid #e3ded7;
+      margin-bottom: 2.2cqw;
+    }
+    .tick {
+      width: 5.6cqw; height: 5.6cqw; border-radius: 50%;
+      background: var(--go); display: grid; place-items: center; flex: none;
+    }
+    .tick svg { width: 58%; }
+    .card.urgent .tick { background: var(--stop); }
+    .card-head .flag {
+      margin-left: auto;
+      font-family: var(--mono);
+      font-size: 2.6cqw;
+      letter-spacing: 0.1em;
+      color: var(--stop);
+      border: 1px solid var(--stop);
+      border-radius: 4px;
+      padding: 0.15em 0.45em;
+      display: none;
+    }
+    .card.urgent .flag { display: inline-block; }
+    .card dl { display: grid; grid-template-columns: auto 1fr; gap: 1.3cqw 3.6cqw; font-size: 3.5cqw; }
+    .card dt { color: #7d766e; }
+    .card dd { font-weight: 600; text-align: right; overflow-wrap: anywhere; }
+
+    /* ---------- Controls ---------- */
+    .controls {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 12cqw;
+      margin-top: 3.5cqh;
+      min-height: 13cqh;
+    }
+    .ctl { display: flex; flex-direction: column; align-items: center; gap: 1.2cqh; font-size: 3.2cqw; color: #c3c7cd; }
+    .ctl .disc {
+      width: 19cqw; aspect-ratio: 1; border-radius: 50%;
+      display: grid; place-items: center;
+      transition: transform 160ms, background 200ms, opacity 200ms;
+    }
+    .ctl:active .disc { transform: scale(0.94); }
+    .ctl .disc svg { width: 40%; height: 40%; }
+    .call .disc { background: var(--go); box-shadow: 0 10px 30px -8px rgba(48, 200, 90, 0.55); }
+    .hang .disc { background: var(--stop); }
+    .hang .disc svg { transform: rotate(135deg); }
+    .mute .disc { background: #2a2d33; }
+    .mute[aria-pressed="true"] .disc { background: var(--ink); }
+    .mute[aria-pressed="true"] .disc svg { color: #111; }
+    .call.busy .disc { animation: ring 1.1s ease-in-out infinite; }
+    @keyframes ring { 0%,100% { box-shadow: 0 0 0 0 rgba(48,200,90,.5); } 50% { box-shadow: 0 0 0 5cqw rgba(48,200,90,0); } }
+
+    .notice {
+      text-align: center;
+      font-size: 3.4cqw;
+      color: #ffb4ad;
+      min-height: 1.4em;
+      margin-top: 1cqh;
+      padding: 0 4cqw;
+    }
+
+    .home-bar {
+      width: 36%; height: 5px; border-radius: 3px; background: #e6e8eb; opacity: 0.85;
+      margin: 2cqh auto 0;
+    }
+
+    /* ---------- States ---------- */
+    [data-state="live"] .identity,
+    [data-state="connecting"] .identity { margin-top: 4.5cqh; }
+    [data-state="live"] .monogram,
+    [data-state="connecting"] .monogram { width: 15cqw; margin-bottom: 3cqh; }
+    [data-state="live"] .picker,
+    [data-state="connecting"] .picker { opacity: 0; transform: translateY(8px); pointer-events: none; }
+    [data-state="live"] .wave-wrap { opacity: 1; }
+    [data-state="live"] .timer,
+    [data-state="ended"] .timer { opacity: 1; }
+    [data-state="connecting"] .call { display: flex; }
+
+    .ctl[hidden] { display: none !important; }
+
+    .credit {
+      position: fixed;
+      bottom: 18px;
+      left: 0; right: 0;
+      text-align: center;
+      font-size: 12px;
+      letter-spacing: 0.02em;
+      color: #7b838c;
+    }
+    .credit b { color: #4b525a; font-weight: 600; }
+
+    /* Phones: the page *is* the phone */
+    @media (max-width: 520px) {
+      body { background: var(--screen); }
+      .phone {
+        --h: 100dvh;
+        height: 100dvh; width: 100vw; aspect-ratio: auto;
+        border-radius: 0; padding: 0; box-shadow: none; background: transparent;
+      }
+      .screen { border-radius: 0; padding-top: max(12px, env(safe-area-inset-top)); padding-bottom: max(20px, env(safe-area-inset-bottom)); }
+      .island, .statusbar .clock, .home-bar, .credit { display: none; }
+      .statusbar { justify-content: flex-end; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: 1ms !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="phone" aria-label="AI receptionist demo">
+    <div class="screen" id="screen" data-state="idle">
+      <div class="island" aria-hidden="true"></div>
+
+      <div class="statusbar">
+        <span class="clock" id="clock">9:41</span>
+        <span class="demo-tag">DEMO</span>
+      </div>
+
+      <section class="identity">
+        <div class="monogram" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M13.2 2.5 5.5 13.3h5.6l-1.3 8.2 7.7-10.8h-5.6l1.3-8.2Z" fill="#e58a3a"/>
+          </svg>
+        </div>
+        <h1 class="biz"><span class="l1">JR Dixon</span><span class="l2">Electrical</span></h1>
+        <p class="who" id="who">AI receptionist · Melbourne</p>
+        <p class="timer" id="timer">00:00</p>
+      </section>
+
+      <section class="stage">
+        <div class="picker" id="picker">
+          <p class="picker-label">Choose a receptionist voice</p>
+          <div class="voices" role="radiogroup" aria-label="Receptionist voice">
+            <button class="voice" role="radio" aria-checked="true" data-voice="female">
+              <span class="vn">Jess</span><span class="vd">Australian · female</span>
+            </button>
+            <button class="voice" role="radio" aria-checked="false" data-voice="male">
+              <span class="vn">Tom</span><span class="vd">Australian · male</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="wave-wrap" aria-hidden="true">
+          <canvas class="wave" id="wave"></canvas>
+          <p class="mode" id="mode"></p>
+        </div>
+
+        <div class="captions" id="captions" aria-live="polite"></div>
+
+        <div class="card" id="card" role="status">
+          <div class="card-head">
+            <span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6.3 5 8.6l4.5-5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span id="card-title">Booking request sent to Jarryd</span>
+            <span class="flag">URGENT</span>
+          </div>
+          <dl id="card-rows"></dl>
+        </div>
+      </section>
+
+      <p class="notice" id="notice" role="alert"></p>
+
+      <div class="controls">
+        <button class="ctl mute" id="mute" aria-pressed="false" hidden>
+          <span class="disc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg></span>
+          <span id="mute-label">Mute</span>
+        </button>
+        <button class="ctl call" id="call">
+          <span class="disc"><svg viewBox="0 0 24 24" fill="#fff"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1l-2.2 2.23Z"/></svg></span>
+          <span id="call-label">Call</span>
+        </button>
+        <button class="ctl hang" id="hang" hidden>
+          <span class="disc"><svg viewBox="0 0 24 24" fill="#fff"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1l-2.2 2.23Z"/></svg></span>
+          <span>End</span>
+        </button>
+      </div>
+
+      <div class="home-bar" aria-hidden="true"></div>
+    </div>
+  </main>
+
+  <p class="credit">Live demo · AI receptionist by <b>Lumora Solutions</b></p>
+
+  <script type="module">
+    import { Conversation } from "/demo/jr-dixon-electrical/eleven.js";
+
+    const VOICES = {
+      female: { name: "Jess", agentId: "agent_8201m3cffdc6f7z8apcbx8pfyfb5" },
+      male:   { name: "Tom",  agentId: "agent_2701m3cfj9cqfk98s1nwq0skzy01" },
+    };
+    const TZ = "Australia/Melbourne";
+
+    const $ = (id) => document.getElementById(id);
+    const screen = $("screen");
+    const els = {
+      who: $("who"), timer: $("timer"), mode: $("mode"), captions: $("captions"),
+      notice: $("notice"), call: $("call"), callLabel: $("call-label"), hang: $("hang"),
+      mute: $("mute"), muteLabel: $("mute-label"), card: $("card"), cardRows: $("card-rows"),
+      cardTitle: $("card-title"), wave: $("wave"), clock: $("clock"),
+    };
+
+    let voiceKey = "female";
+    let convo = null;
+    let state = "idle";
+    let startedAt = 0;
+    let timerId = null;
+    let mode = "listening";
+    let muted = false;
+    let attemptId = 0;
+    let lastUserLine = "";
+
+    // ---------- Voice picker ----------
+    try { const saved = localStorage.getItem("jrd-voice"); if (saved && VOICES[saved]) voiceKey = saved; } catch {}
+    const voiceButtons = [...document.querySelectorAll(".voice")];
+    function selectVoice(key) {
+      voiceKey = key;
+      voiceButtons.forEach((b) => b.setAttribute("aria-checked", String(b.dataset.voice === key)));
+      try { localStorage.setItem("jrd-voice", key); } catch {}
+    }
+    voiceButtons.forEach((b) => b.addEventListener("click", () => state !== "live" && state !== "connecting" && selectVoice(b.dataset.voice)));
+    selectVoice(voiceKey);
+
+    // ---------- Melbourne time context for the agent ----------
+    function melbourneParts(d = new Date()) {
+      const f = new Intl.DateTimeFormat("en-AU", { timeZone: TZ, weekday: "long", day: "numeric", month: "long", year: "numeric", hour: "numeric", minute: "2-digit", hour12: true });
+      const p = Object.fromEntries(f.formatToParts(d).map((x) => [x.type, x.value]));
+      const h24 = Number(new Intl.DateTimeFormat("en-GB", { timeZone: TZ, hour: "2-digit", hour12: false }).format(d));
+      return { ...p, h24 };
+    }
+    function context() {
+      const now = new Date();
+      const p = melbourneParts(now);
+      const weekend = p.weekday === "Saturday" || p.weekday === "Sunday";
+      const open = !weekend && p.h24 >= 7 && p.h24 < 17;
+      const dates = [];
+      for (let i = 0; i < 15; i++) {
+        const d = new Date(now.getTime() + i * 86400000);
+        const q = melbourneParts(d);
+        dates.push(`${q.weekday} ${q.day} ${q.month}${i === 0 ? " (today)" : i === 1 ? " (tomorrow)" : ""}`);
+      }
+      return {
+        now_melbourne: `${p.weekday} ${p.day} ${p.month} ${p.year}, ${p.hour}:${p.minute} ${p.dayPeriod}`,
+        office_status: open ? "open" : weekend ? "closed (weekend)" : "closed (after hours)",
+        upcoming_dates: dates.join("; "),
+      };
+    }
+
+    function tickClock() {
+      els.clock.textContent = new Intl.DateTimeFormat("en-AU", { hour: "numeric", minute: "2-digit", hour12: false }).format(new Date());
+    }
+    tickClock(); setInterval(tickClock, 15000);
+
+    // ---------- UI state ----------
+    function setState(next) {
+      state = next;
+      screen.dataset.state = next;
+      const name = VOICES[voiceKey].name;
+      els.call.hidden = next === "live";
+      els.hang.hidden = next !== "live" && next !== "connecting";
+      els.mute.hidden = next !== "live";
+      els.call.classList.toggle("busy", next === "connecting");
+      els.call.disabled = next === "connecting";
+      if (next === "connecting") { els.call.hidden = true; }
+      if (next === "idle")       { els.who.innerHTML = "AI receptionist · Melbourne"; els.callLabel.textContent = "Call"; }
+      if (next === "connecting") { els.who.innerHTML = `Calling <b>${name}</b>…`; }
+      if (next === "live")       { els.who.innerHTML = `<b>${name}</b> · AI receptionist`; }
+      if (next === "ended")      { els.who.innerHTML = "Call ended"; els.callLabel.textContent = "Call again"; }
+    }
+
+    function formatTime(ms) {
+      const s = Math.floor(ms / 1000);
+      return `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
+    }
+
+    function setMode(m) {
+      mode = m;
+      const name = VOICES[voiceKey].name;
+      els.mode.textContent = m === "speaking" ? `${name} is speaking` : "Listening…";
+      els.mode.classList.toggle("speaking", m === "speaking");
+    }
+
+    const clean = (t) => String(t || "").replace(/\[[^\]]*\]/g, "").replace(/\s{2,}/g, " ").trim();
+    function showCaption(role, text) {
+      const t = clean(text);
+      if (!t) return;
+      if (role === "user") { lastUserLine = t; return; }
+      els.captions.innerHTML = "";
+      if (lastUserLine) {
+        const you = document.createElement("p");
+        you.className = "you line"; you.textContent = `“${lastUserLine}”`;
+        els.captions.appendChild(you);
+        lastUserLine = "";
+      }
+      const line = document.createElement("p");
+      line.className = "line"; line.textContent = t;
+      els.captions.appendChild(line);
+    }
+
+    const PLACEHOLDER = /^(|to be confirmed|tbc|tbd|unknown|n\/?a|none|pending)$/i;
+    function showBooking(p = {}) {
+      const urgent = p.urgent === true || p.urgent === "true";
+      const required = urgent ? [p.customer_name, p.phone, p.suburb] : [p.customer_name, p.job, p.suburb, p.preferred_time];
+      if (required.some((v) => PLACEHOLDER.test(String(v ?? "").trim()))) {
+        return "Not shown yet. Collect the missing details and confirm the summary with the caller first.";
+      }
+      const rows = [
+        ["Name", p.customer_name], ["Mobile", p.phone], ["Job", p.job],
+        ["Where", p.suburb], ["When", p.preferred_time],
+      ].filter(([, v]) => v && !PLACEHOLDER.test(String(v).trim()));
+      els.cardRows.innerHTML = "";
+      for (const [k, v] of rows) {
+        const dt = document.createElement("dt"); dt.textContent = k;
+        const dd = document.createElement("dd"); dd.textContent = v;
+        els.cardRows.append(dt, dd);
+      }
+      els.card.classList.toggle("urgent", urgent);
+      els.cardTitle.textContent = urgent ? "Flagged for Jarryd to call back" : "Booking request sent to Jarryd";
+      els.card.classList.add("show");
+      els.captions.style.opacity = "0";
+      return "The booking summary is now showing on the caller's screen.";
+    }
+    function hideBooking() { els.card.classList.remove("show"); els.captions.style.opacity = ""; }
+
+    // ---------- Waveform ----------
+    const ctx = els.wave.getContext("2d");
+    const BARS = 31;
+    const levels = new Float32Array(BARS);
+    function sizeCanvas() {
+      const r = els.wave.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      els.wave.width = Math.max(1, Math.round(r.width * dpr));
+      els.wave.height = Math.max(1, Math.round(r.height * dpr));
+    }
+    new ResizeObserver(sizeCanvas).observe(els.wave);
+
+    function spectrum(speaking) {
+      let data = null, vol = 0;
+      try {
+        data = speaking ? convo?.getOutputByteFrequencyData() : convo?.getInputByteFrequencyData();
+        vol = speaking ? convo?.getOutputVolume() : convo?.getInputVolume();
+      } catch {}
+      return { data, vol: Number.isFinite(vol) ? vol : 0 };
+    }
+
+    function draw(t) {
+      requestAnimationFrame(draw);
+      if (state !== "live") return;
+      const speaking = mode === "speaking";
+      const { data, vol } = spectrum(speaking);
+      const hasData = data && data.length && data.some((v) => v > 0);
+      for (let i = 0; i < BARS; i++) {
+        const c = Math.abs(i - (BARS - 1) / 2) / ((BARS - 1) / 2); // 0 centre → 1 edge
+        let target;
+        if (hasData) {
+          const bin = Math.floor((1 - c) * 0.5 * data.length * 0.7) + 2;
+          target = (data[Math.min(bin, data.length - 1)] / 255) * (1 - c * 0.45);
+        } else {
+          target = Math.min(1, vol * 2.2) * (0.55 + 0.45 * Math.sin(t / 140 + i * 0.9)) * (1 - c * 0.5);
+        }
+        const idle = 0.035 + 0.025 * Math.sin(t / 600 + i * 0.5);
+        target = Math.max(target, idle);
+        levels[i] += (target - levels[i]) * (target > levels[i] ? 0.45 : 0.12);
+      }
+      const W = els.wave.width, H = els.wave.height;
+      ctx.clearRect(0, 0, W, H);
+      const gap = W / BARS;
+      const bw = gap * 0.4;
+      ctx.fillStyle = speaking ? "#e58a3a" : "#f3f4f6";
+      for (let i = 0; i < BARS; i++) {
+        const h = Math.max(bw, levels[i] * H * 0.92);
+        const x = i * gap + (gap - bw) / 2;
+        const y = (H - h) / 2;
+        ctx.beginPath();
+        ctx.roundRect ? ctx.roundRect(x, y, bw, h, bw / 2) : ctx.rect(x, y, bw, h);
+        ctx.fill();
+      }
+    }
+    requestAnimationFrame(draw);
+
+    // ---------- Call control ----------
+    let wakeLock = null;
+    async function keepAwake() {
+      try { wakeLock = await navigator.wakeLock?.request("screen"); } catch {}
+    }
+
+    async function ensureMic() {
+      if (!navigator.mediaDevices?.getUserMedia) throw Object.assign(new Error("nomedia"), { kind: "nomedia" });
+      try {
+        const s = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
+        s.getTracks().forEach((t) => t.stop());
+      } catch (e) {
+        throw Object.assign(e, { kind: e?.name === "NotAllowedError" || e?.name === "SecurityError" ? "denied" : e?.name === "NotFoundError" ? "nomic" : "mic" });
+      }
+    }
+
+    function withTimeout(p, ms) {
+      return Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error("timeout")), ms))]);
+    }
+
+    function openSession(type, id) {
+      const cfg = VOICES[voiceKey];
+      return Conversation.startSession({
+        agentId: cfg.agentId,
+        connectionType: type,
+        dynamicVariables: context(),
+        useWakeLock: true,
+        clientTools: { show_booking_summary: (p) => (id === attemptId ? showBooking(p) : "ok") },
+        onConnect: () => {},
+        onModeChange: ({ mode }) => id === attemptId && setMode(mode),
+        onMessage: (m) => {
+          if (id !== attemptId) return;
+          const role = m.role === "user" || m.source === "user" ? "user" : "agent";
+          showCaption(role, m.message);
+        },
+        onError: (msg) => console.warn("[voice] error:", msg),
+        onDisconnect: (details) => {
+          if (id !== attemptId || state !== "live") return;
+          console.info("[voice] disconnected:", details);
+          finishCall(details?.reason === "error" ? "The line dropped. Tap Call again to reconnect." : "");
+        },
+      });
+    }
+
+    async function startCall() {
+      if (state === "connecting" || state === "live") return;
+      const id = ++attemptId;
+      els.notice.textContent = "";
+      els.captions.innerHTML = "";
+      lastUserLine = "";
+      hideBooking();
+      setState("connecting");
+      keepAwake();
+
+      try {
+        await ensureMic();
+      } catch (e) {
+        if (id !== attemptId) return;
+        setState("idle");
+        els.notice.textContent =
+          e.kind === "denied" ? "Microphone is blocked. Allow it in the address bar, then tap Call." :
+          e.kind === "nomic"  ? "No microphone found. Connect one, then tap Call." :
+                                "Couldn't open the microphone. Check your mic, then tap Call.";
+        return;
+      }
+
+      // WebRTC first (best echo cancellation), then WebSocket, each with one retry.
+      const plan = ["webrtc", "websocket", "webrtc", "websocket"];
+      for (let i = 0; i < plan.length; i++) {
+        if (id !== attemptId) return;
+        try {
+          const c = await withTimeout(openSession(plan[i], id), 12000);
+          if (id !== attemptId) { c.endSession().catch(() => {}); return; }
+          convo = c;
+          startedAt = Date.now();
+          muted = false; els.mute.setAttribute("aria-pressed", "false"); els.muteLabel.textContent = "Mute";
+          setState("live");
+          setMode("speaking");
+          sizeCanvas();
+          els.timer.textContent = "00:00";
+          clearInterval(timerId);
+          timerId = setInterval(() => { els.timer.textContent = formatTime(Date.now() - startedAt); }, 250);
+          return;
+        } catch (e) {
+          console.warn(`[voice] ${plan[i]} attempt failed:`, e?.message || e);
+          await new Promise((r) => setTimeout(r, 400));
+        }
+      }
+      if (id !== attemptId) return;
+      setState("idle");
+      els.notice.textContent = "Couldn't connect. Check the internet connection and tap Call again.";
+    }
+
+    function finishCall(message = "") {
+      attemptId++;
+      const c = convo; convo = null;
+      c?.endSession().catch(() => {});
+      clearInterval(timerId);
+      if (startedAt && state === "live") els.timer.textContent = formatTime(Date.now() - startedAt);
+      startedAt = 0;
+      setState(state === "live" ? "ended" : "idle");
+      els.notice.textContent = message;
+      try { wakeLock?.release(); } catch {}
+    }
+
+    els.call.addEventListener("click", startCall);
+    els.hang.addEventListener("click", () => finishCall());
+    els.mute.addEventListener("click", () => {
+      if (!convo) return;
+      muted = !muted;
+      try { convo.setMicMuted(muted); } catch {}
+      els.mute.setAttribute("aria-pressed", String(muted));
+      els.muteLabel.textContent = muted ? "Unmute" : "Mute";
+    });
+
+    // Space bar starts / ends the call (handy when filming)
+    document.addEventListener("keydown", (e) => {
+      if (e.code !== "Space" || e.repeat) return;
+      e.preventDefault();
+      if (state === "live" || state === "connecting") finishCall(); else startCall();
+    });
+
+    window.addEventListener("pagehide", () => convo?.endSession().catch(() => {}));
+    setState("idle");
+  </script>
+</body>
+</html>
