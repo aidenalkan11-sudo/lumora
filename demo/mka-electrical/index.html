@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#dfe3e7">
-  <title>JR Dixon Electrical · AI Receptionist Demo</title>
+  <title>MKA Electrical · AI Receptionist Demo</title>
   <link rel="icon" type="image/png" href="/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -446,7 +446,7 @@
             <path d="M13.2 2.5 5.5 13.3h5.6l-1.3 8.2 7.7-10.8h-5.6l1.3-8.2Z" fill="#e58a3a"/>
           </svg>
         </div>
-        <h1 class="biz"><span class="l1">JR Dixon</span><span class="l2">Electrical</span></h1>
+        <h1 class="biz"><span class="l1">MKA</span><span class="l2">Electrical</span></h1>
         <p class="who" id="who">AI receptionist · Melbourne</p>
         <p class="timer" id="timer">00:00</p>
       </section>
@@ -485,7 +485,7 @@
         <div class="card" id="card" role="status">
           <div class="card-head">
             <span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6.3 5 8.6l4.5-5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            <span id="card-title">Booking request sent to Jarryd</span>
+            <span id="card-title">Booking request sent to Mohammed</span>
             <span class="flag">URGENT</span>
           </div>
           <dl id="card-rows"></dl>
@@ -516,15 +516,15 @@
   <p class="credit">Live demo · AI receptionist by <b>Lumora Solutions</b></p>
 
   <script type="module">
-    import { Conversation } from "/demo/jr-dixon-electrical/eleven.js";
+    import { Conversation } from "/demo/mka-electrical/eleven.js";
 
     // Agent IDs are encrypted with the demo passcode (PBKDF2-SHA256 → AES-256-GCM).
-    const SEALED = {"s":"vsA0yXOc/qJdD1wcFmHFxg==","i":"YDWru43pbulr4ldE","c":"acztiwM/XOAmlA2wBHq6oI+3X6gqJ2A1JFgsOV4wabFq18n1pTv6od5a4D1l35q4f2DwxUstS4dOqDYg8dzNXbzBtO5EIfG35VVJBSGJ70VlmypMKj//JKqu9KcKVBQYfwbpyZJDS0Sf3ng="};
+    const SEALED = {"s":"P0Zi6PRr7warlpp8g6xYbQ==","i":"0yszRi9c0+3lX0V5","c":"w6QBhxrVr4BTv5KBhuAIXenP4jbS3W73bJ7hWG+3IzDQ/eN01ni1gRCKR3DRAeSa4y2hZoWrlcr9B7RQxKrFVDaw62kJajbG/mGdnjmf3JmJK2ZtueXVdLzzzdCburb7dlncBIzoSXkm6/8="};
     const VOICES = {
       female: { name: "Kate",  agentId: null },
       male:   { name: "Steve", agentId: null },
     };
-    const UNLOCK_KEY = "jrd-demo-unlock-v2";
+    const UNLOCK_KEY = "mka-demo-unlock-v2";
     const SHARED_KEY = "lumora-demo-pass";
     const TZ = "Australia/Melbourne";
 
@@ -597,12 +597,12 @@
     if (screen.dataset.locked === "true") setTimeout(() => codeInput.focus(), 300);
 
     // ---------- Voice picker ----------
-    try { const saved = localStorage.getItem("jrd-voice"); if (saved && VOICES[saved]) voiceKey = saved; } catch {}
+    try { const saved = localStorage.getItem("mka-voice"); if (saved && VOICES[saved]) voiceKey = saved; } catch {}
     const voiceButtons = [...document.querySelectorAll(".voice")];
     function selectVoice(key) {
       voiceKey = key;
       voiceButtons.forEach((b) => b.setAttribute("aria-checked", String(b.dataset.voice === key)));
-      try { localStorage.setItem("jrd-voice", key); } catch {}
+      try { localStorage.setItem("mka-voice", key); } catch {}
     }
     voiceButtons.forEach((b) => b.addEventListener("click", () => state !== "live" && state !== "connecting" && selectVoice(b.dataset.voice)));
     selectVoice(voiceKey);
@@ -618,7 +618,7 @@
       const now = new Date();
       const p = melbourneParts(now);
       const weekend = p.weekday === "Saturday" || p.weekday === "Sunday";
-      const open = !weekend && p.h24 >= 7 && p.h24 < 17;
+      const open = !weekend && p.h24 >= 0 && p.h24 < 24;
       const dates = [];
       for (let i = 0; i < 15; i++) {
         const d = new Date(now.getTime() + i * 86400000);
@@ -715,7 +715,7 @@
         els.cardRows.append(dt, dd);
       }
       els.card.classList.toggle("urgent", urgent);
-      els.cardTitle.textContent = urgent ? "Flagged for Jarryd to call back" : "Booking request sent to Jarryd";
+      els.cardTitle.textContent = urgent ? "Flagged for Mohammed to call back" : "Booking request sent to Mohammed";
       els.card.classList.add("show");
       els.captions.style.opacity = "0";
       return "The booking summary is now showing on the caller's screen.";
