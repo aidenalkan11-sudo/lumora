@@ -546,7 +546,7 @@
     let muted = false;
     let attemptId = 0;
     let lastUserLine = "";
-    const heard = { agent: "", user: "" };
+    const heard = { agent: "", prevAgent: "", user: "" };
 
     // ---------- Passcode lock ----------
     const fromB64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
@@ -685,15 +685,16 @@
 
     const PLACEHOLDER = /^(|to be confirmed|tbc|tbd|unknown|n\/?a|none|pending)$/i;
     // A normal booking only shows once the receptionist has read the summary back
-    // (mentioning the address) and the caller has just said yes to it.
+    // (mentioning the address or the booked day) and the caller has just said yes to it.
     const ASKED = /\b(sound|sounds|right|correct|good|ok|okay)\b[^.?!]*\?\s*$/i;
     const YES = /\b(yes|yep|yeah|yup|yes please|correct|that'?s (right|it)|all good|sounds (good|great|right|perfect)|perfect|spot on|absolutely|sure|too easy)\b/i;
     const NOPE = /(^\W*(no|nah)\b)|\b(wrong|incorrect|not right|not sure|actually|change|instead)\b/i;
     function summaryConfirmed(p) {
       const a = heard.agent, u = heard.user;
-      const placeWords = String(p.suburb || "").match(/[A-Za-z]{4,}/g) || [];
-      const mentionsPlace = placeWords.some((w) => a.toLowerCase().includes(w.toLowerCase()));
-      return ASKED.test(a) && mentionsPlace && YES.test(u) && !NOPE.test(u);
+      const recent = `${heard.prevAgent} ${a}`.toLowerCase();
+      const words = `${p.suburb || ""} ${p.preferred_time || ""}`.match(/[A-Za-z]{4,}/g) || [];
+      const mentionsBooking = words.some((w) => recent.includes(w.toLowerCase()));
+      return ASKED.test(a) && mentionsBooking && YES.test(u) && !NOPE.test(u);
     }
     function showBooking(p = {}) {
       const urgent = p.urgent === true || p.urgent === "true";
@@ -811,7 +812,7 @@
         useWakeLock: true,
         clientTools: { show_booking_summary: (p) => {
           const r = id === attemptId ? showBooking(p) : "ok";
-          console.info("[voice] booking tool:", JSON.stringify(p), "->", r.slice(0, 40), "| heard:", JSON.stringify(heard));
+          console.info("[voice] booking tool:", JSON.stringify(p), "->", r.slice(0, 40), "| heard:", JSON.stringify(heard).slice(0, 300));
           return r;
         } },
         onConnect: () => {},
@@ -819,6 +820,7 @@
         onMessage: (m) => {
           if (id !== attemptId) return;
           const role = m.role === "user" || m.source === "user" ? "user" : "agent";
+          if (role === "agent") heard.prevAgent = heard.agent;
           heard[role] = clean(m.message);
           showCaption(role, m.message);
         },
@@ -838,7 +840,7 @@
       els.notice.textContent = "";
       els.captions.innerHTML = "";
       lastUserLine = "";
-      heard.agent = heard.user = "";
+      heard.agent = heard.prevAgent = heard.user = "";
       hideBooking();
       setState("connecting");
       keepAwake();
