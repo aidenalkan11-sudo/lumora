@@ -37,18 +37,23 @@
 function escapeHtml(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
 function markdownToHtml(value){
   let s=escapeHtml(value);
-  s=s.replace(/^### (.*)$/gm,'<h3>$1</h3>').replace(/^## (.*)$/gm,'<h2>$1</h2>');
+  s=s.replace(/^### (.*)$/gm,'<h3>$1</h3>').replace(/^## (.*)$/gm,'<h2>$1</h2>').replace(/^# (.*)$/gm,'<h1>$1</h1>');
   s=s.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>');
   s=s.replace(/^- (.*)$/gm,'<li>$1</li>').replace(/(<li>.*<\/li>)/gs,'<ul>$1</ul>');
-  return s.split(/\n\n+/).map(x=>/^<(h2|h3|ul)/.test(x)?x:'<p>'+x.replace(/\n/g,'<br>')+'</p>').join('');
+  return s.split(/\n\n+/).map(x=>/^<(h1|h2|h3|ul)/.test(x)?x:'<p>'+x.replace(/\n/g,'<br>')+'</p>').join('');
 }
 function render(posts){
   const grid=document.getElementById('post-grid');
+  if(!Array.isArray(posts)){throw new Error('Blog data is not an array');}
   if(!posts.length){grid.innerHTML='<div class="empty">No posts yet. New insights will appear here.</div>';return}
-  grid.innerHTML=posts.map(p=>'<article class="post"><div class="post-date">'+escapeHtml(new Date(p.date).toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'}))+'</div><h2>'+escapeHtml(p.title)+'</h2><p>'+escapeHtml(p.excerpt||'')+'</p><a class="read" href="?post='+encodeURIComponent(p.slug)+'">Read article →</a></article>').join('');
+  grid.innerHTML=posts.map(p=>'<article class="post"><div class="post-date">'+escapeHtml(new Date(p.date).toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'}))+'</div><h2>'+escapeHtml(p.title)+'</h2><p>'+escapeHtml(p.excerpt||'')+'</p><a class="read" href="/blog/?post='+encodeURIComponent(p.slug)+'">Read article →</a></article>').join('');
 }
 async function load(){
-  const res=await fetch('/blog/posts.json?ts='+Date.now(),{cache:'no-store'}); const posts=await res.json();
+  const response=await fetch('/blog/posts.json?ts='+Date.now(),{cache:'no-store'});
+  if(!response.ok) throw new Error('posts.json returned HTTP '+response.status);
+  const text=await response.text();
+  let posts;
+  try{posts=JSON.parse(text)}catch(e){throw new Error('Invalid blog JSON')}
   const slug=new URLSearchParams(location.search).get('post');
   if(!slug){render(posts);return}
   const p=posts.find(x=>x.slug===slug);
@@ -56,7 +61,11 @@ async function load(){
   document.title=p.title+' — Lumora Solutions';
   document.getElementById('app').innerHTML='<section class="container article"><a class="back" href="/blog/">← Back to blog</a><h1>'+escapeHtml(p.title)+'</h1><div class="article-meta">'+escapeHtml(new Date(p.date).toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'}))+(p.category?' · '+escapeHtml(p.category):'')+'</div><div class="article-body">'+markdownToHtml(p.content)+'</div></section>';
 }
-load().catch(()=>{document.getElementById('post-grid').innerHTML='<div class="empty">The blog is temporarily unavailable.</div>'});
+load().catch(error=>{
+  console.error('Lumora blog load failed:',error);
+  const grid=document.getElementById('post-grid');
+  if(grid) grid.innerHTML='<div class="empty">The blog is temporarily unavailable. Please refresh the page.</div>';
+});
 </script>
 </body>
 </html>
