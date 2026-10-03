@@ -60,7 +60,7 @@ export default async function handler(req, res) {
     const post = {
       slug,
       title,
-      excerpt: excerpt || content.replace(/[#*_>-]/g, '').replace(/\\s+/g, ' ').trim().slice(0, 180),
+      excerpt: excerpt || content.replace(/[#*_>-]/g, '').replace(/\s+/g, ' ').trim().slice(0, 180),
       category: category || 'Insights',
       date: new Date().toISOString(),
       content
@@ -116,7 +116,7 @@ export default async function handler(req, res) {
       ...current,
       slug: newSlug,
       title,
-      excerpt: excerpt || content.replace(/[#*_>-]/g, '').replace(/\\s+/g, ' ').trim().slice(0, 180),
+      excerpt: excerpt || content.replace(/[#*_>-]/g, '').replace(/\s+/g, ' ').trim().slice(0, 180),
       category,
       content,
       updated_at: new Date().toISOString()
