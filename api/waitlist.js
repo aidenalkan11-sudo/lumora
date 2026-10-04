@@ -22,19 +22,13 @@ export default async function handler(req, res) {
   try {
     if (req.method === 'POST') {
       const b = req.body || {};
-      for (const key of ['name','businessName','niche','contactMethod']) if (!String(b[key] || '').trim()) return res.status(400).json({ error: `Missing ${key}` });
-      if (!String(b.phone || '').trim() && !String(b.contactDetails || '').trim()) return res.status(400).json({ error: 'Please provide contact details' });
+      for (const key of ['name','businessName','phone','email']) if (!String(b[key] || '').trim()) return res.status(400).json({ error: `Missing ${key}` });
       if (String(b.website || '').trim()) return res.status(400).json({ error: 'Invalid submission' });
       const { entries, sha } = await readStore();
       entries.unshift({
         id: crypto.randomUUID(), submittedAt: new Date().toISOString(),
         name: String(b.name).trim().slice(0,120), businessName: String(b.businessName).trim().slice(0,160),
-        niche: String(b.niche).trim().slice(0,120), phone: String(b.phone||'').trim().slice(0,50),
-        email: String(b.email||'').trim().slice(0,160), contactMethod: String(b.contactMethod).trim().slice(0,40),
-        contactDetails: String(b.contactDetails||'').trim().slice(0,200), bestTime: String(b.bestTime||'').trim().slice(0,100),
-        location: String(b.location||'').trim().slice(0,160), callVolume: String(b.callVolume||'').trim().slice(0,80),
-        automationInterest: String(b.automationInterest||'').trim().slice(0,200), problem: String(b.problem||'').trim().slice(0,1000),
-        notes: String(b.notes||'').trim().slice(0,1000)
+        phone: String(b.phone).trim().slice(0,50), email: String(b.email).trim().slice(0,160)
       });
       await writeStore(entries, sha);
       return res.status(201).json({ success: true });
