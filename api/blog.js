@@ -67,7 +67,7 @@ export default async function handler(req, res) {
     };
 
     posts.unshift(post);
-    const encoded = Buffer.from(JSON.stringify(posts, null, 2) + '\\n').toString('base64');
+    const encoded = Buffer.from(JSON.stringify(posts, null, 2) + '\n').toString('base64');
     const put = await fetch(apiBase, {
       method: 'PUT',
       headers: { ...headers, 'Content-Type': 'application/json' },
@@ -122,7 +122,7 @@ export default async function handler(req, res) {
       updated_at: new Date().toISOString()
     };
 
-    const encoded = Buffer.from(JSON.stringify(posts, null, 2) + '\\n').toString('base64');
+    const encoded = Buffer.from(JSON.stringify(posts, null, 2) + '\n').toString('base64');
     const put = await fetch(apiBase, {
       method: 'PUT',
       headers: { ...headers, 'Content-Type': 'application/json' },
@@ -140,7 +140,7 @@ export default async function handler(req, res) {
 
   if (methodAction === 'delete') {
     const [deleted] = posts.splice(index, 1);
-    const encoded = Buffer.from(JSON.stringify(posts, null, 2) + '\\n').toString('base64');
+    const encoded = Buffer.from(JSON.stringify(posts, null, 2) + '\n').toString('base64');
     const put = await fetch(apiBase, {
       method: 'PUT',
       headers: { ...headers, 'Content-Type': 'application/json' },
