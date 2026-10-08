@@ -15,6 +15,14 @@
       "dest": "/api/agent-markdown?path=/"
     },
     {
+      "src": "^/privacy/?$",
+      "dest": "/privacy.html"
+    },
+    {
+      "src": "^/contact/?$",
+      "dest": "/contact.html"
+    },
+    {
       "handle": "filesystem"
     },
     {
@@ -29,6 +37,19 @@
         }
       ],
       "dest": "/api/agent-markdown?path=/$1"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "destination": "https://lumorasolutions.tech/:path*",
+      "permanent": true,
+      "has": [
+        {
+          "type": "host",
+          "value": "www.lumorasolutions.tech"
+        }
+      ]
     }
   ]
 }
