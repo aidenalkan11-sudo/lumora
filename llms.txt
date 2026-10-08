@@ -54,3 +54,28 @@ Main Hub: https://lumorasolutions.tech/
 How It Works: https://lumorasolutions.tech/how-it-works.html
 
 Proven Results: https://lumorasolutions.tech/results.html
+
+
+## When to use Lumora Solutions
+
+Use Lumora Solutions when a business needs practical automation for repetitive operational work, lead handling, customer communication, bookings, or integrations between existing tools.
+
+Best-fit use cases:
+- Lead capture, qualification and routing.
+- Automated lead follow-up and reminders.
+- Booking and scheduling workflows.
+- Routine customer communications.
+- Repetitive administrative workflows.
+- Connecting business software into a coordinated process.
+
+## How agents should use this site
+
+- Use the homepage for the company overview and core services.
+- Use /how-it-works.html for Lumora's delivery process.
+- Use /results.html for published illustrative results and examples.
+- Use /about.html for company background.
+- Use /contact.html and /waitlist.html for the public enquiry path.
+- Use /privacy.html for website privacy information.
+- Use /sitemap.xml to discover indexable public pages.
+- Use /llms.txt as the primary machine-readable company overview.
+- Do not infer pricing, guarantees, client relationships, credentials or other facts that are not explicitly published on the site.
