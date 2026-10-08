@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url><loc>https://lumorasolutions.tech/</loc><lastmod>2026-10-08</lastmod></url>
-<url><loc>https://lumorasolutions.tech/how-it-works.html</loc><lastmod>2026-10-08</lastmod></url>
-<url><loc>https://lumorasolutions.tech/results.html</loc><lastmod>2026-10-08</lastmod></url>
-<url><loc>https://lumorasolutions.tech/waitlist.html</loc><lastmod>2026-10-08</lastmod></url>
-<url><loc>https://lumorasolutions.tech/blog/</loc><lastmod>2026-10-08</lastmod></url>
-<url><loc>https://lumorasolutions.tech/about.html</loc><lastmod>2026-10-08</lastmod></url>
-<url><loc>https://lumorasolutions.tech/contact.html</loc><lastmod>2026-10-08</lastmod></url>
-<url><loc>https://lumorasolutions.tech/privacy.html</loc><lastmod>2026-10-08</lastmod></url>
-<url><loc>https://lumorasolutions.tech/llms.txt</loc><lastmod>2026-10-08</lastmod></url>
+  <url><loc>https://lumorasolutions.tech/</loc><lastmod>2026-10-08</lastmod></url>
+  <url><loc>https://lumorasolutions.tech/how-it-works.html</loc><lastmod>2026-10-08</lastmod></url>
+  <url><loc>https://lumorasolutions.tech/results.html</loc><lastmod>2026-10-08</lastmod></url>
+  <url><loc>https://lumorasolutions.tech/waitlist.html</loc><lastmod>2026-10-08</lastmod></url>
+  <url><loc>https://lumorasolutions.tech/about.html</loc><lastmod>2026-10-08</lastmod></url>
+  <url><loc>https://lumorasolutions.tech/contact</loc><lastmod>2026-10-08</lastmod></url>
+  <url><loc>https://lumorasolutions.tech/privacy</loc><lastmod>2026-10-08</lastmod></url>
+  <url><loc>https://lumorasolutions.tech/llms.txt</loc><lastmod>2026-10-08</lastmod></url>
 </urlset>
