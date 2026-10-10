@@ -18,20 +18,111 @@
 <meta name="twitter:description" content="Privacy information for Lumora Solutions website enquiries, waitlist submissions, hosting and analytics.">
 <meta name="twitter:image" content="https://lumorasolutions.tech/og-image.png">
 <link rel="icon" type="image/png" href="/favicon.png">
-<style>body{margin:0;background:#fffaf6;color:#292625;font-family:Inter,Arial,sans-serif}main{width:min(860px,calc(100% - 40px));margin:0 auto;padding:70px 0;line-height:1.75}h1,h2{color:#545454}a{color:#f37922}header{padding:25px 0;border-bottom:1px solid #eadccf}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sniglet:wght@400;800&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#fffaf6;--cream-dark:#fff2df;--orange:#f37922;--orange-light:#ff8d32;--charcoal:#545454;--text:#292625;--muted:#766d66;--line:#eadccf;--white:#fff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--text);font-family:Inter,Arial,sans-serif;line-height:1.75}
+a{color:inherit;text-decoration:none}
+.container{width:min(1120px,calc(100% - 40px));margin-inline:auto}
+.site-header{height:82px;display:flex;align-items:center;justify-content:space-between;gap:24px;border-bottom:1px solid rgba(234,220,207,.7)}
+.brand{display:flex;align-items:center;gap:11px;font-family:Sniglet,cursive;font-size:25px;color:var(--charcoal);white-space:nowrap}
+.brand img{width:40px;height:40px;object-fit:contain}
+.brand span{color:var(--orange)}
+.nav{display:flex;align-items:center;gap:25px;font-size:14px;color:#6b625c}
+.nav a:hover,.nav a[aria-current=page]{color:var(--orange)}
+.button{display:inline-flex;align-items:center;justify-content:center;padding:12px 20px;border-radius:999px;background:var(--orange);color:#fff;font-weight:800;font-size:14px;box-shadow:0 8px 22px rgba(243,121,34,.18);transition:background .2s,transform .2s}
+.button:hover{background:var(--orange-light);transform:translateY(-1px)}
+main{padding:72px 0 90px}
+.hero{padding:clamp(30px,6vw,62px);border:1px solid var(--line);border-radius:30px;background:linear-gradient(135deg,#fff2df 0%,#fffaf6 72%);box-shadow:0 18px 50px rgba(84,84,84,.06)}
+.eyebrow{display:inline-flex;align-items:center;gap:9px;color:var(--orange);font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+.eyebrow:before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{max-width:760px;margin:17px 0 16px;color:var(--charcoal);font-size:clamp(42px,6.4vw,66px);line-height:1.04;letter-spacing:-.045em}
+.intro{max-width:740px;margin:0;color:var(--muted);font-size:17px}
+.policy-layout{display:grid;grid-template-columns:240px minmax(0,1fr);gap:24px;align-items:start;margin-top:24px}
+.toc,.policy-content{border:1px solid var(--line);border-radius:23px;background:#fff}
+.toc{position:sticky;top:22px;padding:24px}
+.toc h2{margin:0 0 13px;color:var(--charcoal);font-size:14px}
+.toc a{display:block;padding:8px 0;color:var(--muted);font-size:14px;border-bottom:1px solid #f3e9e0}
+.toc a:last-child{border-bottom:0}
+.toc a:hover{color:var(--orange)}
+.policy-content{padding:clamp(25px,4vw,42px)}
+.policy-content section+section{margin-top:31px;padding-top:27px;border-top:1px solid #f0e5dc}
+h2{margin:0 0 12px;color:var(--charcoal);font-size:25px;line-height:1.25;letter-spacing:-.025em}
+p{margin:0 0 14px}
+p:last-child{margin-bottom:0}
+.policy-content p,.policy-content li{color:var(--muted)}
+.policy-content ul{padding-left:22px;margin:10px 0 0}
+.policy-content li+li{margin-top:7px}
+.notice{margin-top:25px;padding:19px 21px;border-radius:16px;background:var(--cream-dark);color:var(--charcoal);font-size:14px}
+.text-link{color:var(--orange);font-weight:700;text-decoration:underline;text-underline-offset:3px}
+footer{display:flex;justify-content:space-between;gap:18px;padding:27px 0 34px;border-top:1px solid var(--line);color:#887e76;font-size:13px}
+footer a:hover{color:var(--orange)}
+@media(max-width:760px){.container{width:min(100% - 28px,1120px)}.site-header{height:auto;min-height:76px;flex-wrap:wrap;padding:15px 0}.brand{font-size:22px}.brand img{width:34px;height:34px}.nav{order:3;width:100%;gap:18px;overflow-x:auto;padding:3px 0 7px}.nav a{white-space:nowrap}.header-cta{padding:10px 13px;font-size:12px}main{padding:34px 0 52px}.hero{border-radius:23px}.policy-layout{grid-template-columns:1fr}.toc{position:static;padding:18px 22px}.toc nav{display:grid;grid-template-columns:1fr 1fr;column-gap:16px}.intro{font-size:16px}footer{display:block}footer div+div{margin-top:8px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important}}
+</style>
 </head>
 <body>
-<header><main style="padding:0"><a href="/">Lumora Solutions</a></main></header>
-<main>
-<h1>Privacy</h1>
+<header class="container site-header">
+<a class="brand" href="/" aria-label="Lumora Solutions home"><img src="/lumora-icon.png" alt=""><span>Lumora Solutions</span></a>
+<nav class="nav" aria-label="Main navigation">
+<a href="/">Home</a><a href="/how-it-works.html">How it works</a><a href="/results.html">Results</a><a href="/blog/">Blog</a><a href="/privacy" aria-current="page">Privacy</a>
+</nav>
+<a class="button header-cta" href="/waitlist.html">Join the waitlist</a>
+</header>
+<main class="container">
+<section class="hero">
+<div class="eyebrow">Your information</div>
+<h1>Privacy, clearly explained.</h1>
+<p class="intro">This page explains what information may be submitted through the Lumora Solutions website and how it is used to respond to enquiries and operate the site.</p>
+</section>
+<div class="policy-layout">
+<aside class="toc">
+<h2>On this page</h2>
+<nav aria-label="Privacy policy sections">
+<a href="#information">Information collected</a>
+<a href="#use">How it is used</a>
+<a href="#website">Website operation</a>
+<a href="#sharing">Service providers</a>
+<a href="#requests">Your requests</a>
+<a href="#updates">Policy updates</a>
+</nav>
+</aside>
+<article class="policy-content">
+<section id="information">
+<h2>Information collected</h2>
 <p>Lumora Solutions respects the information submitted through this website. The public waitlist form asks for a name, business name, phone number and email address so that an enquiry can be reviewed and followed up.</p>
+<p>Please provide only information relevant to your enquiry.</p>
+</section>
+<section id="use">
 <h2>How information is used</h2>
-<p>Information submitted through the waitlist is used for the purpose of reviewing the enquiry, understanding the business need described by the person submitting it, and contacting the person about Lumora's services. Information should not be submitted if it is not necessary for the enquiry.</p>
-<h2>Website operation</h2>
-<p>The website may use normal hosting, security and analytics services required to operate the site. Technical information may be processed by those services as part of delivering and protecting the website. Lumora does not ask visitors to submit passwords or sensitive personal information through the public enquiry form.</p>
-<h2>Requests about your information</h2>
-<p>If you have submitted information through the waitlist and need to ask about it, use the <a href="/contact">public contact route</a> and identify the submission you are referring to. Do not include passwords, identity documents or other sensitive information in a website enquiry.</p>
-<p>This page provides general website privacy information and may be updated as Lumora's systems and processes change.</p>
+<p>Information submitted through the waitlist is used to review the enquiry, understand the business need described, and contact the person about Lumora's services. It may also be used to manage follow-up related to that enquiry.</p>
+</section>
+<section id="website">
+<h2>Website operation and analytics</h2>
+<p>The website may use standard hosting, security and analytics services needed to operate, measure and protect the site. These services may process technical information such as browser or request data as part of delivering their functions.</p>
+</section>
+<section id="sharing">
+<h2>Service providers</h2>
+<p>Website infrastructure and enquiry handling may rely on third-party service providers. Those providers process information as needed to provide their services. The details of providers and settings may change as the website evolves.</p>
+</section>
+<section id="requests">
+<h2>Questions or requests about your information</h2>
+<p>If you have submitted information through the waitlist and need to ask about it, use the <a class="text-link" href="/contact">contact page</a> to identify the submission you are referring to. Do not include passwords, identity documents or other sensitive information in a website enquiry.</p>
+<div class="notice">Lumora does not ask visitors to submit passwords or sensitive personal information through the public enquiry form.</div>
+</section>
+<section id="updates">
+<h2>Policy updates</h2>
+<p>This page provides general website privacy information and may be updated as Lumora's systems and processes change. Please check this page periodically for the current version.</p>
+</section>
+</article>
+</div>
 </main>
+<footer class="container">
+<div>Lumora Solutions · Melbourne, Victoria</div>
+<div>© 2026 Lumora Solutions · <a href="/privacy" aria-current="page">Privacy</a> · <a href="/contact">Contact</a></div>
+</footer>
 </body>
 </html>
