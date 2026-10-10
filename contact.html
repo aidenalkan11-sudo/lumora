@@ -18,18 +18,96 @@
 <meta name="twitter:description" content="Contact Lumora Solutions about AI automation, workflow automation and business process systems.">
 <meta name="twitter:image" content="https://lumorasolutions.tech/og-image.png">
 <link rel="icon" type="image/png" href="/favicon.png">
-<style>body{margin:0;background:#fffaf6;color:#292625;font-family:Inter,Arial,sans-serif}main{width:min(860px,calc(100% - 40px));margin:0 auto;padding:70px 0;line-height:1.75}h1,h2{color:#545454}a{color:#f37922}header{padding:25px 0;border-bottom:1px solid #eadccf}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sniglet:wght@400;800&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#fffaf6;--cream-dark:#fff2df;--orange:#f37922;--orange-light:#ff8d32;--charcoal:#545454;--text:#292625;--muted:#766d66;--line:#eadccf;--white:#fff}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--text);font-family:Inter,Arial,sans-serif;line-height:1.7}
+a{color:inherit;text-decoration:none}
+.container{width:min(1120px,calc(100% - 40px));margin-inline:auto}
+.site-header{height:82px;display:flex;align-items:center;justify-content:space-between;gap:24px;border-bottom:1px solid rgba(234,220,207,.7)}
+.brand{display:flex;align-items:center;gap:11px;font-family:Sniglet,cursive;font-size:25px;color:var(--charcoal);white-space:nowrap}
+.brand img{width:40px;height:40px;object-fit:contain}
+.brand span{color:var(--orange)}
+.nav{display:flex;align-items:center;gap:25px;font-size:14px;color:#6b625c}
+.nav a:hover,.nav a[aria-current=page]{color:var(--orange)}
+.button{display:inline-flex;align-items:center;justify-content:center;padding:12px 20px;border-radius:999px;background:var(--orange);color:#fff;font-weight:800;font-size:14px;box-shadow:0 8px 22px rgba(243,121,34,.18);transition:background .2s,transform .2s}
+.button:hover{background:var(--orange-light);transform:translateY(-1px)}
+main{padding:72px 0 90px}
+.hero{position:relative;overflow:hidden;padding:clamp(30px,6vw,68px);border:1px solid var(--line);border-radius:30px;background:linear-gradient(135deg,#fff2df 0%,#fffaf6 72%);box-shadow:0 18px 50px rgba(84,84,84,.06)}
+.eyebrow{display:inline-flex;align-items:center;gap:9px;color:var(--orange);font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+.eyebrow:before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{max-width:760px;margin:17px 0 18px;color:var(--charcoal);font-size:clamp(42px,6.4vw,68px);line-height:1.03;letter-spacing:-.045em}
+.intro{max-width:700px;margin:0;color:var(--muted);font-size:18px}
+.content-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:22px;margin-top:24px}
+.panel{padding:clamp(25px,4vw,38px);border:1px solid var(--line);border-radius:24px;background:#fff}
+h2{margin:0 0 13px;color:var(--charcoal);font-size:25px;line-height:1.2;letter-spacing:-.025em}
+p{margin:0 0 16px}
+p:last-child{margin-bottom:0}
+.muted{color:var(--muted)}
+.steps{display:grid;gap:17px;margin-top:24px}
+.step{display:grid;grid-template-columns:38px 1fr;gap:13px;align-items:start}
+.step-number{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:var(--cream-dark);color:var(--orange);font-weight:800;font-size:13px}
+.step strong{display:block;margin:2px 0 3px;color:var(--charcoal)}
+.step p{margin:0;color:var(--muted);font-size:14px}
+.link-card{margin-top:22px;padding:22px;border-radius:18px;background:var(--charcoal);color:#fff}
+.link-card p{margin:0 0 15px;color:#e7dfd9;font-size:14px}
+.link-card .button{background:#fff;color:var(--charcoal);box-shadow:none}
+.link-card .button:hover{background:var(--cream-dark)}
+.text-link{color:var(--orange);font-weight:700;text-decoration:underline;text-underline-offset:3px}
+footer{display:flex;justify-content:space-between;gap:18px;padding:27px 0 34px;border-top:1px solid var(--line);color:#887e76;font-size:13px}
+footer a:hover{color:var(--orange)}
+@media(max-width:760px){.container{width:min(100% - 28px,1120px)}.site-header{height:auto;min-height:76px;flex-wrap:wrap;padding:15px 0}.brand{font-size:22px}.brand img{width:34px;height:34px}.nav{order:3;width:100%;gap:18px;overflow-x:auto;padding:3px 0 7px}.nav a{white-space:nowrap}.header-cta{padding:10px 13px;font-size:12px}main{padding:34px 0 52px}.hero{border-radius:23px}.content-grid{grid-template-columns:1fr}.intro{font-size:16px}footer{display:block}footer div+div{margin-top:8px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important}}
+</style>
 </head>
 <body>
-<header><main style="padding:0"><a href="/">Lumora Solutions</a></main></header>
-<main>
-<h1>Contact Lumora Solutions</h1>
-<p>If you are interested in AI automation for your business, Lumora's public enquiry path is the <a href="/waitlist.html">Lumora waitlist</a>. The form collects your name, business name, phone number and email address so the enquiry can be reviewed and followed up.</p>
-<p>Typical reasons to get in touch include reducing repetitive administration, improving lead response times, automating follow-ups, organising bookings, improving routine customer communications, or connecting tools that currently require manual copying between systems.</p>
-<h2>What to include</h2>
-<p>When submitting an enquiry, describe the business process you want to improve, the tools currently involved, and the repetitive steps that consume the most time. This helps Lumora understand the workflow before suggesting an automation approach.</p>
-<p>Lumora is based in Melbourne, Victoria, Australia. The website's public contact route is the waitlist form; no separate public phone number is published on this page.</p>
-<p><a href="/how-it-works.html">Learn how projects work</a> or <a href="/">return to the homepage</a>.</p>
+<header class="container site-header">
+<a class="brand" href="/" aria-label="Lumora Solutions home"><img src="/lumora-icon.png" alt=""><span>Lumora Solutions</span></a>
+<nav class="nav" aria-label="Main navigation">
+<a href="/">Home</a><a href="/how-it-works.html">How it works</a><a href="/results.html">Results</a><a href="/blog/">Blog</a><a href="/privacy">Privacy</a>
+</nav>
+<a class="button header-cta" href="/waitlist.html">Join the waitlist</a>
+</header>
+<main class="container">
+<section class="hero">
+<div class="eyebrow">Get in touch</div>
+<h1>Let’s talk about what you could automate.</h1>
+<p class="intro">Have a repetitive process slowing your business down? Start with an enquiry and share a little about the workflow you want to improve.</p>
+</section>
+<div class="content-grid">
+<section class="panel">
+<h2>Contact Lumora Solutions</h2>
+<p class="muted">Our public enquiry route is the Lumora waitlist. The form asks for your name, business name, phone number and email address so your enquiry can be reviewed and followed up.</p>
+<div class="steps">
+<div class="step"><div class="step-number">01</div><div><strong>Describe the process</strong><p>Tell us what takes too much time or requires repeated manual work.</p></div></div>
+<div class="step"><div class="step-number">02</div><div><strong>Share your current tools</strong><p>Include the apps or systems involved and where the process gets stuck.</p></div></div>
+<div class="step"><div class="step-number">03</div><div><strong>Submit an enquiry</strong><p>Use the waitlist form to send the details and let Lumora review the fit.</p></div></div>
+</div>
+<div style="margin-top:26px"><a class="button" href="/waitlist.html">Go to the enquiry form</a></div>
+</section>
+<aside>
+<section class="panel">
+<h2>What can we help with?</h2>
+<p class="muted">Common starting points include:</p>
+<ul class="muted" style="padding-left:20px;margin:0;display:grid;gap:9px">
+<li>Lead capture and follow-ups</li><li>Booking and admin workflows</li><li>Routine customer communications</li><li>Connecting tools and reducing manual data entry</li>
+</ul>
+</section>
+<section class="link-card">
+<h2 style="color:#fff">Based in Melbourne</h2>
+<p>Lumora Solutions is based in Melbourne, Victoria, Australia.</p>
+<a class="button" href="/how-it-works.html">See how projects work</a>
+</section>
+</aside>
+</div>
 </main>
+<footer class="container">
+<div>Lumora Solutions · Melbourne, Victoria</div>
+<div>© 2026 Lumora Solutions · <a href="/privacy">Privacy</a> · <a href="/contact" aria-current="page">Contact</a></div>
+</footer>
 </body>
 </html>
