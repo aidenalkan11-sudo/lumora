@@ -1,5 +1,13 @@
 [
   {
+    "slug": "test2",
+    "title": "test2",
+    "excerpt": "test",
+    "category": "AI Automation",
+    "date": "2026-10-14T20:35:57.719Z",
+    "content": "test"
+  },
+  {
     "slug": "test",
     "title": "test",
     "excerpt": "test",
