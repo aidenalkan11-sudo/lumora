@@ -5,8 +5,6 @@ const VOICES = {
   female: { name: "Kate", geminiVoice: "Aoede" },
   male: { name: "Steve", geminiVoice: "Fenrir" },
 };
-const UNLOCK_KEY = "mka-gemini-demo-unlock-v1";
-const SHARED_KEY = "lumora-demo-pass";
 const TZ = "Australia/Melbourne";
 const $ = (id) => document.getElementById(id);
 const screen = $("screen");
@@ -19,25 +17,6 @@ const els = {
 let voiceKey = "female", session = null, state = "idle", startedAt = 0, timerId = null;
 let muted = false, attemptId = 0, lastUserLine = "", pendingBooking = null;
 const heard = { agent: "", prevAgent: "", user: "" };
-const fromB64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
-// Retain the existing demo passcode gate. The encrypted payload is only used to validate
-// the passcode; Gemini credentials are never stored in this browser code.
-const SEALED = {"s":"P0Zi6PRr7warlpp8g6xYbQ==","i":"0yszRi9c0+3lX0V5","c":"w6QBhxrVr4BTv5KBhuAIXenP4jbS3W73bJ7hWG+3IzDQ/eN01ni1gRCKR3DRAeSa4y2hZoWrlcr9B7RQxKrFVDaw62kJajbG/mGdnjmf3JmJK2ZtueXVdLzzzdCburb7dlncBIzoSXkm6/8="};
-async function validatePasscode(code) {
-  const norm = code.toUpperCase().replace(/[^A-Z0-9]/g, "");
-  const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(norm), "PBKDF2", false, ["deriveKey"]);
-  const key = await crypto.subtle.deriveKey({name:"PBKDF2",salt:fromB64(SEALED.s),iterations:600000,hash:"SHA-256"},base,{name:"AES-GCM",length:256},false,["decrypt"]);
-  const plain = await crypto.subtle.decrypt({name:"AES-GCM",iv:fromB64(SEALED.i)},key,fromB64(SEALED.c));
-  const ids = JSON.parse(new TextDecoder().decode(plain));
-  if (!ids || !/^agent_\\w+$/.test(ids.female) || !/^agent_\\w+$/.test(ids.male)) throw new Error("Invalid passcode");
-}
-function unlock() { screen.dataset.locked = "false"; try { localStorage.setItem(UNLOCK_KEY,"1"); } catch {} }
-try { if (localStorage.getItem(UNLOCK_KEY) === "1") unlock(); else { const savedPass = localStorage.getItem(SHARED_KEY); if (savedPass) validatePasscode(savedPass).then(unlock).catch(() => {}); } } catch {}
-const lockForm=$("lock-form"), codeInput=$("code"), lockErr=$("lock-err"), unlockBtn=$("unlock");
-let failures=0;
-lockForm.addEventListener("submit",async(e)=>{e.preventDefault();if(unlockBtn.disabled)return;unlockBtn.disabled=true;unlockBtn.textContent="Checking…";lockErr.textContent="";try{await validatePasscode(codeInput.value);try{localStorage.setItem(SHARED_KEY,codeInput.value.toUpperCase().replace(/[^A-Z0-9]/g,""));}catch{}unlock();}catch{failures++;codeInput.classList.remove("shake");void codeInput.offsetWidth;codeInput.classList.add("shake");lockErr.textContent="That passcode isn't right. Check it and try again.";await new Promise(r=>setTimeout(r,Math.min(8000,600*2**(failures-1))));}finally{unlockBtn.disabled=false;unlockBtn.textContent="Unlock";}});
-if(screen.dataset.locked==="true")setTimeout(()=>codeInput.focus(),300);
-
 try { const saved=localStorage.getItem("mka-gemini-voice");if(saved&&VOICES[saved])voiceKey=saved; } catch {}
 const voiceButtons=[...document.querySelectorAll(".voice")];
 function selectVoice(key){voiceKey=key;voiceButtons.forEach(b=>b.setAttribute("aria-checked",String(b.dataset.voice===key)));try{localStorage.setItem("mka-gemini-voice",key);}catch{}}
@@ -75,5 +54,5 @@ try{
 }catch(e){console.error("[Gemini demo]",e);if(id===attemptId){finishCall(e?.message?.includes("GEMINI_API_KEY")?"Gemini isn't configured yet. Add GEMINI_API_KEY in Vercel project settings.":e?.message||"Couldn't connect. Check the microphone and try again.");if(state==="ended")setState("idle");}}}
 function finishCall(message=""){attemptId++;const s=session;session=null;try{s?.close();}catch{}stopAudio();clearInterval(timerId);startedAt=0;setState("ended");els.notice.textContent=message;muted=false;els.mute.setAttribute("aria-pressed","false");els.muteLabel.textContent="Mute";}
 els.call.addEventListener("click",startCall);els.hang.addEventListener("click",()=>finishCall());els.mute.addEventListener("click",()=>{muted=!muted;els.mute.setAttribute("aria-pressed",String(muted));els.muteLabel.textContent=muted?"Unmute":"Mute";});
-document.addEventListener("keydown",e=>{if(e.code!=="Space"||e.repeat||screen.dataset.locked==="true")return;e.preventDefault();if(state==="live"||state==="connecting")finishCall();else startCall();});
+document.addEventListener("keydown",e=>{if(e.code!=="Space"||e.repeat)return;e.preventDefault();if(state==="live"||state==="connecting")finishCall();else startCall();});
 window.addEventListener("pagehide",()=>{try{session?.close();}catch{}stopAudio();});setState("idle");
