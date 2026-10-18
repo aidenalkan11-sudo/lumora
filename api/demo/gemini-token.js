@@ -5,16 +5,23 @@ export default async function handler(req, res) {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ error: 'Method not allowed' });
   }
-  const allowedHosts = new Set(['lumorasolutions.tech', 'www.lumorasolutions.tech']);
   const origin = req.headers.origin;
-  if (origin) {
-    let host;
-    try { host = new URL(origin).hostname; } catch { return res.status(403).json({ error: 'Origin not allowed' }); }
-    const isVercelPreview = host.endsWith('.vercel.app');
-    if (!allowedHosts.has(host) && !isVercelPreview && host !== 'localhost') {
-      return res.status(403).json({ error: 'Origin not allowed' });
-    }
-  }
+  if (!origin) return res.status(403).json({ error: 'Origin required' });
+  let host;
+  try { host = new URL(origin).hostname; } catch { return res.status(403).json({ error: 'Origin not allowed' }); }
+  const allowedHosts = new Set(['lumorasolutions.tech', 'www.lumorasolutions.tech', 'localhost']);
+  if (process.env.VERCEL_URL) allowedHosts.add(process.env.VERCEL_URL);
+  if (!allowedHosts.has(host)) return res.status(403).json({ error: 'Origin not allowed' });
+
+  // Best-effort per-instance rate limit to reduce accidental repeated token creation.
+  const nowForLimit = Date.now();
+  const ip = String(req.headers['x-forwarded-for'] || 'unknown').split(',')[0].trim();
+  globalThis.__geminiTokenRequests ||= new Map();
+  const requests = globalThis.__geminiTokenRequests;
+  const recent = (requests.get(ip) || []).filter((t) => nowForLimit - t < 10 * 60 * 1000);
+  if (recent.length >= 10) return res.status(429).json({ error: 'Too many session requests. Try again in a few minutes.' });
+  recent.push(nowForLimit);
+  requests.set(ip, recent);
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) return res.status(503).json({ error: 'GEMINI_API_KEY is not configured in Vercel.' });
   const requestedVoice = req.body?.voice === 'male' ? 'Fenrir' : 'Aoede';
