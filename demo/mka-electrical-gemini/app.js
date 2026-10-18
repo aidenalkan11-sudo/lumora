@@ -46,11 +46,68 @@ try{
   const { GoogleGenAI } = await import("https://esm.sh/@google/genai");
   inputCtx=new AudioContext({sampleRate:16000});outputCtx=new AudioContext({sampleRate:24000});await inputCtx.resume();await outputCtx.resume();source=inputCtx.createMediaStreamSource(micStream);processor=inputCtx.createScriptProcessor(4096,1,1);silentGain=inputCtx.createGain();silentGain.gain.value=0;source.connect(processor);processor.connect(silentGain);silentGain.connect(inputCtx.destination);
   const ai=new GoogleGenAI({apiKey:token,httpOptions:{apiVersion:"v1beta"}});const config={responseModalities:["AUDIO"],inputAudioTranscription:{},outputAudioTranscription:{},tools:[{functionDeclarations:[{name:"show_booking_summary",description:"Display a booking request summary only after collecting the details and reading them back for caller confirmation. Never claim that an appointment is confirmed.",parameters:{type:"OBJECT",properties:{customer_name:{type:"STRING"},phone:{type:"STRING"},job:{type:"STRING"},suburb:{type:"STRING"},preferred_time:{type:"STRING"},urgent:{type:"BOOLEAN"}},required:["customer_name","phone","suburb"]}}]}]};
-  session=await ai.live.connect({model:MODEL,config,callbacks:{
-    onopen:()=>{if(id===attemptId){startedAt=Date.now();setState("live");setMode("listening");els.timer.textContent="00:00";clearInterval(timerId);timerId=setInterval(()=>{els.timer.textContent=String(Math.floor((Date.now()-startedAt)/60000)).padStart(2,"0")+":"+String(Math.floor((Date.now()-startedAt)/1000)%60).padStart(2,"0");},250);}},
-    onmessage:async(message)=>{if(id!==attemptId)return;const sc=message.serverContent||{};if(sc.inputTranscription?.text){heard.user=clean(sc.inputTranscription.text);showCaption("user",heard.user);}if(sc.outputTranscription?.text){heard.prevAgent=heard.agent;heard.agent=clean(sc.outputTranscription.text);showCaption("agent",heard.agent);}for(const part of sc.modelTurn?.parts||[]){if(part.inlineData?.mimeType?.startsWith("audio/pcm"))playPcm(part.inlineData.data);}if(message.toolCall?.functionCalls?.length){const functionResponses=[];for(const call of message.toolCall.functionCalls){let result="Collected details; read the complete summary back and ask the caller to confirm before showing it.";if(call.name==="show_booking_summary"){const p=call.args||{};const urgent=p.urgent===true||p.urgent==="true";if([p.customer_name,p.phone,p.suburb].some(v=>PLACEHOLDER.test(String(v||"").trim()))){result="Missing required details. Collect the caller's name, phone and suburb first.";}else{renderBooking(p,urgent);result="Summary displayed. Do not say an appointment is confirmed; explain that Mohammed will follow up."}}functionResponses.push({id:call.id,name:call.name,response:{result}});}session?.sendToolResponse({functionResponses});}if(sc.turnComplete)setMode("listening");},
-    onerror:(e)=>{console.error("[Gemini Live]",e);if(id===attemptId)finishCall("Gemini connection failed. Check the API key, Live API access, and browser connection, then try again.");},
-    onclose:()=>{if(id===attemptId&&(state==="live"||state==="connecting"))finishCall("Gemini closed the connection. Check Live API access and try again.");}
+  session = await ai.live.connect({
+    model: MODEL,
+    config,
+    callbacks: {
+      onopen: () => {
+        if (id !== attemptId) return;
+        startedAt = Date.now();
+        setState("live");
+        setMode("listening");
+        els.timer.textContent = "00:00";
+        clearInterval(timerId);
+        timerId = setInterval(() => {
+          const seconds = Math.floor((Date.now() - startedAt) / 1000);
+          els.timer.textContent = String(Math.floor(seconds / 60)).padStart(2, "0") + ":" + String(seconds % 60).padStart(2, "0");
+        }, 250);
+      },
+      onmessage: (message) => {
+        if (id !== attemptId) return;
+        const sc = message.serverContent || {};
+        if (sc.inputTranscription?.text) {
+          heard.user = clean(sc.inputTranscription.text);
+          showCaption("user", heard.user);
+        }
+        if (sc.outputTranscription?.text) {
+          heard.prevAgent = heard.agent;
+          heard.agent = clean(sc.outputTranscription.text);
+          showCaption("agent", heard.agent);
+        }
+        for (const part of sc.modelTurn?.parts || []) {
+          if (part.inlineData?.mimeType?.startsWith("audio/pcm")) playPcm(part.inlineData.data);
+        }
+        if (message.toolCall?.functionCalls?.length) {
+          const functionResponses = [];
+          for (const call of message.toolCall.functionCalls) {
+            let result = "Collected details. Read the summary back and ask the caller to confirm.";
+            if (call.name === "show_booking_summary") {
+              const p = call.args || {};
+              const urgent = p.urgent === true || p.urgent === "true";
+              const missing = [p.customer_name, p.phone, p.suburb].some(v => PLACEHOLDER.test(String(v || "").trim()));
+              if (missing) {
+                result = "Missing required details. Collect the caller's name, phone and suburb first.";
+              } else {
+                renderBooking(p, urgent);
+                result = "Summary displayed. Do not say an appointment is confirmed; explain that Mohammed will follow up.";
+              }
+            }
+            functionResponses.push({ id: call.id, name: call.name, response: { result } });
+          }
+          session?.sendToolResponse({ functionResponses });
+        }
+        if (sc.turnComplete) setMode("listening");
+      },
+      onerror: (e) => {
+        console.error("[Gemini Live]", e);
+        if (id === attemptId) finishCall("Gemini connection failed. Check API access and your browser connection, then try again.");
+      },
+      onclose: () => {
+        if (id === attemptId && (state === "live" || state === "connecting")) {
+          finishCall("Gemini closed the connection. Check Live API access and try again.");
+        }
+      }
+    }
   });
   processor.onaudioprocess=(event)=>{if(!session||muted||id!==attemptId)return;const input=event.inputBuffer.getChannelData(0);session.sendRealtimeInput({audio:{data:pcm16ToBase64(input),mimeType:"audio/pcm;rate=16000"}});};
 }catch(e){console.error("[Gemini demo]",e);if(id===attemptId){finishCall(e?.message?.includes("GEMINI_API_KEY")?"Gemini isn't configured yet. Add GEMINI_API_KEY in Vercel project settings.":e?.message||"Couldn't connect. Check the microphone and try again.");if(state==="ended")setState("idle");}}}
