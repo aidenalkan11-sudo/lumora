@@ -395,6 +395,55 @@
         margin-top: 8px;
       }
     }
+  
+    /* Consistent, compact mobile header */
+    @media (max-width: 760px) {
+      header.navbar, header.site-header {
+        height: auto;
+        min-height: 70px;
+        flex-wrap: nowrap;
+        gap: 10px;
+        padding: 10px 0;
+      }
+      .brand {
+        min-width: 0;
+        gap: 7px;
+        font-size: clamp(16px, 4.5vw, 20px);
+        letter-spacing: -.03em;
+      }
+      .brand img {
+        width: 32px;
+        height: 32px;
+        flex: 0 0 32px;
+      }
+      .brand-name { font-size: clamp(16px, 4.5vw, 20px); }
+      .nav-links, .nav { display: none !important; }
+      header.navbar > .button, header.site-header > .button {
+        flex: 0 0 auto;
+        min-height: 40px;
+        padding: 10px 15px;
+        border-radius: 999px;
+        white-space: nowrap;
+        font-size: 12px;
+        line-height: 1;
+        box-shadow: 0 5px 14px rgba(243, 121, 34, .22);
+        transition: background .2s, transform .2s, box-shadow .2s;
+      }
+      header.navbar > .button:active, header.site-header > .button:active {
+        transform: scale(.97);
+        box-shadow: 0 2px 7px rgba(243, 121, 34, .18);
+      }
+    }
+    @media (max-width: 360px) {
+      .brand { font-size: 15px; }
+      .brand img { width: 29px; height: 29px; flex-basis: 29px; }
+      .brand-name { font-size: 15px; }
+      header.navbar > .button, header.site-header > .button {
+        padding-inline: 11px;
+        font-size: 11px;
+      }
+    }
+
   </style>
 </head>
 
