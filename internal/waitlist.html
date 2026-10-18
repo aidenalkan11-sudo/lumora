@@ -1,29 +1,115 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Lumora Waitlist</title><link rel="icon" href="/lumora-icon.png"><style>body{margin:0;background:#fffaf6;color:#292625;font-family:Arial,sans-serif}.wrap{width:min(1200px,calc(100% - 30px));margin:auto}.top{padding:25px 0;display:flex;justify-content:space-between;align-items:center}.brand{display:flex;gap:10px;align-items:center;font-weight:800;font-size:22px;color:#545454}.brand img{width:38px}.brand span{color:#f37922}.card{background:#fff;border:1px solid #eadccf;border-radius:18px;padding:24px;margin-bottom:20px;overflow:auto}h1{color:#545454}.entry{border-top:1px solid #eadccf;padding:20px 0}.entry:first-child{border-top:0}.meta{color:#766d66;font-size:13px;margin-bottom:10px}.row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.field b{color:#545454}.field{padding:8px 0;white-space:pre-wrap}@media(max-width:700px){.row{grid-template-columns:1fr}}</style></head><body><header class="wrap top"><div class="brand"><img src="/lumora-icon.png"><div>Lumora<span> Solutions</span></div></div></header><main class="wrap"><h1>Waitlist</h1><div id="app" class="card">Loading waitlist…</div></main><script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lumora Client Waitlist</title>
+<link rel="icon" href="/lumora-icon.png">
+<style>
+:root{color-scheme:light;--ink:#292625;--muted:#766d66;--line:#eadccf;--accent:#f37922;--paper:#fffaf6;--green:#247447}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,sans-serif}.wrap{width:min(1100px,calc(100% - 32px));margin:auto}.top{padding:24px 0;display:flex;justify-content:space-between;align-items:center}.brand{display:flex;gap:10px;align-items:center;font-weight:800;font-size:21px;color:#545454}.brand img{width:38px;height:38px;object-fit:contain}.brand span{color:var(--accent)}h1{font-size:clamp(27px,4vw,36px);margin:16px 0 8px;color:#545454}.subtitle{color:var(--muted);margin:0 0 24px}.toolbar{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:16px}.count{font-size:14px;color:var(--muted)}.filter{border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 12px;font:inherit;color:var(--ink)}.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:0 5px 20px #3a201008}.entry{padding:22px 0;border-top:1px solid var(--line)}.entry:first-child{border-top:0;padding-top:4px}.entry-head{display:flex;gap:14px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}.entry-title{margin:0 0 5px;font-size:19px;color:#45413e}.meta{font-size:13px;color:var(--muted)}.status{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;padding:9px 12px;border-radius:999px;background:#f4f0eb}.status.done{color:var(--green);background:#eaf6ee}.details{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 22px;margin:18px 0}.field{min-width:0;font-size:14px;overflow-wrap:anywhere}.field b{display:block;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}.field a{color:#8c4b19}.notes-label{display:block;font-weight:700;font-size:14px;margin:12px 0 8px}.notes{display:block;width:100%;min-height:94px;resize:vertical;padding:12px;border:1px solid var(--line);border-radius:10px;font:inherit;line-height:1.5;background:#fffdfb;color:var(--ink)}.actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}.btn{border:0;border-radius:9px;padding:10px 14px;font:inherit;font-weight:700;cursor:pointer}.btn:disabled{opacity:.6;cursor:wait}.primary{background:var(--accent);color:#fff}.secondary{background:#f2ece6;color:#45413e}.danger{background:#fff0ed;color:#a22e20}.notice{font-size:13px;color:var(--muted);min-height:18px}.empty{padding:28px 4px;color:var(--muted)}.error{color:#a22e20}.loading{color:var(--muted)}@media(max-width:650px){.details{grid-template-columns:1fr}.card{padding:16px}.entry{padding:18px 0}.entry-head{display:block}.status{margin-top:12px}}
+</style>
+</head>
+<body>
+<header class="wrap top"><div class="brand"><img src="/lumora-icon.png" alt=""><div>Lumora<span> Solutions</span></div></div></header>
+<main class="wrap">
+<h1>Client waitlist</h1>
+<p class="subtitle">Manage incoming enquiries, track follow-ups, and keep private notes for each client.</p>
+<div class="toolbar"><div id="count" class="count">Loading client records…</div><select id="filter" class="filter" aria-label="Filter clients"><option value="all">All clients</option><option value="open">Not checked off</option><option value="done">Checked off</option></select></div>
+<div id="app" class="card"><div class="loading">Loading client records…</div></div>
+</main>
+<script>
 const app=document.getElementById('app');
+const count=document.getElementById('count');
+const filter=document.getElementById('filter');
 const storageKey='lumora_waitlist_admin_token';
-async function loadWaitlist(token, fromSaved=false){
-  app.textContent='Loading waitlist…';
-  try{
-    const r=await fetch('/api/waitlist',{headers:{Authorization:'Bearer '+token}});
-    const j=await r.json();
-    if(!r.ok){
-      if(fromSaved && r.status===401){
-        localStorage.removeItem(storageKey);
-        const replacement=prompt('Your saved waitlist password is no longer valid. Enter the admin token again:');
-        if(replacement){await loadWaitlist(replacement,false);return;}
-      }
-      throw Error(j.error||'Unable to load waitlist');
-    }
-    localStorage.setItem(storageKey,token);
-    if(!j.length){app.textContent='No waitlist submissions yet.';return;}
-    app.innerHTML=j.map(x=>'<article class="entry"><div class="meta">'+new Date(x.submittedAt).toLocaleString('en-AU')+'</div><div class="row">'+Object.entries(x).filter(([k])=>!['id','submittedAt'].includes(k)).map(([k,v])=>'<div class="field"><b>'+String(k).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))+'</b><br>'+String(v||'—').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))+'</div>').join('')+'</div></article>').join('');
-  }catch(e){app.textContent=e.message;}
+let adminToken='';
+let clients=[];
+let busy=false;
+const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const dateText=value=>{const d=new Date(value);return Number.isNaN(d.getTime())?'Date unavailable':d.toLocaleString('en-AU')};
+async function request(path,options={}){
+  const response=await fetch(path,{...options,headers:{Authorization:'Bearer '+adminToken,'Content-Type':'application/json',...(options.headers||{})}});
+  const data=await response.json().catch(()=>({}));
+  if(!response.ok)throw new Error(data.error||'Request failed');
+  return data;
 }
-const savedToken=localStorage.getItem(storageKey);
-if(savedToken){loadWaitlist(savedToken,true);}
+async function refresh(){
+  app.innerHTML='<div class="loading">Loading client records…</div>';
+  try{
+    clients=await request('/api/waitlist');
+    render();
+  }catch(error){
+    app.innerHTML='<div class="empty error">'+esc(error.message)+'</div>';
+  }
+}
+function render(){
+  const shown=clients.filter(c=>filter.value==='all'||(filter.value==='done'?!!c.checked:!c.checked));
+  count.textContent=clients.length+' client'+(clients.length===1?'':'s')+' · '+clients.filter(c=>c.checked).length+' checked off';
+  if(!shown.length){app.innerHTML='<div class="empty">'+(clients.length?'No clients match this filter.':'No waitlist submissions yet.')+'</div>';return;}
+  app.innerHTML=shown.map(c=>{
+    const id=esc(c.id);
+    const email=String(c.email||'');
+    const phone=String(c.phone||'');
+    return '<article class="entry" data-id="'+id+'">'+
+      '<div class="entry-head"><div><h2 class="entry-title">'+esc(c.businessName||'Unnamed business')+'</h2><div class="meta">Submitted '+esc(dateText(c.submittedAt))+'</div></div>'+
+      '<label class="status '+(c.checked?'done':'')+'"><input class="check" type="checkbox" '+(c.checked?'checked':'')+' aria-label="Mark '+esc(c.businessName||'client')+' as checked off"> '+(c.checked?'Checked off':'Needs follow-up')+'</label></div>'+
+      '<div class="details"><div class="field"><b>Contact name</b>'+esc(c.name||'—')+'</div>'+
+      '<div class="field"><b>Email</b>'+(email?'<a href="mailto:'+esc(email)+'">'+esc(email)+'</a>':'—')+'</div>'+
+      '<div class="field"><b>Phone</b>'+(phone?'<a href="tel:'+esc(phone)+'">'+esc(phone)+'</a>':'—')+'</div></div>'+
+      '<label class="notes-label" for="notes-'+id+'">Private notes</label>'+
+      '<textarea id="notes-'+id+'" class="notes" maxlength="4000" placeholder="Add call notes, next steps, or follow-up details…">'+esc(c.notes||'')+'</textarea>'+
+      '<div class="actions"><button class="btn primary save" type="button">Save notes</button><button class="btn danger delete" type="button">Delete client</button><span class="notice" aria-live="polite"></span></div>'+
+      '</article>';
+  }).join('');
+  app.querySelectorAll('.entry').forEach(card=>{
+    const id=card.dataset.id;
+    const notice=card.querySelector('.notice');
+    card.querySelector('.check').addEventListener('change',async event=>{
+      setCardBusy(card,true);
+      try{await request('/api/waitlist',{method:'PATCH',body:JSON.stringify({id,checked:event.target.checked})});const c=clients.find(x=>x.id===id);if(c)c.checked=event.target.checked;render();}
+      catch(e){event.target.checked=!event.target.checked;notice.textContent=e.message;notice.classList.add('error');setCardBusy(card,false);}
+    });
+    card.querySelector('.save').addEventListener('click',async()=>{
+      const notes=card.querySelector('.notes').value;
+      setCardBusy(card,true);notice.textContent='Saving…';notice.classList.remove('error');
+      try{await request('/api/waitlist',{method:'PATCH',body:JSON.stringify({id,notes})});const c=clients.find(x=>x.id===id);if(c)c.notes=notes;notice.textContent='Notes saved.';setCardBusy(card,false);}
+      catch(e){notice.textContent=e.message;notice.classList.add('error');setCardBusy(card,false);}
+    });
+    card.querySelector('.delete').addEventListener('click',async()=>{
+      const client=clients.find(x=>x.id===id);
+      if(!confirm('Permanently delete '+(client?.businessName||'this client')+' from the waitlist? This cannot be undone.'))return;
+      setCardBusy(card,true);notice.textContent='Deleting…';notice.classList.remove('error');
+      try{await request('/api/waitlist',{method:'DELETE',body:JSON.stringify({id})});clients=clients.filter(x=>x.id!==id);render();}
+      catch(e){notice.textContent=e.message;notice.classList.add('error');setCardBusy(card,false);}
+    });
+  });
+}
+function setCardBusy(card,value){card.querySelectorAll('button,input,textarea').forEach(el=>el.disabled=value);}
+filter.addEventListener('change',render);
+async function start(token,fromSaved=false){
+  adminToken=token;
+  try{
+    clients=await request('/api/waitlist');
+    localStorage.setItem(storageKey,token);
+    render();
+  }catch(error){
+    if(fromSaved && error.message==='Unauthorized'){
+      localStorage.removeItem(storageKey);
+      const replacement=prompt('Your saved waitlist password is no longer valid. Enter the admin token again:');
+      if(replacement&&replacement.trim()){await start(replacement.trim());return;}
+    }
+    app.innerHTML='<div class="empty error">'+esc(error.message==='Unauthorized'?'Access denied. Check the admin token and refresh to try again.':error.message)+'</div>';
+    count.textContent='Unable to load client records';
+  }
+}
+const saved=localStorage.getItem(storageKey);
+if(saved)start(saved,true);
 else{
   const token=prompt('Waitlist admin token');
-  if(token && token.trim()) loadWaitlist(token.trim());
-  else app.textContent='Access cancelled. Refresh this page to try again.';
+  if(token&&token.trim())start(token.trim());
+  else{app.innerHTML='<div class="empty">Access cancelled. Refresh this page to try again.</div>';count.textContent='Access required';}
 }
-</script></body></html>
+</script>
+</body>
+</html>
