@@ -16,7 +16,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112..125,600..900&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
-  <link rel="preconnect" href="https://api.elevenlabs.io">
 
   <style>
     :root {
@@ -367,46 +366,6 @@
 
     .ctl[hidden] { display: none !important; }
 
-    /* ---------- Passcode lock ---------- */
-    .lock { display: none; width: 100%; text-align: center; }
-    [data-locked="true"] .lock { display: block; }
-    [data-locked="true"] .picker,
-    [data-locked="true"] .controls,
-    [data-locked="true"] .notice { display: none; }
-    .lock-icon { width: 7cqw; height: 7cqw; margin: 0 auto 2cqh; color: var(--copper); }
-    .lock h2 { font-size: 4.6cqw; font-weight: 600; }
-    .lock-sub { font-size: 3.4cqw; color: var(--muted); margin-top: 0.8cqh; }
-    .lock form { margin-top: 3.2cqh; display: grid; gap: 2cqw; }
-    .lock input {
-      width: 100%;
-      background: var(--screen-lift);
-      border: 1px solid var(--hair);
-      border-radius: 4cqw;
-      padding: 1.9cqh 4cqw;
-      color: var(--ink);
-      font: 500 4.8cqw/1 var(--mono);
-      letter-spacing: 0.12em;
-      text-align: center;
-      text-transform: uppercase;
-      outline: none;
-      transition: border-color 200ms;
-    }
-    .lock input::placeholder { color: #5b616a; letter-spacing: 0.04em; text-transform: none; font-family: var(--body); }
-    .lock input:focus { border-color: var(--copper); }
-    .lock input.shake { animation: shake 360ms; border-color: var(--stop); }
-    @keyframes shake { 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
-    .lock button {
-      background: var(--copper);
-      color: #1c1208;
-      font-weight: 600;
-      font-size: 4.2cqw;
-      border-radius: 4cqw;
-      padding: 1.8cqh 4cqw;
-      transition: opacity 200ms;
-    }
-    .lock button:disabled { opacity: 0.55; cursor: default; }
-    .lock-err { font-size: 3.4cqw; color: #ffb4ad; min-height: 1.4em; margin-top: 1.6cqh; }
-
     .credit {
       position: fixed;
       bottom: 18px;
@@ -438,7 +397,7 @@
 </head>
 <body>
   <main class="phone" aria-label="AI receptionist demo">
-    <div class="screen" id="screen" data-state="idle" data-locked="true">
+    <div class="screen" id="screen" data-state="idle">
       <div class="island" aria-hidden="true"></div>
 
       <div class="statusbar">
@@ -458,17 +417,6 @@
       </section>
 
       <section class="stage">
-        <div class="lock" id="lock">
-          <svg class="lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>
-          <h2>Private demo</h2>
-          <p class="lock-sub">Enter the passcode to continue.</p>
-          <form id="lock-form" autocomplete="off">
-            <input id="code" name="code" type="text" inputmode="text" autocapitalize="characters" autocorrect="off" spellcheck="false" placeholder="Passcode" aria-label="Passcode" required>
-            <button type="submit" id="unlock">Unlock</button>
-          </form>
-          <p class="lock-err" id="lock-err" role="alert"></p>
-        </div>
-
         <div class="picker" id="picker">
           <p class="picker-label">Choose a receptionist voice</p>
           <div class="voices" role="radiogroup" aria-label="Receptionist voice">
