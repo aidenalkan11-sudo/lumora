@@ -5,7 +5,6 @@ export default async function handler(req, res) {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ error: 'Method not allowed' });
   }
-
   const allowedHosts = new Set(['lumorasolutions.tech', 'www.lumorasolutions.tech']);
   const origin = req.headers.origin;
   if (origin) {
@@ -16,10 +15,18 @@ export default async function handler(req, res) {
       return res.status(403).json({ error: 'Origin not allowed' });
     }
   }
-
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) return res.status(503).json({ error: 'GEMINI_API_KEY is not configured in Vercel.' });
-
+  const requestedVoice = req.body?.voice === 'male' ? 'Fenrir' : 'Aoede';
+  const systemInstruction = [
+    'You are a friendly, professional AI receptionist for MKA Electrical in Melbourne, Australia.',
+    'Speak naturally in Australian English with a clear Australian accent. Keep replies concise.',
+    'Collect the caller’s name, mobile number, job details, suburb/address, and preferred time.',
+    'Never claim a booking is confirmed. Say you will pass on a request for Mohammed to follow up.',
+    'Do not invent availability, prices, or confirmed appointments.',
+    'If urgent, collect the caller’s name, phone, and suburb, then say you will flag it for a callback.',
+    'Use Australia/Melbourne local date and time.'
+  ].join(' ');
   try {
     const now = Date.now();
     const tokenResponse = await fetch('https://generativelanguage.googleapis.com/v1beta/auth_tokens', {
@@ -34,8 +41,12 @@ export default async function handler(req, res) {
           config: {
             responseModalities: ['AUDIO'],
             sessionResumption: {},
-          },
-        },
+            systemInstruction: { parts: [{ text: systemInstruction }] },
+            speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: requestedVoice } } },
+            inputAudioTranscription: {},
+            outputAudioTranscription: {}
+          }
+        }
       }),
     });
     const data = await tokenResponse.json().catch(() => ({}));
