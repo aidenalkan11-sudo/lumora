@@ -32,7 +32,7 @@ async function validatePasscode(code) {
   if (!ids || !/^agent_\\w+$/.test(ids.female) || !/^agent_\\w+$/.test(ids.male)) throw new Error("Invalid passcode");
 }
 function unlock() { screen.dataset.locked = "false"; try { localStorage.setItem(UNLOCK_KEY,"1"); } catch {} }
-try { if (localStorage.getItem(UNLOCK_KEY) === "1" || localStorage.getItem(SHARED_KEY)) unlock(); } catch {}
+try { if (localStorage.getItem(UNLOCK_KEY) === "1") unlock(); else { const savedPass = localStorage.getItem(SHARED_KEY); if (savedPass) validatePasscode(savedPass).then(unlock).catch(() => {}); } } catch {}
 const lockForm=$("lock-form"), codeInput=$("code"), lockErr=$("lock-err"), unlockBtn=$("unlock");
 let failures=0;
 lockForm.addEventListener("submit",async(e)=>{e.preventDefault();if(unlockBtn.disabled)return;unlockBtn.disabled=true;unlockBtn.textContent="Checking…";lockErr.textContent="";try{await validatePasscode(codeInput.value);try{localStorage.setItem(SHARED_KEY,codeInput.value.toUpperCase().replace(/[^A-Z0-9]/g,""));}catch{}unlock();}catch{failures++;codeInput.classList.remove("shake");void codeInput.offsetWidth;codeInput.classList.add("shake");lockErr.textContent="That passcode isn't right. Check it and try again.";await new Promise(r=>setTimeout(r,Math.min(8000,600*2**(failures-1))));}finally{unlockBtn.disabled=false;unlockBtn.textContent="Unlock";}});
