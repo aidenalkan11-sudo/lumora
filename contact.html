@@ -62,6 +62,22 @@ footer{display:flex;justify-content:space-between;gap:18px;padding:27px 0 34px;b
 footer a:hover{color:var(--orange)}
 @media(max-width:760px){.container{width:min(100% - 28px,1120px)}.site-header{height:auto;min-height:76px;flex-wrap:wrap;padding:15px 0}.brand{font-size:22px}.brand img{width:34px;height:34px}.nav{order:3;width:100%;gap:18px;overflow-x:auto;padding:3px 0 7px}.nav a{white-space:nowrap}.header-cta{padding:10px 13px;font-size:12px}main{padding:34px 0 52px}.hero{border-radius:23px}.content-grid{grid-template-columns:1fr}.intro{font-size:16px}footer{display:block}footer div+div{margin-top:8px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important}}
+
+/* Consistent, compact mobile header */
+@media(max-width:760px){
+.site-header{height:auto;min-height:70px;flex-wrap:nowrap;gap:10px;padding:10px 0}
+.site-header .brand{min-width:0;gap:7px;font-size:clamp(16px,4.5vw,20px);letter-spacing:-.03em}
+.site-header .brand img{width:32px;height:32px;flex:0 0 32px}
+.site-header .nav{display:none!important}
+.site-header .header-cta{flex:0 0 auto;min-height:40px;padding:10px 15px;border-radius:999px;white-space:nowrap;font-size:12px;line-height:1;box-shadow:0 5px 14px rgba(243,121,34,.22);transition:background .2s,transform .2s,box-shadow .2s}
+.site-header .header-cta:active{transform:scale(.97);box-shadow:0 2px 7px rgba(243,121,34,.18)}
+}
+@media(max-width:360px){
+.site-header .brand{font-size:15px}
+.site-header .brand img{width:29px;height:29px;flex-basis:29px}
+.site-header .header-cta{padding-inline:11px;font-size:11px}
+}
+
 </style>
 </head>
 <body>
