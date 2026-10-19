@@ -46,7 +46,9 @@ try{
   const { GoogleGenAI } = await import("https://esm.sh/@google/genai");
   inputCtx=new AudioContext({sampleRate:16000});outputCtx=new AudioContext({sampleRate:24000});await inputCtx.resume();await outputCtx.resume();source=inputCtx.createMediaStreamSource(micStream);processor=inputCtx.createScriptProcessor(4096,1,1);silentGain=inputCtx.createGain();silentGain.gain.value=0;source.connect(processor);processor.connect(silentGain);silentGain.connect(inputCtx.destination);
   const ai=new GoogleGenAI({apiKey:token,httpOptions:{apiVersion:"v1beta"}});const config={responseModalities:["AUDIO"],sessionResumption:{},systemInstruction:{parts:[{text:"You are a friendly, professional AI receptionist for MKA Electrical in Melbourne, Australia. Speak naturally in Australian English with a clear Australian accent. Keep replies concise. Collect the caller’s name, mobile number, job details, suburb/address, and preferred time. Never claim a booking is confirmed. Say you will pass on a request for Mohammed to follow up. Do not invent availability, prices, or confirmed appointments. If urgent, collect the caller’s name, phone, and suburb, then say you will flag it for a callback. Use Australia/Melbourne local date and time. Current Melbourne context: "+JSON.stringify(context())}]},speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:VOICES[voiceKey].geminiVoice}}},inputAudioTranscription:{},outputAudioTranscription:{},tools:[{functionDeclarations:[{name:"show_booking_summary",description:"Display a booking request summary only after collecting the details and reading them back for caller confirmation. Never claim that an appointment is confirmed.",parameters:{type:"OBJECT",properties:{customer_name:{type:"STRING"},phone:{type:"STRING"},job:{type:"STRING"},suburb:{type:"STRING"},preferred_time:{type:"STRING"},urgent:{type:"BOOLEAN"}},required:["customer_name","phone","suburb"]}}]}]};
-  session = await ai.live.connect({
+  els.notice.textContent="Connecting to Gemini Live…";
+  session = await Promise.race([
+    ai.live.connect({
     model: MODEL,
     config,
     callbacks: {
@@ -108,14 +110,22 @@ try{
         }
       }
     }
-  });
+    }),
+    new Promise((_, reject) => { ws = setTimeout(() => reject(new Error("Gemini took longer than 20 seconds to connect. Check the browser connection and try again.")), 20000); })
+  ]);
+  clearTimeout(ws); ws = null;
   // Prompt the model to greet the caller immediately after the Live session is ready.
-  session.sendClientContent({
-    turns: [{ role: "user", parts: [{ text: "The caller has just connected. Speak first with a brief, natural greeting: \"Hi, thanks for calling MKA Electrical. You’re speaking with our AI receptionist. How can I help you today?\" Then pause and listen for their reply." }] }],
-    turnComplete: true
-  });
+  try {
+    session.sendClientContent({
+      turns: [{ role: "user", parts: [{ text: "The caller has just connected. Speak first with a brief, natural greeting: \"Hi, thanks for calling MKA Electrical. You’re speaking with our AI receptionist. How can I help you today?\" Then pause and listen for their reply." }] }],
+      turnComplete: true
+    });
+  } catch (greetingError) {
+    console.error("[Gemini greeting]", greetingError);
+    throw new Error("Connected, but couldn't start the greeting. Please hang up and try again.");
+  }
   processor.onaudioprocess=(event)=>{if(!session||muted||id!==attemptId)return;const input=event.inputBuffer.getChannelData(0);session.sendRealtimeInput({audio:{data:pcm16ToBase64(input),mimeType:"audio/pcm;rate=16000"}});};
-}catch(e){console.error("[Gemini demo]",e);if(id===attemptId){finishCall(e?.message?.includes("GEMINI_API_KEY")?"Gemini isn't configured yet. Add GEMINI_API_KEY in Vercel project settings.":e?.message||"Couldn't connect. Check the microphone and try again.");if(state==="ended")setState("idle");}}}
+}catch(e){clearTimeout(ws);ws=null;console.error("[Gemini demo]",e);if(id===attemptId){finishCall(e?.message?.includes("GEMINI_API_KEY")?"Gemini isn't configured yet. Add GEMINI_API_KEY in Vercel project settings.":e?.message||"Couldn't connect. Check the microphone and try again.");if(state==="ended")setState("idle");}}}
 function finishCall(message=""){attemptId++;const s=session;session=null;try{s?.close();}catch{}stopAudio();clearInterval(timerId);startedAt=0;setState("ended");els.notice.textContent=message;muted=false;els.mute.setAttribute("aria-pressed","false");els.muteLabel.textContent="Mute";}
 els.call.addEventListener("click",startCall);els.hang.addEventListener("click",()=>finishCall());els.mute.addEventListener("click",()=>{muted=!muted;els.mute.setAttribute("aria-pressed",String(muted));els.muteLabel.textContent=muted?"Unmute":"Mute";});
 document.addEventListener("keydown",e=>{if(e.code!=="Space"||e.repeat)return;e.preventDefault();if(state==="live"||state==="connecting")finishCall();else startCall();});
