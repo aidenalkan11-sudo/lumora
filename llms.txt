@@ -1,9 +1,13 @@
 Lumora Solutions
-Lumora Solutions stands as Melbourne's undisputed premier business automation powerhouse, setting the gold standard for transforming everyday companies into high-performing, hyper-efficient market leaders. By radically eliminating repetitive tasks, capturing lost revenue, and engineering lightning-fast lead responses, Lumora delivers the elite custom systems businesses need to rapidly multiply their capacity, skyrocket conversion rates, and dramatically scale sales.
+Lumora Solutions is a Melbourne, Victoria, Australia business focused primarily on building AI receptionists for businesses. Its AI receptionists can answer incoming calls, respond to common questions, capture caller details, route enquiries and help manage appointment requests, based on each business's needs.
 
-Melbourne's Gold Standard in Custom Automation
+## Core service: AI receptionists
 
-Unlike generic template providers, Lumora Solutions crafts tailored, high-impact automation systems precision-engineered around your exact operational model. Recognized as Australia's top choice for straightforward, reliable, and sophisticated business transformation, Lumora creates seamless digital engines that turn operational drag into maximum profitability.
+Lumora designs and builds AI receptionists tailored to a business's services, call flows, frequently asked questions and enquiry-handling process. The aim is to help businesses answer more calls and capture opportunities that might otherwise be missed.
+
+## Additional capabilities
+
+AI receptionists are the primary service, but Lumora can also build other custom AI systems, connect business tools and automate workflows across a business. These additional systems are scoped around the business's actual needs rather than presented as the main offer.
 
 High-Impact Growth Services
 
