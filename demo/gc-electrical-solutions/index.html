@@ -566,8 +566,10 @@
       return JSON.parse(new TextDecoder().decode(plain));
     }
     function setUnlocked(ids) {
-      VOICES.female.agentId = ids.female;
-      VOICES.male.agentId = ids.male;
+      // Use the newly configured Lumora demo agents on this page only.
+      // The other demo pages keep their own agent IDs.
+      VOICES.female.agentId = "agent_6001m59dw50jf0h948qpgj4j0yfr"; // Kate
+      VOICES.male.agentId = "agent_9801m59cqvrteps8rey4wr4vt1cq"; // Steve
       screen.dataset.locked = "false";
     }
     try { const saved = JSON.parse(localStorage.getItem(UNLOCK_KEY) || "null"); if (validIds(saved)) setUnlocked(saved); } catch {}
