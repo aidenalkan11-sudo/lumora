@@ -154,5 +154,18 @@ body.lumora-motion-ready .button:hover, body.lumora-motion-ready .main-button:ho
 <div>Lumora Solutions · Melbourne, Victoria</div>
 <div>© 2026 Lumora Solutions · <a href="/privacy">Privacy</a> · <a href="/contact" aria-current="page">Contact</a></div>
 </footer>
+
+<script>
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  document.body.classList.add('lumora-motion-ready');
+  const selectors = 'main > section, main > article, main > .container > section, main > .wrap > section, main > .container > article, main > .card, main > .link-card, main .stat, main .step, main .service-card, main .service, main .post-card, #post-grid > *';
+  let observer;
+  const observeTargets = (root) => (root || document).querySelectorAll(selectors).forEach((target) => { if (target.dataset.lumoraMotionObserved) return; target.dataset.lumoraMotionObserved = 'true'; target.classList.add('lumora-reveal'); if (observer) observer.observe(target); else target.classList.add('lumora-visible'); });
+  if ('IntersectionObserver' in window) observer = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('lumora-visible'); observer.unobserve(entry.target); } }), { threshold: 0.08, rootMargin: '0px 0px -28px 0px' });
+  observeTargets(); const main = document.querySelector('main');
+  if (main && 'MutationObserver' in window) new MutationObserver(() => observeTargets(main)).observe(main, { childList: true, subtree: true });
+})();
+</script>
 </body>
 </html>
