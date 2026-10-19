@@ -90,6 +90,42 @@
       box-sizing: border-box;
     }
 
+    html { scroll-behavior: smooth; }
+    @keyframes lumora-rise-in {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes lumora-arrow-bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(7px); }
+    }
+    .hero .eyebrow { animation: lumora-rise-in .65s ease-out both; }
+    .hero h1 { animation: lumora-rise-in .75s .08s ease-out both; }
+    .hero p { animation: lumora-rise-in .75s .16s ease-out both; }
+    .hero-buttons, .hero > .main-button { animation: lumora-rise-in .75s .24s ease-out both; }
+    .scroll-cue {
+      position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      color: var(--muted); font-size: 10px; letter-spacing: .12em;
+      text-transform: uppercase; animation: lumora-arrow-bounce 1.5s ease-in-out infinite;
+    }
+    .scroll-cue svg { width: 18px; height: 18px; stroke: var(--orange); }
+    .hero { position: relative; }
+    .reveal-ready .reveal-on-scroll {
+      opacity: 0; transform: translateY(22px);
+      transition: opacity .65s ease, transform .65s ease;
+    }
+    .reveal-ready .reveal-on-scroll.is-visible { opacity: 1; transform: translateY(0); }
+    .service-card, .service, .step, .live-demo-frame {
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+    .service-card:hover { transform: translateY(-5px); box-shadow: 0 14px 30px rgba(50,35,25,.08); }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      .reveal-ready .reveal-on-scroll { opacity: 1; transform: none; }
+    }
+
+
     body {
       margin: 0;
       background: var(--cream);
@@ -174,10 +210,10 @@
     }
 
     .hero {
-      min-height: 650px;
+      min-height: min(690px, calc(100svh - 82px));
       display: flex;
       align-items: center;
-      padding: 90px 0;
+      padding: 68px 0 92px;
     }
 
     .hero-content {
@@ -378,7 +414,7 @@
     .live-demo-heading h2 { margin: 12px 0 14px; color: var(--charcoal); font-family: Cause, sans-serif; font-size: clamp(36px, 5vw, 54px); line-height: 1; }
     .live-demo-heading p { margin: 0 auto; max-width: 650px; color: var(--muted); line-height: 1.7; }
     .live-demo-frame { overflow: hidden; border: 1px solid var(--line); border-radius: 24px; background: #111; box-shadow: 0 18px 50px rgba(50, 35, 25, .12); }
-    .live-demo-frame iframe { display: block; width: 100%; height: 760px; border: 0; background: #111; }
+    .live-demo-frame iframe { display: block; width: 100%; height: 540px; border: 0; background: #111; }
     .live-demo-note { margin: 14px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; text-align: center; }
     @media (max-width: 760px) {
       .live-demo-section { padding: 10px 0 60px; }
@@ -447,12 +483,17 @@
 
   </div>
 
+  <a class="scroll-cue" href="#ai-receptionist-demo" aria-label="Scroll down to try the AI receptionist">
+    <span>Scroll to explore</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+  </a>
+
 </section>
 
 
 <!-- BEGIN HOMEPAGE AI RECEPTIONIST DEMO SECTION
      This section is independent. Remove this entire section to undo the homepage demo embed. -->
-<section class="container live-demo-section" id="ai-receptionist-demo">
+<section class="container live-demo-section reveal-on-scroll" id="ai-receptionist-demo">
   <div class="live-demo-heading">
     <div class="eyebrow">Try it yourself</div>
     <h2>Talk to the AI receptionist.</h2>
@@ -465,7 +506,7 @@
 </section>
 <!-- END HOMEPAGE AI RECEPTIONIST DEMO SECTION -->
 
-<section class="services">
+<section class="services reveal-on-scroll">
 
   <div class="container">
 
@@ -558,6 +599,29 @@
   </div>
 
 </footer>
+
+
+<script>
+  (function () {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion || !('IntersectionObserver' in window)) return;
+    const targets = document.querySelectorAll('.reveal-on-scroll, .service-card, .service, .step');
+    if (!targets.length) return;
+    document.documentElement.classList.add('reveal-ready');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -35px 0px' });
+    targets.forEach((target) => {
+      if (!target.classList.contains('reveal-on-scroll')) target.classList.add('reveal-on-scroll');
+      observer.observe(target);
+    });
+  })();
+</script>
 
 </body>
 </html>
