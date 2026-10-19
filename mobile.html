@@ -379,6 +379,16 @@
       .nav-cta { padding-inline: 10px; font-size: 10px; }
     }
 
+  
+    /* Independent homepage demo embed styles; remove with the mobile homepage demo section if desired. */
+    .live-demo-section { padding: 12px 0 58px; }
+    .live-demo-heading { margin-bottom: 20px; }
+    .live-demo-heading h2 { margin: 10px 0 12px; color: var(--charcoal); font-family: Cause, sans-serif; font-size: 36px; line-height: 1; }
+    .live-demo-heading p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.6; }
+    .live-demo-frame { overflow: hidden; border: 1px solid var(--line); border-radius: 16px; background: #111; }
+    .live-demo-frame iframe { display: block; width: 100%; height: 690px; border: 0; background: #111; }
+    .live-demo-note { margin: 10px 0 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+
   </style>
 </head>
 
@@ -438,6 +448,21 @@
 
 </section>
 
+
+<!-- BEGIN MOBILE HOMEPAGE AI RECEPTIONIST DEMO SECTION
+     Independent from the desktop homepage section. Remove this entire section to undo the mobile homepage demo embed. -->
+<section class="container live-demo-section" id="ai-receptionist-demo">
+  <div class="live-demo-heading">
+    <div class="section-label">Try it yourself</div>
+    <h2>Talk to the AI receptionist.</h2>
+    <p>Ask for help with a service and hear how the receptionist gathers caller details and a preferred time.</p>
+  </div>
+  <div class="live-demo-frame">
+    <iframe src="/demo/mka-electrical-gemini/" title="Interactive AI receptionist demo" loading="lazy" allow="microphone; autoplay" allowfullscreen></iframe>
+  </div>
+  <p class="live-demo-note">Demo only: no real booking is made and details are not sent to a business.</p>
+</section>
+<!-- END MOBILE HOMEPAGE AI RECEPTIONIST DEMO SECTION -->
 
 <section class="services">
 
