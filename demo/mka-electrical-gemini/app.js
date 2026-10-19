@@ -54,35 +54,13 @@ function stopRinging() {
   if (ctx) ctx.close().catch(() => {});
 }
 const heard = { agent: "", prevAgent: "", user: "" };
-let agentCaptionStartAt = 0, agentCaptionEndAt = 0, captionTicker = null, agentTurnDone = true, agentCaptionElement = null, lastRenderedCaption = "";
+let agentTurnDone = true, agentCaptionElement = null;
 function resetAgentCaptions() {
   heard.agent = "";
   heard.prevAgent = "";
-  agentCaptionStartAt = 0;
-  agentCaptionEndAt = 0;
   agentTurnDone = false;
   agentCaptionElement = null;
-  lastRenderedCaption = "";
-}
-function startCaptionTicker() {
-  if (captionTicker) return;
-  captionTicker = setInterval(() => {
-    if (!outputCtx || !heard.agent || !agentCaptionElement) return;
-    const now = outputCtx.currentTime;
-    const duration = Math.max(0.01, agentCaptionEndAt - agentCaptionStartAt);
-    const progress = Math.max(0, Math.min(1, (now - agentCaptionStartAt) / duration));
-    const words = heard.agent.split(/\\s+/);
-    const visible = Math.max(1, Math.ceil(words.length * progress));
-    const partial = words.slice(0, visible).join(" ");
-    if (partial !== lastRenderedCaption) {
-      agentCaptionElement.textContent = partial;
-      lastRenderedCaption = partial;
-    }
-    if (agentTurnDone && now >= agentCaptionEndAt) {
-      clearInterval(captionTicker);
-      captionTicker = null;
-    }
-  }, 45);
+  els.captions.innerHTML = "";
 }
 try { const saved=localStorage.getItem("lumora-demo-voice");if(saved&&VOICES[saved])voiceKey=saved; } catch {}
 const voiceButtons=[...document.querySelectorAll(".voice")];
@@ -95,7 +73,7 @@ function tickClock(){els.clock.textContent=new Intl.DateTimeFormat("en-AU",{hour
 function setState(next){state=next;screen.dataset.state=next;const name=VOICES[voiceKey].name;els.call.hidden=next==="live"||next==="connecting";els.hang.hidden=next!=="live"&&next!=="connecting";els.mute.hidden=next!=="live";els.call.classList.toggle("busy",next==="connecting");els.call.disabled=next==="connecting";if(next==="idle"){els.who.textContent="AI receptionist · Melbourne";els.callLabel.textContent="Call";}if(next==="connecting")els.who.textContent="AI receptionist · Melbourne";if(next==="live")els.who.textContent=`${name} · AI receptionist`;if(next==="ended"){els.who.textContent="Call ended";els.callLabel.textContent="Call again";}}
 function setMode(m){els.mode.textContent=m==="speaking"?`${VOICES[voiceKey].name} is speaking`:"Listening…";els.mode.classList.toggle("speaking",m==="speaking");}
 const clean=t=>String(t||"").replace(/\[[^\]]*\]/g,"").replace(/\s{2,}/g," ").trim();
-function showCaption(role,text){const t=clean(text);if(!t)return;if(role==="user"){lastUserLine=t;return;}if(!agentCaptionElement){if(lastUserLine){const you=document.createElement("p");you.className="you line";you.textContent=`“${lastUserLine}”`;els.captions.appendChild(you);lastUserLine="";}agentCaptionElement=document.createElement("p");agentCaptionElement.className="line";els.captions.appendChild(agentCaptionElement);}if(t!==heard.agent)heard.agent=t;}
+function showCaption(role,text){const t=clean(text);if(!t)return;if(role==="user"){lastUserLine=t;return;}if(!agentCaptionElement){if(lastUserLine){const you=document.createElement("p");you.className="you line";you.textContent=`“${lastUserLine}”`;els.captions.appendChild(you);lastUserLine="";}agentCaptionElement=document.createElement("p");agentCaptionElement.className="line";els.captions.appendChild(agentCaptionElement);}agentCaptionElement.textContent=t;}
 const PLACEHOLDER=/^(|to be confirmed|tbc|tbd|unknown|n\/?a|none|pending)$/i;
 function renderBooking(p,urgent=false){const rows=[["Name",p.customer_name],["Mobile",p.phone],["Job",p.job],["Where",p.suburb],["When",p.preferred_time]].filter(([,v])=>v&&!PLACEHOLDER.test(String(v).trim()));els.cardRows.innerHTML="";for(const[k,v]of rows){const dt=document.createElement("dt");dt.textContent=k;const dd=document.createElement("dd");dd.textContent=String(v);els.cardRows.append(dt,dd);}els.card.classList.toggle("urgent",urgent);els.cardTitle.textContent=urgent?"Demo priority enquiry":"Demo enquiry summary";els.card.classList.add("show");els.captions.style.opacity="0";}
 function hideBooking(){els.card.classList.remove("show");els.captions.style.opacity="";}
@@ -103,7 +81,7 @@ function pcm16ToBase64(float32){const bytes=new Uint8Array(float32.length*2);con
 function base64ToBytes(s){const bin=atob(s),out=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)out[i]=bin.charCodeAt(i);return out;}
 let micStream=null,inputCtx=null,processor=null,source=null,silentGain=null,outputCtx=null,nextPlayAt=0;
 function stopAudio(){try{processor?.disconnect();source?.disconnect();silentGain?.disconnect();}catch{}processor=null;source=null;silentGain=null;if(micStream){micStream.getTracks().forEach(t=>t.stop());micStream=null;}try{inputCtx?.close();}catch{}inputCtx=null;try{outputCtx?.close();}catch{}outputCtx=null;nextPlayAt=0;}
-function playPcm(data){if(!outputCtx||!data)return;const bytes=base64ToBytes(data);const samples=new Int16Array(bytes.buffer,bytes.byteOffset,Math.floor(bytes.byteLength/2));const buffer=outputCtx.createBuffer(1,samples.length,24000);const channel=buffer.getChannelData(0);for(let i=0;i<samples.length;i++)channel[i]=samples[i]/32768;const node=outputCtx.createBufferSource();node.buffer=buffer;node.connect(outputCtx.destination);nextPlayAt=Math.max(nextPlayAt,outputCtx.currentTime+0.02);if(!agentCaptionStartAt||outputCtx.currentTime>=agentCaptionEndAt){agentCaptionStartAt=nextPlayAt;}node.start(nextPlayAt);nextPlayAt+=buffer.duration;agentCaptionEndAt=nextPlayAt;startCaptionTicker();setMode("speaking");node.onended=()=>{if(outputCtx&&outputCtx.currentTime>=nextPlayAt-0.05)setMode("listening");};}
+function playPcm(data){if(!outputCtx||!data)return;const bytes=base64ToBytes(data);const samples=new Int16Array(bytes.buffer,bytes.byteOffset,Math.floor(bytes.byteLength/2));const buffer=outputCtx.createBuffer(1,samples.length,24000);const channel=buffer.getChannelData(0);for(let i=0;i<samples.length;i++)channel[i]=samples[i]/32768;const node=outputCtx.createBufferSource();node.buffer=buffer;node.connect(outputCtx.destination);nextPlayAt=Math.max(nextPlayAt,outputCtx.currentTime+0.02);node.start(nextPlayAt);nextPlayAt+=buffer.duration;setMode("speaking");node.onended=()=>{if(outputCtx&&outputCtx.currentTime>=nextPlayAt-0.05)setMode("listening");};}
 async function getToken(voice){const r=await fetch("/api/demo/gemini-token",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({demo:"lumora-receptionist",voice})});const body=await r.json().catch(()=>({}));if(!r.ok)throw new Error(body.error||"Couldn't securely start the Gemini session.");if(!body.token)throw new Error("The server didn't return a session token.");return body.token;}
 async function startCall(){if(state==="connecting"||state==="live")return;const id=++attemptId;els.notice.textContent="";els.captions.innerHTML="";lastUserLine="";heard.agent=heard.prevAgent=heard.user="";resetAgentCaptions();pendingBooking=null;hideBooking();setState("connecting");startRinging();let ws=null;
 try{
@@ -144,11 +122,7 @@ try{
           const incoming = clean(sc.outputTranscription.text);
           if (incoming) heard.agent = clean(heard.agent ? heard.agent + " " + incoming : incoming);
           agentTurnDone = false;
-          if (!agentCaptionStartAt) {
-            agentCaptionStartAt = outputCtx?.currentTime || 0;
-            agentCaptionEndAt = agentCaptionStartAt + 0.5;
-          }
-          startCaptionTicker();
+          showCaption("agent", heard.agent);
         }
         for (const part of sc.modelTurn?.parts || []) {
           if (part.inlineData?.mimeType?.startsWith("audio/pcm")) playPcm(part.inlineData.data);
@@ -202,7 +176,7 @@ try{
   }
   processor.onaudioprocess=(event)=>{if(!session||muted||id!==attemptId)return;const input=event.inputBuffer.getChannelData(0);session.sendRealtimeInput({audio:{data:pcm16ToBase64(input),mimeType:"audio/pcm;rate=16000"}});};
 }catch(e){clearTimeout(ws);ws=null;console.error("[Gemini demo]",e);if(id===attemptId){finishCall(e?.message?.includes("GEMINI_API_KEY")?"Gemini isn't configured yet. Add GEMINI_API_KEY in Vercel project settings.":e?.message||"Couldn't connect. Check the microphone and try again.");if(state==="ended")setState("idle");}}}
-function finishCall(message=""){stopRinging();attemptId++;const s=session;session=null;try{s?.close();}catch{}stopAudio();clearInterval(timerId);if(captionTicker)clearInterval(captionTicker);captionTicker=null;startedAt=0;setState("ended");els.notice.textContent=message;muted=false;els.mute.setAttribute("aria-pressed","false");els.muteLabel.textContent="Mute";}
+function finishCall(message=""){stopRinging();attemptId++;const s=session;session=null;try{s?.close();}catch{}stopAudio();clearInterval(timerId);startedAt=0;setState("ended");els.notice.textContent=message;muted=false;els.mute.setAttribute("aria-pressed","false");els.muteLabel.textContent="Mute";}
 els.call.addEventListener("click",startCall);els.hang.addEventListener("click",()=>finishCall());els.mute.addEventListener("click",()=>{muted=!muted;els.mute.setAttribute("aria-pressed",String(muted));els.muteLabel.textContent=muted?"Unmute":"Mute";});
 document.addEventListener("keydown",e=>{if(e.code!=="Space"||e.repeat)return;e.preventDefault();if(state==="live"||state==="connecting")finishCall();else startCall();});
 window.addEventListener("pagehide",()=>{try{session?.close();}catch{}stopAudio();});setState("idle");
