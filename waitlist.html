@@ -13,6 +13,25 @@
 <meta name="twitter:description" content="Contact Lumora Solutions about practical AI automation and workflow services for your business.">
 <meta name="twitter:image" content="https://lumorasolutions.tech/og-image.png"><link rel="icon" href="/lumora-icon.png"><style>
 :root{--cream:#fffaf6;--orange:#f37922;--charcoal:#545454;--text:#292625;--muted:#766d66;--line:#eadccf;--white:#fff}*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--text);font-family:Inter,Arial,sans-serif}.wrap{width:min(760px,calc(100% - 32px));margin:auto}.top{padding:28px 0}.brand{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--charcoal);font-size:22px}.brand img{width:38px;height:38px}.brand span{color:var(--orange)}.card{background:#fff;border:1px solid var(--line);border-radius:24px;padding:42px;margin:28px 0 60px;box-shadow:0 12px 35px rgba(84,84,84,.06)}h1{font-size:42px;line-height:1.05;color:var(--charcoal);margin:0 0 12px}p.lead{color:var(--muted);line-height:1.65;margin:0 0 30px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}label{display:block;font-size:13px;font-weight:800;color:var(--charcoal);margin-bottom:7px}input{width:100%;border:1px solid var(--line);border-radius:12px;padding:13px 14px;font:inherit;background:#fff;color:var(--text)}.button{border:0;width:100%;padding:15px;border-radius:999px;background:var(--orange);color:#fff;font-weight:800;font-size:15px;cursor:pointer}.status{display:none;margin-top:18px;padding:14px;border-radius:12px;background:#fff2df;color:var(--charcoal);line-height:1.5}.honeypot{position:absolute;left:-9999px}@media(max-width:650px){.card{padding:25px}.grid{grid-template-columns:1fr}h1{font-size:35px}}
+
+/* Consistent motion across Lumora pages */
+@keyframes lumora-page-enter { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+body.lumora-motion-ready header { animation: lumora-page-enter .55s ease-out both; }
+body.lumora-motion-ready main > .hero h1,
+body.lumora-motion-ready main > section:first-child h1,
+body.lumora-motion-ready main > .container:first-child h1 { animation: lumora-page-enter .7s .05s ease-out both; }
+body.lumora-motion-ready .lumora-reveal { opacity: 0; transform: translateY(20px); transition: opacity .65s ease, transform .65s ease; }
+body.lumora-motion-ready .lumora-reveal.lumora-visible { opacity: 1; transform: translateY(0); }
+body.lumora-motion-ready .button,
+body.lumora-motion-ready .main-button,
+body.lumora-motion-ready .link-card,
+body.lumora-motion-ready .card { transition: transform .25s ease, box-shadow .25s ease; }
+body.lumora-motion-ready .button:hover,
+body.lumora-motion-ready .main-button:hover { transform: translateY(-2px); }
+@media (prefers-reduced-motion: reduce) {
+  body.lumora-motion-ready *, body.lumora-motion-ready *::before, body.lumora-motion-ready *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+  body.lumora-motion-ready .lumora-reveal { opacity: 1; transform: none; }
+}
 </style></head><body><header class="wrap top"><a class="brand" href="/"><img src="/lumora-icon.png" alt="Lumora Solutions"><div>Lumora<span> Solutions</span></div></a></header>
 <main class="wrap"><section class="card"><h1>Contact us.</h1><p class="lead">Please fill in the form below and we’ll get back to you as soon as we can.</p>
 <form id="form"><div class="grid">
