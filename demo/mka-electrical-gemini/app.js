@@ -15,9 +15,9 @@ const els = {
 let voiceKey = "female", session = null, state = "idle", startedAt = 0, timerId = null;
 let muted = false, attemptId = 0, lastUserLine = "", pendingBooking = null;
 const heard = { agent: "", prevAgent: "", user: "" };
-try { const saved=localStorage.getItem("mka-gemini-voice");if(saved&&VOICES[saved])voiceKey=saved; } catch {}
+try { const saved=localStorage.getItem("lumora-demo-voice");if(saved&&VOICES[saved])voiceKey=saved; } catch {}
 const voiceButtons=[...document.querySelectorAll(".voice")];
-function selectVoice(key){voiceKey=key;voiceButtons.forEach(b=>b.setAttribute("aria-checked",String(b.dataset.voice===key)));try{localStorage.setItem("mka-gemini-voice",key);}catch{}}
+function selectVoice(key){voiceKey=key;voiceButtons.forEach(b=>b.setAttribute("aria-checked",String(b.dataset.voice===key)));try{localStorage.setItem("lumora-demo-voice",key);}catch{}}
 voiceButtons.forEach(b=>b.addEventListener("click",()=>state!=="live"&&state!=="connecting"&&selectVoice(b.dataset.voice)));selectVoice(voiceKey);
 
 function melbourneParts(d=new Date()){const f=new Intl.DateTimeFormat("en-AU",{timeZone:TZ,weekday:"long",day:"numeric",month:"long",year:"numeric",hour:"numeric",minute:"2-digit",hour12:true});const p=Object.fromEntries(f.formatToParts(d).map(x=>[x.type,x.value]));const h24=Number(new Intl.DateTimeFormat("en-GB",{timeZone:TZ,hour:"2-digit",hour12:false}).format(d));return{...p,h24};}
@@ -28,14 +28,14 @@ function setMode(m){els.mode.textContent=m==="speaking"?`${VOICES[voiceKey].name
 const clean=t=>String(t||"").replace(/\[[^\]]*\]/g,"").replace(/\s{2,}/g," ").trim();
 function showCaption(role,text){const t=clean(text);if(!t)return;if(role==="user"){lastUserLine=t;return;}els.captions.innerHTML="";if(lastUserLine){const you=document.createElement("p");you.className="you line";you.textContent=`“${lastUserLine}”`;els.captions.appendChild(you);lastUserLine="";}const line=document.createElement("p");line.className="line";line.textContent=t;els.captions.appendChild(line);}
 const PLACEHOLDER=/^(|to be confirmed|tbc|tbd|unknown|n\/?a|none|pending)$/i;
-function renderBooking(p,urgent=false){const rows=[["Name",p.customer_name],["Mobile",p.phone],["Job",p.job],["Where",p.suburb],["When",p.preferred_time]].filter(([,v])=>v&&!PLACEHOLDER.test(String(v).trim()));els.cardRows.innerHTML="";for(const[k,v]of rows){const dt=document.createElement("dt");dt.textContent=k;const dd=document.createElement("dd");dd.textContent=String(v);els.cardRows.append(dt,dd);}els.card.classList.toggle("urgent",urgent);els.cardTitle.textContent=urgent?"Flagged for Mohammed to call back":"Booking request sent to Mohammed";els.card.classList.add("show");els.captions.style.opacity="0";}
+function renderBooking(p,urgent=false){const rows=[["Name",p.customer_name],["Mobile",p.phone],["Job",p.job],["Where",p.suburb],["When",p.preferred_time]].filter(([,v])=>v&&!PLACEHOLDER.test(String(v).trim()));els.cardRows.innerHTML="";for(const[k,v]of rows){const dt=document.createElement("dt");dt.textContent=k;const dd=document.createElement("dd");dd.textContent=String(v);els.cardRows.append(dt,dd);}els.card.classList.toggle("urgent",urgent);els.cardTitle.textContent=urgent?"Demo priority enquiry":"Demo enquiry summary";els.card.classList.add("show");els.captions.style.opacity="0";}
 function hideBooking(){els.card.classList.remove("show");els.captions.style.opacity="";}
 function pcm16ToBase64(float32){const bytes=new Uint8Array(float32.length*2);const view=new DataView(bytes.buffer);for(let i=0;i<float32.length;i++){const s=Math.max(-1,Math.min(1,float32[i]));view.setInt16(i*2,s<0?s*0x8000:s*0x7fff,true);}let bin="";for(let i=0;i<bytes.length;i++)bin+=String.fromCharCode(bytes[i]);return btoa(bin);}
 function base64ToBytes(s){const bin=atob(s),out=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)out[i]=bin.charCodeAt(i);return out;}
 let micStream=null,inputCtx=null,processor=null,source=null,silentGain=null,outputCtx=null,nextPlayAt=0;
 function stopAudio(){try{processor?.disconnect();source?.disconnect();silentGain?.disconnect();}catch{}processor=null;source=null;silentGain=null;if(micStream){micStream.getTracks().forEach(t=>t.stop());micStream=null;}try{inputCtx?.close();}catch{}inputCtx=null;try{outputCtx?.close();}catch{}outputCtx=null;nextPlayAt=0;}
 function playPcm(data){if(!outputCtx||!data)return;const bytes=base64ToBytes(data);const samples=new Int16Array(bytes.buffer,bytes.byteOffset,Math.floor(bytes.byteLength/2));const buffer=outputCtx.createBuffer(1,samples.length,24000);const channel=buffer.getChannelData(0);for(let i=0;i<samples.length;i++)channel[i]=samples[i]/32768;const node=outputCtx.createBufferSource();node.buffer=buffer;node.connect(outputCtx.destination);nextPlayAt=Math.max(nextPlayAt,outputCtx.currentTime+0.02);node.start(nextPlayAt);nextPlayAt+=buffer.duration;setMode("speaking");node.onended=()=>{if(outputCtx&&outputCtx.currentTime>=nextPlayAt-0.05)setMode("listening");};}
-async function getToken(voice){const r=await fetch("/api/demo/gemini-token",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({demo:"mka-electrical",voice})});const body=await r.json().catch(()=>({}));if(!r.ok)throw new Error(body.error||"Couldn't securely start the Gemini session.");if(!body.token)throw new Error("The server didn't return a session token.");return body.token;}
+async function getToken(voice){const r=await fetch("/api/demo/gemini-token",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({demo:"lumora-receptionist",voice})});const body=await r.json().catch(()=>({}));if(!r.ok)throw new Error(body.error||"Couldn't securely start the Gemini session.");if(!body.token)throw new Error("The server didn't return a session token.");return body.token;}
 async function startCall(){if(state==="connecting"||state==="live")return;const id=++attemptId;els.notice.textContent="";els.captions.innerHTML="";lastUserLine="";heard.agent=heard.prevAgent=heard.user="";pendingBooking=null;hideBooking();setState("connecting");let ws=null;
 try{
   els.notice.textContent="Waiting for microphone permission…";
@@ -45,7 +45,7 @@ try{
   const token=await getToken(voiceKey);if(id!==attemptId){stopAudio();return;}
   const { GoogleGenAI } = await import("https://esm.sh/@google/genai");
   inputCtx=new AudioContext({sampleRate:16000});outputCtx=new AudioContext({sampleRate:24000});await inputCtx.resume();await outputCtx.resume();source=inputCtx.createMediaStreamSource(micStream);processor=inputCtx.createScriptProcessor(4096,1,1);silentGain=inputCtx.createGain();silentGain.gain.value=0;source.connect(processor);processor.connect(silentGain);silentGain.connect(inputCtx.destination);
-  const ai=new GoogleGenAI({apiKey:token,httpOptions:{apiVersion:"v1beta"}});const config={responseModalities:["AUDIO"],sessionResumption:{},systemInstruction:{parts:[{text:"You are a friendly, professional AI receptionist for MKA Electrical in Melbourne, Australia. Speak naturally in Australian English with a clear Australian accent. Keep replies concise. Collect the caller’s name, mobile number, job details, suburb/address, and preferred time. Never claim a booking is confirmed. Say you will pass on a request for Mohammed to follow up. Do not invent availability, prices, or confirmed appointments. If urgent, collect the caller’s name, phone, and suburb, then say you will flag it for a callback. Use Australia/Melbourne local date and time. Current Melbourne context: "+JSON.stringify(context())}]},speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:VOICES[voiceKey].geminiVoice}}},inputAudioTranscription:{},outputAudioTranscription:{},tools:[{functionDeclarations:[{name:"show_booking_summary",description:"Display a booking request summary only after collecting the details and reading them back for caller confirmation. Never claim that an appointment is confirmed.",parameters:{type:"OBJECT",properties:{customer_name:{type:"STRING"},phone:{type:"STRING"},job:{type:"STRING"},suburb:{type:"STRING"},preferred_time:{type:"STRING"},urgent:{type:"BOOLEAN"}},required:["customer_name","phone","suburb"]}}]}]};
+  const ai=new GoogleGenAI({apiKey:token,httpOptions:{apiVersion:"v1beta"}});const config={responseModalities:["AUDIO"],sessionResumption:{},systemInstruction:{parts:[{text:"You are the AI receptionist in a fictional business demo created by Lumora Solutions. This is only a demonstration, not a real business and not a real booking service. Speak naturally in Australian English with a clear Australian accent. Keep replies concise and helpful. Greet the caller first, then demonstrate how a receptionist could collect a name, contact number, job details, suburb, and preferred time. Never claim a real booking or callback has been made. Explain that any details entered are only shown in this demo and are not sent to a business. Do not invent real availability or prices. Use Australia/Melbourne local date and time. Current Melbourne context: "+JSON.stringify(context())}]},speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:VOICES[voiceKey].geminiVoice}}},inputAudioTranscription:{},outputAudioTranscription:{},tools:[{functionDeclarations:[{name:"show_booking_summary",description:"Display a booking request summary only after collecting the details and reading them back for caller confirmation. Never claim that an appointment is confirmed.",parameters:{type:"OBJECT",properties:{customer_name:{type:"STRING"},phone:{type:"STRING"},job:{type:"STRING"},suburb:{type:"STRING"},preferred_time:{type:"STRING"},urgent:{type:"BOOLEAN"}},required:["customer_name","phone","suburb"]}}]}]};
   els.notice.textContent="Connecting to Gemini Live…";
   session = await Promise.race([
     ai.live.connect({
@@ -82,7 +82,7 @@ try{
         if (message.toolCall?.functionCalls?.length) {
           const functionResponses = [];
           for (const call of message.toolCall.functionCalls) {
-            let result = "Collected details. Read the summary back and ask the caller to confirm.";
+            let result = "This is a fictional demo. Read the details back for confirmation and explain that the summary is only shown on screen and is not sent anywhere.";
             if (call.name === "show_booking_summary") {
               const p = call.args || {};
               const urgent = p.urgent === true || p.urgent === "true";
@@ -91,7 +91,7 @@ try{
                 result = "Missing required details. Collect the caller's name, phone and suburb first.";
               } else {
                 renderBooking(p, urgent);
-                result = "Summary displayed. Do not say an appointment is confirmed; explain that Mohammed will follow up.";
+                result = "Demo summary displayed on screen only. Make clear that no real booking was made and no details were sent to anyone.";
               }
             }
             functionResponses.push({ id: call.id, name: call.name, response: { result } });
@@ -117,7 +117,7 @@ try{
   // Ask the model to start its first audio turn immediately after connection.
   try {
     session.sendClientContent({
-      turns: [{ role: "user", parts: [{ text: "Begin the call now. Greet the caller first with exactly this opening, spoken aloud in a natural Australian voice: Hi, thanks for calling MKA Electrical. You’re speaking with our AI receptionist. How can I help you today? Do not wait for the caller to speak first. After the greeting, stop and listen." }] }],
+      turns: [{ role: "user", parts: [{ text: "Begin the call now. Greet the caller first with exactly this opening, spoken aloud in a natural Australian voice: Hi, you’ve reached the Lumora AI receptionist demo. I’m here to show how a virtual receptionist could help a business. How can I help you today? Do not wait for the caller to speak first. After the greeting, stop and listen." }] }],
       turnComplete: true
     });
     setMode("speaking");
