@@ -428,6 +428,34 @@ body.lumora-motion-ready .lumora-reveal.lumora-visible { opacity: 1; transform: 
 body.lumora-motion-ready .button, body.lumora-motion-ready .main-button, body.lumora-motion-ready .link-card, body.lumora-motion-ready .card { transition: transform .25s ease, box-shadow .25s ease; }
 body.lumora-motion-ready .button:hover, body.lumora-motion-ready .main-button:hover { transform: translateY(-2px); }
 @media (prefers-reduced-motion: reduce) { body.lumora-motion-ready *, body.lumora-motion-ready *::before, body.lumora-motion-ready *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } body.lumora-motion-ready .lumora-reveal { opacity: 1; transform: none; } }
+
+/* Staggered text reveals inspired by the redesign */
+.lumora-text-reveal { visibility: visible; }
+.lumora-text-reveal .lumora-text-reveal-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding-bottom: .08em;
+  margin-bottom: -.08em;
+}
+.lumora-text-reveal .lumora-text-reveal-word > span {
+  display: inline-block;
+  opacity: 0;
+  transform: translate3d(0, 110%, 0);
+  transition: transform .8s cubic-bezier(.16,1,.3,1), opacity .55s ease;
+  transition-delay: var(--word-delay, 0ms);
+}
+.lumora-text-reveal.lumora-text-revealed .lumora-text-reveal-word > span {
+  opacity: 1;
+  transform: translate3d(0,0,0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .lumora-text-reveal .lumora-text-reveal-word > span {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
 </style>
 </head>
 
@@ -768,5 +796,47 @@ body.lumora-motion-ready .button:hover, body.lumora-motion-ready .main-button:ho
   if (main && 'MutationObserver' in window) new MutationObserver(() => observeTargets(main)).observe(main, { childList: true, subtree: true });
 })();
 </script>
+
+<script>
+(function () {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const headings = document.querySelectorAll('main h1, main h2, main h3, main .hero p, main .homepage-booking-heading p');
+  headings.forEach((el) => {
+    if (el.children.length || !el.textContent.trim() || el.closest('button, a, label')) return;
+    const original = el.textContent.trim().replace(/\s+/g, ' ');
+    el.setAttribute('aria-label', original);
+    el.setAttribute('data-lumora-text-reveal', 'true');
+    el.classList.add('lumora-text-reveal');
+    el.setAttribute('aria-hidden', 'true');
+    const words = original.split(' ');
+    el.textContent = '';
+    words.forEach((word, index) => {
+      const clip = document.createElement('span');
+      clip.className = 'lumora-text-reveal-word';
+      clip.style.setProperty('--word-delay', (Math.min(index, 12) * 32) + 'ms');
+      const inner = document.createElement('span');
+      inner.textContent = word;
+      clip.appendChild(inner);
+      el.appendChild(clip);
+      if (index < words.length - 1) el.appendChild(document.createTextNode(' '));
+    });
+    el.removeAttribute('aria-hidden');
+  });
+  if (reduceMotion || !('IntersectionObserver' in window)) {
+    document.querySelectorAll('.lumora-text-reveal').forEach(el => el.classList.add('lumora-text-revealed'));
+    return;
+  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('lumora-text-revealed');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -24px 0px' });
+  document.querySelectorAll('.lumora-text-reveal').forEach(el => observer.observe(el));
+})();
+</script>
+
 </body>
 </html>
