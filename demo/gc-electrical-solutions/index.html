@@ -438,7 +438,7 @@
 </head>
 <body>
   <main class="phone" aria-label="AI receptionist demo">
-    <div class="screen" id="screen" data-state="idle" data-locked="true">
+    <div class="screen" id="screen" data-state="idle" data-locked="false">
       <div class="island" aria-hidden="true"></div>
 
       <div class="statusbar">
@@ -572,6 +572,8 @@
       VOICES.male.agentId = "agent_9801m59cqvrteps8rey4wr4vt1cq"; // Steve
       screen.dataset.locked = "false";
     }
+    // Public website demo: configure the demo agents immediately without a passcode.
+    setUnlocked({});
     try { const saved = JSON.parse(localStorage.getItem(UNLOCK_KEY) || "null"); if (validIds(saved)) setUnlocked(saved); } catch {}
     if (screen.dataset.locked === "true") {
       let pass = null;
