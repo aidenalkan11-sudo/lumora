@@ -10,9 +10,16 @@ module.exports = function handler(req, res) {
     res.status(200).send([
       "# Lumora Solutions",
       "",
-      "Lumora Solutions is a Melbourne, Victoria, Australia business that builds practical AI automation systems for businesses.",
+      "Lumora Solutions is a Melbourne, Victoria, Australia business focused primarily on AI receptionists that answer calls, capture enquiries, handle common questions and help manage appointment requests. Lumora also builds other custom AI systems and automates workflows across businesses.",
       "",
-      "## Services",
+      "## Core service: AI receptionists
+- Answer incoming business calls
+- Handle common questions and capture caller details
+- Route enquiries and support appointment requests
+
+## Additional services
+- Custom AI systems
+- Workflow automation across business operations",
       "- Lead capture and enquiry routing",
       "- Automated lead follow-up",
       "- Booking and scheduling workflows",
