@@ -14,6 +14,45 @@ const els = {
 };
 let voiceKey = "female", session = null, state = "idle", startedAt = 0, timerId = null;
 let muted = false, attemptId = 0, lastUserLine = "", pendingBooking = null;
+let ringCtx = null, ringInterval = null;
+function playRingBurst() {
+  if (!ringCtx || ringCtx.state !== "running") return;
+  const start = ringCtx.currentTime;
+  for (const frequency of [440, 480]) {
+    const oscillator = ringCtx.createOscillator();
+    const gain = ringCtx.createGain();
+    oscillator.type = "sine";
+    oscillator.frequency.value = frequency;
+    gain.gain.setValueAtTime(0.0001, start);
+    gain.gain.exponentialRampToValueAtTime(0.045, start + 0.025);
+    gain.gain.setValueAtTime(0.045, start + 0.28);
+    gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.34);
+    oscillator.connect(gain);
+    gain.connect(ringCtx.destination);
+    oscillator.start(start);
+    oscillator.stop(start + 0.35);
+  }
+}
+function startRinging() {
+  stopRinging();
+  try {
+    ringCtx = new AudioContext();
+    ringCtx.resume().then(() => {
+      if (!ringCtx || state !== "connecting") return;
+      playRingBurst();
+      ringInterval = setInterval(() => {
+        if (state === "connecting") playRingBurst();
+      }, 2100);
+    }).catch(() => {});
+  } catch (error) { console.warn("[Demo ringtone]", error); }
+}
+function stopRinging() {
+  if (ringInterval) clearInterval(ringInterval);
+  ringInterval = null;
+  const ctx = ringCtx;
+  ringCtx = null;
+  if (ctx) ctx.close().catch(() => {});
+}
 const heard = { agent: "", prevAgent: "", user: "" };
 try { const saved=localStorage.getItem("lumora-demo-voice");if(saved&&VOICES[saved])voiceKey=saved; } catch {}
 const voiceButtons=[...document.querySelectorAll(".voice")];
@@ -23,7 +62,7 @@ voiceButtons.forEach(b=>b.addEventListener("click",()=>state!=="live"&&state!=="
 function melbourneParts(d=new Date()){const f=new Intl.DateTimeFormat("en-AU",{timeZone:TZ,weekday:"long",day:"numeric",month:"long",year:"numeric",hour:"numeric",minute:"2-digit",hour12:true});const p=Object.fromEntries(f.formatToParts(d).map(x=>[x.type,x.value]));const h24=Number(new Intl.DateTimeFormat("en-GB",{timeZone:TZ,hour:"2-digit",hour12:false}).format(d));return{...p,h24};}
 function context(){const now=new Date(),p=melbourneParts(now),weekend=p.weekday==="Saturday"||p.weekday==="Sunday",dates=[];for(let i=0;i<15;i++){const q=melbourneParts(new Date(now.getTime()+i*86400000));dates.push(`${q.weekday} ${q.day} ${q.month}${i===0?" (today)":i===1?" (tomorrow)":""}`);}return{now_melbourne:`${p.weekday} ${p.day} ${p.month} ${p.year}, ${p.hour}:${p.minute} ${p.dayPeriod}`,office_status:weekend?"closed (weekend)":"open",upcoming_dates:dates.join("; ")};}
 function tickClock(){els.clock.textContent=new Intl.DateTimeFormat("en-AU",{hour:"numeric",minute:"2-digit",hour12:false}).format(new Date());}tickClock();setInterval(tickClock,15000);
-function setState(next){state=next;screen.dataset.state=next;const name=VOICES[voiceKey].name;els.call.hidden=next==="live"||next==="connecting";els.hang.hidden=next!=="live"&&next!=="connecting";els.mute.hidden=next!=="live";els.call.classList.toggle("busy",next==="connecting");els.call.disabled=next==="connecting";if(next==="idle"){els.who.textContent="AI receptionist · Melbourne";els.callLabel.textContent="Call";}if(next==="connecting")els.who.textContent=`Calling ${name}…`;if(next==="live")els.who.textContent=`${name} · AI receptionist`;if(next==="ended"){els.who.textContent="Call ended";els.callLabel.textContent="Call again";}}
+function setState(next){state=next;screen.dataset.state=next;const name=VOICES[voiceKey].name;els.call.hidden=next==="live"||next==="connecting";els.hang.hidden=next!=="live"&&next!=="connecting";els.mute.hidden=next!=="live";els.call.classList.toggle("busy",next==="connecting");els.call.disabled=next==="connecting";if(next==="idle"){els.who.textContent="AI receptionist · Melbourne";els.callLabel.textContent="Call";}if(next==="connecting")els.who.textContent="AI receptionist · Melbourne";if(next==="live")els.who.textContent=`${name} · AI receptionist`;if(next==="ended"){els.who.textContent="Call ended";els.callLabel.textContent="Call again";}}
 function setMode(m){els.mode.textContent=m==="speaking"?`${VOICES[voiceKey].name} is speaking`:"Listening…";els.mode.classList.toggle("speaking",m==="speaking");}
 const clean=t=>String(t||"").replace(/\[[^\]]*\]/g,"").replace(/\s{2,}/g," ").trim();
 function showCaption(role,text){const t=clean(text);if(!t)return;if(role==="user"){lastUserLine=t;return;}els.captions.innerHTML="";if(lastUserLine){const you=document.createElement("p");you.className="you line";you.textContent=`“${lastUserLine}”`;els.captions.appendChild(you);lastUserLine="";}const line=document.createElement("p");line.className="line";line.textContent=t;els.captions.appendChild(line);}
@@ -46,7 +85,8 @@ try{
   const { GoogleGenAI } = await import("https://esm.sh/@google/genai");
   inputCtx=new AudioContext({sampleRate:16000});outputCtx=new AudioContext({sampleRate:24000});await inputCtx.resume();await outputCtx.resume();source=inputCtx.createMediaStreamSource(micStream);processor=inputCtx.createScriptProcessor(4096,1,1);silentGain=inputCtx.createGain();silentGain.gain.value=0;source.connect(processor);processor.connect(silentGain);silentGain.connect(inputCtx.destination);
   const ai=new GoogleGenAI({apiKey:token,httpOptions:{apiVersion:"v1beta"}});const config={responseModalities:["AUDIO"],sessionResumption:{},systemInstruction:{parts:[{text:"You are the AI receptionist in a fictional business demo created by Lumora Solutions. This is only a demonstration, not a real business and not a real booking service. Speak naturally in Australian English with a clear Australian accent. Keep replies concise and helpful. Greet the caller first, then demonstrate how a receptionist could collect a name, contact number, job details, suburb, and preferred time. Never claim a real booking or callback has been made. Explain that any details entered are only shown in this demo and are not sent to a business. Do not invent real availability or prices. Use Australia/Melbourne local date and time. Current Melbourne context: "+JSON.stringify(context())}]},speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:VOICES[voiceKey].geminiVoice}}},inputAudioTranscription:{},outputAudioTranscription:{},tools:[{functionDeclarations:[{name:"show_booking_summary",description:"Display a booking request summary only after collecting the details and reading them back for caller confirmation. Never claim that an appointment is confirmed.",parameters:{type:"OBJECT",properties:{customer_name:{type:"STRING"},phone:{type:"STRING"},job:{type:"STRING"},suburb:{type:"STRING"},preferred_time:{type:"STRING"},urgent:{type:"BOOLEAN"}},required:["customer_name","phone","suburb"]}}]}]};
-  els.notice.textContent="Connecting to Gemini Live…";
+  els.notice.textContent="";
+  startRinging();
   session = await Promise.race([
     ai.live.connect({
     model: MODEL,
@@ -54,6 +94,7 @@ try{
     callbacks: {
       onopen: () => {
         if (id !== attemptId) return;
+        stopRinging();
         startedAt = Date.now();
         setState("live");
         setMode("listening");
@@ -128,7 +169,7 @@ try{
   }
   processor.onaudioprocess=(event)=>{if(!session||muted||id!==attemptId)return;const input=event.inputBuffer.getChannelData(0);session.sendRealtimeInput({audio:{data:pcm16ToBase64(input),mimeType:"audio/pcm;rate=16000"}});};
 }catch(e){clearTimeout(ws);ws=null;console.error("[Gemini demo]",e);if(id===attemptId){finishCall(e?.message?.includes("GEMINI_API_KEY")?"Gemini isn't configured yet. Add GEMINI_API_KEY in Vercel project settings.":e?.message||"Couldn't connect. Check the microphone and try again.");if(state==="ended")setState("idle");}}}
-function finishCall(message=""){attemptId++;const s=session;session=null;try{s?.close();}catch{}stopAudio();clearInterval(timerId);startedAt=0;setState("ended");els.notice.textContent=message;muted=false;els.mute.setAttribute("aria-pressed","false");els.muteLabel.textContent="Mute";}
+function finishCall(message=""){stopRinging();attemptId++;const s=session;session=null;try{s?.close();}catch{}stopAudio();clearInterval(timerId);startedAt=0;setState("ended");els.notice.textContent=message;muted=false;els.mute.setAttribute("aria-pressed","false");els.muteLabel.textContent="Mute";}
 els.call.addEventListener("click",startCall);els.hang.addEventListener("click",()=>finishCall());els.mute.addEventListener("click",()=>{muted=!muted;els.mute.setAttribute("aria-pressed",String(muted));els.muteLabel.textContent=muted?"Unmute":"Mute";});
 document.addEventListener("keydown",e=>{if(e.code!=="Space"||e.repeat)return;e.preventDefault();if(state==="live"||state==="connecting")finishCall();else startCall();});
 window.addEventListener("pagehide",()=>{try{session?.close();}catch{}stopAudio();});setState("idle");
