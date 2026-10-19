@@ -55,4 +55,17 @@ body.lumora-motion-ready .button:hover, body.lumora-motion-ready .main-button:ho
 <script>
 const form=document.getElementById('form'),status=document.getElementById('status');
 form.addEventListener('submit',async e=>{e.preventDefault();status.style.display='block';status.textContent='Submitting...';const data=Object.fromEntries(new FormData(form));try{const r=await fetch('/api/waitlist',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});const j=await r.json();if(!r.ok)throw new Error(j.error||'Submission failed');document.querySelector('.card h1')?.remove();document.querySelector('.card .lead')?.remove();form.innerHTML='<h2 style="color:#545454;margin-top:0">Thanks for contacting us.</h2><p style="color:#766d66;line-height:1.7">We’ve received your details and will get back to you as soon as we can.</p>';window.scrollTo({top:0,behavior:'smooth'})}catch(err){status.textContent=err.message+' Please try again.'}});
-</script></body></html>
+</script>
+<script>
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  document.body.classList.add('lumora-motion-ready');
+  const selectors = 'main > section, main > article, main > .container > section, main > .wrap > section, main > .container > article, main > .card, main > .link-card, main .stat, main .step, main .service-card, main .service, main .post-card, #post-grid > *';
+  let observer;
+  const observeTargets = (root) => (root || document).querySelectorAll(selectors).forEach((target) => { if (target.dataset.lumoraMotionObserved) return; target.dataset.lumoraMotionObserved = 'true'; target.classList.add('lumora-reveal'); if (observer) observer.observe(target); else target.classList.add('lumora-visible'); });
+  if ('IntersectionObserver' in window) observer = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('lumora-visible'); observer.unobserve(entry.target); } }), { threshold: 0.08, rootMargin: '0px 0px -28px 0px' });
+  observeTargets(); const main = document.querySelector('main');
+  if (main && 'MutationObserver' in window) new MutationObserver(() => observeTargets(main)).observe(main, { childList: true, subtree: true });
+})();
+</script>
+</body></html>
