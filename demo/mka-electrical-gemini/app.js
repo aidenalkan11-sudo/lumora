@@ -114,12 +114,14 @@ try{
     new Promise((_, reject) => { ws = setTimeout(() => reject(new Error("Gemini took longer than 20 seconds to connect. Check the browser connection and try again.")), 20000); })
   ]);
   clearTimeout(ws); ws = null;
-  // Prompt the model to greet the caller immediately after the Live session is ready.
+  // Ask the model to start its first audio turn immediately after connection.
   try {
     session.sendClientContent({
-      turns: [{ role: "user", parts: [{ text: "The caller has just connected. Speak first with a brief, natural greeting: \"Hi, thanks for calling MKA Electrical. You’re speaking with our AI receptionist. How can I help you today?\" Then pause and listen for their reply." }] }],
+      turns: [{ role: "user", parts: [{ text: "Begin the call now. Greet the caller first with exactly this opening, spoken aloud in a natural Australian voice: Hi, thanks for calling MKA Electrical. You’re speaking with our AI receptionist. How can I help you today? Do not wait for the caller to speak first. After the greeting, stop and listen." }] }],
       turnComplete: true
     });
+    setMode("speaking");
+    els.notice.textContent="Connected. The receptionist is greeting you…";
   } catch (greetingError) {
     console.error("[Gemini greeting]", greetingError);
     throw new Error("Connected, but couldn't start the greeting. Please hang up and try again.");
