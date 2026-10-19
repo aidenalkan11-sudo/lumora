@@ -27,7 +27,7 @@ export default async function handler(req, res) {
       for (const key of ['name','businessName','phone','email']) if (!String(b[key] || '').trim()) return res.status(400).json({ error: `Missing ${key}` });
       if (String(b.website || '').trim()) return res.status(400).json({ error: 'Invalid submission' });
       const { entries, sha } = await readStore();
-      entries.unshift({ id: crypto.randomUUID(), submittedAt: new Date().toISOString(), name: String(b.name).trim().slice(0,120), businessName: String(b.businessName).trim().slice(0,160), phone: String(b.phone).trim().slice(0,50), email: String(b.email).trim().slice(0,160), checked: false, notes: '' });
+      entries.unshift({ id: crypto.randomUUID(), submittedAt: new Date().toISOString(), name: String(b.name).trim().slice(0,120), businessName: String(b.businessName).trim().slice(0,160), phone: String(b.phone).trim().slice(0,50), email: String(b.email).trim().slice(0,160), checked: false, notes: String(b.notes || '').trim().slice(0,4000) });
       await writeStore(entries, sha);
       return res.status(201).json({ success: true });
     }
