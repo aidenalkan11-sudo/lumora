@@ -109,6 +109,9 @@
       color: var(--muted); font-size: 10px; letter-spacing: .12em;
       text-transform: uppercase; animation: lumora-arrow-bounce 1.5s ease-in-out infinite;
     }
+
+    .scroll-cue-after-demo { position: static; left: auto; bottom: auto; transform: none; width: fit-content; margin: 8px auto 26px; padding: 8px 14px 0; animation: none; }
+    .scroll-cue-after-demo svg { animation: lumora-arrow-bounce 1.5s ease-in-out infinite; }
     .scroll-cue svg { width: 18px; height: 18px; stroke: var(--orange); }
     .hero { position: relative; }
     .reveal-ready .reveal-on-scroll {
@@ -483,10 +486,7 @@
 
   </div>
 
-  <a class="scroll-cue" href="#ai-receptionist-demo" aria-label="Scroll down to try the AI receptionist">
-    <span>Scroll to explore</span>
-    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-  </a>
+
 
 </section>
 
@@ -505,8 +505,13 @@
   <p class="live-demo-note">This is a demonstration only. It does not make real bookings or send your details to a business.</p>
 </section>
 <!-- END HOMEPAGE AI RECEPTIONIST DEMO SECTION -->
+<a class="scroll-cue scroll-cue-after-demo" href="#services" aria-label="Scroll down to explore more of Lumora">
+  <span>Scroll to explore</span>
+  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+</a>
 
-<section class="services reveal-on-scroll">
+
+<section class="services reveal-on-scroll" id="services">
 
   <div class="container">
 
