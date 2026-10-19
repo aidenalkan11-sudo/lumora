@@ -823,11 +823,21 @@
       return Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error("timeout")), ms))]);
     }
 
-    function openSession(type, id) {
+    async function openSession(type, id) {
       const cfg = VOICES[voiceKey];
+      const tokenResponse = await fetch("/api/elevenlabs-signed-url", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ agentId: cfg.agentId }),
+        cache: "no-store",
+      });
+      const tokenData = await tokenResponse.json().catch(() => ({}));
+      if (!tokenResponse.ok || !tokenData.signedUrl) {
+        throw new Error(tokenData.error || "Could not securely connect to the receptionist.");
+      }
       return Conversation.startSession({
-        agentId: cfg.agentId,
-        connectionType: type,
+        signedUrl: tokenData.signedUrl,
+        connectionType: "websocket",
         dynamicVariables: context(),
         useWakeLock: true,
         clientTools: { show_booking_summary: (p) => {
@@ -879,8 +889,8 @@
         return;
       }
 
-      // WebRTC first (best echo cancellation), then WebSocket, each with one retry.
-      const plan = ["webrtc", "websocket", "webrtc", "websocket"];
+      // Signed ElevenLabs URLs support WebSocket connections; fetch a fresh URL on retry.
+      const plan = ["websocket", "websocket"];
       for (let i = 0; i < plan.length; i++) {
         if (id !== attemptId) return;
         try {
