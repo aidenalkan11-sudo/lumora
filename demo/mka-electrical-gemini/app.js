@@ -135,6 +135,7 @@ try{
           showCaption("user", heard.user);
         }
         if (sc.outputTranscription?.text) {
+          if (agentTurnDone) resetAgentCaptions();
           heard.prevAgent = heard.agent;
           const incoming = clean(sc.outputTranscription.text);
           if (incoming) heard.agent = clean(heard.agent ? heard.agent + " " + incoming : incoming);
