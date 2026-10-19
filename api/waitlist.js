@@ -29,6 +29,38 @@ export default async function handler(req, res) {
       const { entries, sha } = await readStore();
       entries.unshift({ id: crypto.randomUUID(), submittedAt: new Date().toISOString(), name: String(b.name).trim().slice(0,120), businessName: String(b.businessName).trim().slice(0,160), phone: String(b.phone).trim().slice(0,50), email: String(b.email).trim().slice(0,160), checked: false, notes: String(b.notes || '').trim().slice(0,4000) });
       await writeStore(entries, sha);
+
+      // Send a Telegram alert after the lead is safely saved. Notification failures
+      // must not make a successful form submission appear to fail.
+      const telegramToken = process.env.TELEGRAM_BOT_TOKEN;
+      const telegramChatId = process.env.TELEGRAM_CHAT_ID;
+      if (telegramToken && telegramChatId) {
+        const lead = entries[0];
+        const message = [
+          'New Lumora website enquiry',
+          '',
+          `Name: ${lead.name}`,
+          `Business: ${lead.businessName}`,
+          `Phone: ${lead.phone}`,
+          `Email: ${lead.email}`,
+          lead.notes ? `Details: ${lead.notes}` : ''
+        ].filter(Boolean).join('\n').slice(0, 4000);
+        try {
+          const telegramResponse = await fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: telegramChatId, text: message })
+          });
+          if (!telegramResponse.ok) {
+            console.error('Telegram notification failed:', await telegramResponse.text());
+          }
+        } catch (telegramError) {
+          console.error('Telegram notification failed:', telegramError);
+        }
+      } else {
+        console.warn('Telegram notification skipped: TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID is missing');
+      }
+
       return res.status(201).json({ success: true });
     }
     if (req.method === 'GET') {
