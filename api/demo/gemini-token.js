@@ -58,8 +58,9 @@ export default async function handler(req, res) {
     });
     const data = await tokenResponse.json().catch(() => ({}));
     if (!tokenResponse.ok || !data.name) {
-      console.error('Gemini ephemeral token request failed:', tokenResponse.status, data.error?.message || 'Unknown error');
-      return res.status(502).json({ error: 'Gemini could not issue a session token. Check the API key and Live API access.' });
+      const googleMessage = String(data.error?.message || 'Google returned an unexpected token response').slice(0, 500);
+      console.error('Gemini ephemeral token request failed:', tokenResponse.status, googleMessage);
+      return res.status(502).json({ error: `Gemini token request failed (${tokenResponse.status}): ${googleMessage}` });
     }
     return res.status(200).json({ token: data.name });
   } catch (error) {
