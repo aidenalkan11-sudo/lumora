@@ -42,18 +42,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         uses: 1,
         expireTime: new Date(now + 15 * 60 * 1000).toISOString(),
-        newSessionExpireTime: new Date(now + 60 * 1000).toISOString(),
-        liveConnectConstraints: {
-          model: 'models/gemini-3.8-live',
-          config: {
-            responseModalities: ['AUDIO'],
-            sessionResumption: {},
-            systemInstruction: { parts: [{ text: systemInstruction }] },
-            speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: requestedVoice } } },
-            inputAudioTranscription: {},
-            outputAudioTranscription: {}
-          }
-        }
+        newSessionExpireTime: new Date(now + 60 * 1000).toISOString()
       }),
     });
     const data = await tokenResponse.json().catch(() => ({}));
