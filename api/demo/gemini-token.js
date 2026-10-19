@@ -24,14 +24,14 @@ export default async function handler(req, res) {
   requests.set(ip, recent);
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) return res.status(503).json({ error: 'GEMINI_API_KEY is not configured in Vercel.' });
-  const requestedVoice = req.body?.voice === 'male' ? 'Fenrir' : 'Aoede';
+  
   const systemInstruction = [
-    'You are a friendly, professional AI receptionist for MKA Electrical in Melbourne, Australia.',
+    'You are the AI receptionist in a fictional business demo created by Lumora Solutions. This is not a real business or booking service.',
     'Speak naturally in Australian English with a clear Australian accent. Keep replies concise.',
     'Collect the caller’s name, mobile number, job details, suburb/address, and preferred time.',
-    'Never claim a booking is confirmed. Say you will pass on a request for Mohammed to follow up.',
+    'Never claim a booking is confirmed. Explain that details are only shown in the demo and are not sent to anyone.',
     'Do not invent availability, prices, or confirmed appointments.',
-    'If urgent, collect the caller’s name, phone, and suburb, then say you will flag it for a callback.',
+    'If urgent, collect the caller’s name, phone, and suburb, then explain that this is only a demo and no callback will be made.',
     'Use Australia/Melbourne local date and time.'
   ].join(' ');
   try {
