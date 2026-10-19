@@ -489,7 +489,26 @@
       .live-demo-frame iframe { height: 720px; }
     }
 
-  </style>
+  
+/* Consistent motion across Lumora pages */
+@keyframes lumora-page-enter { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+body.lumora-motion-ready header { animation: lumora-page-enter .55s ease-out both; }
+body.lumora-motion-ready main > .hero h1,
+body.lumora-motion-ready main > section:first-child h1,
+body.lumora-motion-ready main > .container:first-child h1 { animation: lumora-page-enter .7s .05s ease-out both; }
+body.lumora-motion-ready .lumora-reveal { opacity: 0; transform: translateY(20px); transition: opacity .65s ease, transform .65s ease; }
+body.lumora-motion-ready .lumora-reveal.lumora-visible { opacity: 1; transform: translateY(0); }
+body.lumora-motion-ready .button,
+body.lumora-motion-ready .main-button,
+body.lumora-motion-ready .link-card,
+body.lumora-motion-ready .card { transition: transform .25s ease, box-shadow .25s ease; }
+body.lumora-motion-ready .button:hover,
+body.lumora-motion-ready .main-button:hover { transform: translateY(-2px); }
+@media (prefers-reduced-motion: reduce) {
+  body.lumora-motion-ready *, body.lumora-motion-ready *::before, body.lumora-motion-ready *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+  body.lumora-motion-ready .lumora-reveal { opacity: 1; transform: none; }
+}
+</style>
 </head>
 
 <body>
