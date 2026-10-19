@@ -257,13 +257,23 @@
       line-height: 1.38;
       color: #d8dbe0;
       min-height: 4.2em;
+      max-height: 36%;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      padding: 0 2cqw;
+      gap: 0.35em;
+      padding: 0.6cqh 2cqw;
+      overflow-x: hidden;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(229, 138, 58, 0.45) transparent;
       transition: opacity 300ms;
     }
-    .captions .you { color: var(--muted); font-size: 3.5cqw; margin-bottom: 0.6em; }
+    .captions p { max-width: 100%; min-width: 0; flex: 0 0 auto; white-space: normal; overflow-wrap: anywhere; }
+    .captions .you { color: var(--muted); font-size: 3.5cqw; margin-bottom: 0.2em; }
     .captions .line { animation: rise 380ms cubic-bezier(.2,.8,.2,1); }
     @keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
