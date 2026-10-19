@@ -155,21 +155,21 @@ body.lumora-motion-ready .button:hover, body.lumora-motion-ready .main-button:ho
 <nav class="nav" aria-label="Main navigation">
 <a href="/">Home</a><a href="/how-it-works.html">How it works</a><a href="/results.html">Results</a><a href="/blog/">Blog</a><a href="/privacy">Privacy</a>
 </nav>
-<a class="button header-cta" href="/waitlist.html">Contact us</a>
+<a class="button header-cta" href="/contact.html#contact-form">Book a call</a>
 </header>
 <main class="container">
 <section class="hero">
-<div class="eyebrow">Start a conversation</div>
-<h1>Let’s make every enquiry count.</h1>
+<div class="eyebrow">Book a call</div>
+<h1>Let’s talk about your business.</h1>
 
 </section>
 
 <div class="content-grid">
-<section class="panel enquiry-panel">
-<div class="eyebrow">Contact Lumora</div>
-<h2>Tell us about your business.</h2>
-<p class="muted">Share a few details so we can understand what you need. You don’t need a technical plan — just tell us what you’d like to improve.</p>
-<form id="contact-form">
+<section class="panel enquiry-panel" id="contact-form">
+<div class="eyebrow">Book a call</div>
+<h2>Request a call with Lumora.</h2>
+<p class="muted">Tell us a little about your business and we’ll get back to you to arrange a time to talk.</p>
+<form id="contact-form-form">
 <div class="form-grid">
 <div class="field"><label for="contact-name">Your name <span>*</span></label><input id="contact-name" name="name" required autocomplete="name" placeholder="e.g. Alex Smith"></div>
 <div class="field"><label for="contact-business">Business name <span>*</span></label><input id="contact-business" name="businessName" required autocomplete="organization" placeholder="Your business"></div>
@@ -178,7 +178,7 @@ body.lumora-motion-ready .button:hover, body.lumora-motion-ready .main-button:ho
 <div class="field full-field"><label for="contact-type">What kind of business do you run?</label><select id="contact-type" name="businessType"><option value="">Choose your industry (optional)</option><option>Trades and home services</option><option>Health and wellbeing</option><option>Professional services</option><option>Property and real estate</option><option>Retail and hospitality</option><option>Fitness and education</option><option>Other</option></select></div>
 <div class="field full-field"><label for="contact-message">What would you like help with?</label><textarea id="contact-message" name="notes" rows="5" placeholder="For example, handling missed calls, answering common questions, collecting job details or managing booking requests."></textarea><span class="field-help">Include any current tools or processes you’d like to connect, if relevant.</span></div>
 <div class="honeypot" aria-hidden="true"><label for="contact-website">Website</label><input id="contact-website" name="website" tabindex="-1" autocomplete="off"></div>
-<div class="full-field submit-field"><button class="button" type="submit" id="contact-submit">Send enquiry <span aria-hidden="true">→</span></button><p class="form-privacy">Your details will be used to review and respond to your enquiry.</p><div id="contact-status" class="form-status" role="status" aria-live="polite"></div></div>
+<div class="full-field submit-field"><button class="button" type="submit" id="contact-submit">Request a call <span aria-hidden="true">→</span></button><p class="form-privacy">Your details will be used to review and respond to your enquiry.</p><div id="contact-status" class="form-status" role="status" aria-live="polite"></div></div>
 </div>
 </form>
 </section>
@@ -188,7 +188,7 @@ body.lumora-motion-ready .button:hover, body.lumora-motion-ready .main-button:ho
 <div class="steps">
 <div class="step"><div class="step-number">01</div><div><strong>Tell us what’s happening</strong><p>Share the calls, questions or admin tasks you’d like to improve.</p></div></div>
 <div class="step"><div class="step-number">02</div><div><strong>We review your enquiry</strong><p>We’ll look at your needs and the kind of receptionist workflow that may suit your business.</p></div></div>
-<div class="step"><div class="step-number">03</div><div><strong>Discuss the next step</strong><p>If it looks like a fit, we can talk through a practical approach for your business.</p></div></div>
+<div class="step"><div class="step-number">03</div><div><strong>Book a time to talk</strong><p>We’ll follow up to arrange a call and discuss a practical approach for your business.</p></div></div>
 </div>
 </section>
 <section class="link-card">
@@ -223,7 +223,7 @@ body.lumora-motion-ready .button:hover, body.lumora-motion-ready .main-button:ho
 
 <script>
 (function(){
-const form=document.getElementById('contact-form');
+const form=document.getElementById('contact-form-form');
 if(!form)return;
 const status=document.getElementById('contact-status');
 const submit=document.getElementById('contact-submit');
