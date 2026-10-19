@@ -431,7 +431,36 @@
     .live-demo-frame iframe { display: block; width: 100%; height: 540px; border: 0; background: #111; }
     .live-demo-note { margin: 10px 0 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
 
-  </style>
+  /* Homepage book-a-call form */
+.homepage-booking{padding-top:72px;padding-bottom:76px}
+.homepage-booking-heading{max-width:720px;margin:0 auto 28px;text-align:center}
+.homepage-booking-heading h2{margin:12px 0;color:var(--charcoal);font-size:clamp(30px,4vw,44px);line-height:1.15;letter-spacing:-.035em}
+.homepage-booking-heading p{color:var(--muted);margin:0}
+.homepage-booking-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:22px;align-items:start}
+.homepage-booking-panel{padding:clamp(24px,4vw,36px);border:1px solid var(--line);border-radius:24px;background:#fff}
+.homepage-booking-panel h3{margin:10px 0 16px;color:var(--charcoal);font-size:25px;line-height:1.2;letter-spacing:-.025em}
+.homepage-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px 14px;margin-top:22px}
+.homepage-field{display:grid;gap:7px;align-content:start}
+.homepage-field label{font-size:13px;font-weight:700;color:var(--charcoal)}
+.homepage-field label span{color:var(--orange)}
+.homepage-field input,.homepage-field select,.homepage-field textarea{width:100%;min-width:0;border:1px solid var(--line);border-radius:12px;background:var(--cream);padding:12px 13px;color:var(--text);font:inherit;font-size:14px;line-height:1.45;outline:none}
+.homepage-field textarea{resize:vertical;min-height:110px}
+.homepage-field input:focus,.homepage-field select:focus,.homepage-field textarea:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(243,121,34,.13)}
+.homepage-full{grid-column:1/-1}
+.homepage-booking .button{border:0;cursor:pointer}
+.homepage-booking .button:disabled{opacity:.65;cursor:wait}
+.homepage-form-privacy{margin:10px 0 0;color:var(--muted);font-size:12px}
+.homepage-form-status{display:none;margin-top:12px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--cream);font-size:14px}
+.homepage-form-status.error{border-color:#e6b5a8;color:#8d3022;background:#fff5f2}
+.homepage-honeypot{position:absolute!important;left:-10000px!important;width:1px!important;height:1px!important;overflow:hidden!important}
+.homepage-next{display:grid;gap:20px}
+.homepage-next h3{margin:0 0 2px}
+.homepage-step{display:grid;grid-template-columns:38px 1fr;gap:12px;align-items:start}
+.homepage-step>span{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:var(--cream-dark);color:var(--orange);font-weight:800;font-size:13px}
+.homepage-step strong{display:block;margin:2px 0 4px;color:var(--charcoal)}
+.homepage-step p{margin:0;color:var(--muted);font-size:14px}
+@media(max-width:760px){.homepage-booking{padding-top:44px;padding-bottom:48px}.homepage-booking-grid{grid-template-columns:1fr}.homepage-form-grid{grid-template-columns:1fr}.homepage-full{grid-column:1}.homepage-booking-heading{text-align:left}}
+</style>
 </head>
 
 <body>
@@ -681,7 +710,29 @@
 
 </section>
 
-</main>
+<section class="container homepage-booking reveal-on-scroll" id="book-a-call">
+  <div class="homepage-booking-heading"><div class="eyebrow">Book a call</div><h2>Let’s talk about your business.</h2><p>Tell us a little about your business and we’ll get back to you to arrange a time to talk.</p></div>
+  <div class="homepage-booking-grid">
+    <section class="homepage-booking-panel">
+      <div class="eyebrow">Request a call</div><h3>Book a call with Lumora.</h3>
+      <form class="homepage-contact-form"><div class="homepage-form-grid">
+        <div class="homepage-field"><label>Your name <span>*</span></label><input name="name" required autocomplete="name" placeholder="e.g. Alex Smith"></div>
+        <div class="homepage-field"><label>Business name <span>*</span></label><input name="businessName" required autocomplete="organization" placeholder="Your business"></div>
+        <div class="homepage-field"><label>Email address <span>*</span></label><input name="email" type="email" required autocomplete="email" placeholder="you@business.com"></div>
+        <div class="homepage-field"><label>Phone number <span>*</span></label><input name="phone" type="tel" required autocomplete="tel" placeholder="Best number to reach you"></div>
+        <div class="homepage-field homepage-full"><label>What kind of business do you run?</label><select name="businessType"><option value="">Choose your industry (optional)</option><option>Trades and home services</option><option>Health and wellbeing</option><option>Professional services</option><option>Property and real estate</option><option>Retail and hospitality</option><option>Fitness and education</option><option>Other</option></select></div>
+        <div class="homepage-field homepage-full"><label>What would you like help with?</label><textarea name="notes" rows="4" placeholder="Tell us what you’d like to improve."></textarea></div>
+        <div class="homepage-honeypot" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div>
+        <div class="homepage-full"><button class="button" type="submit">Request a call <span aria-hidden="true">→</span></button><p class="homepage-form-privacy">Your details will be used to review and respond to your enquiry.</p><div class="homepage-form-status" role="status" aria-live="polite"></div></div>
+      </div></form>
+    </section>
+    <aside class="homepage-booking-panel homepage-next"><h3>What happens next?</h3>
+      <div class="homepage-step"><span>01</span><div><strong>Tell us what’s happening</strong><p>Share the calls, questions or admin tasks you’d like to improve.</p></div></div>
+      <div class="homepage-step"><span>02</span><div><strong>We review your enquiry</strong><p>We’ll look at your needs and the kind of receptionist workflow that may suit your business.</p></div></div>
+      <div class="homepage-step"><span>03</span><div><strong>Arrange a time to talk</strong><p>We’ll follow up to organise a call and discuss a practical approach for your business.</p></div></div>
+    </aside>
+  </div>
+</section></main>
 
 <footer class="container">
 
@@ -713,5 +764,18 @@
   })();
 </script>
 
+<script>
+(function(){
+document.querySelectorAll('.homepage-contact-form').forEach(function(form){
+ const status=form.querySelector('.homepage-form-status'),submit=form.querySelector('button[type="submit"]');
+ form.addEventListener('submit',async function(event){
+  event.preventDefault();status.style.display='block';status.classList.remove('error');status.textContent='Sending your request…';submit.disabled=true;
+  const data=Object.fromEntries(new FormData(form));data.notes=[data.businessType?'Business type: '+data.businessType:'',data.notes||''].filter(Boolean).join('\\n\\n');
+  try{const response=await fetch('/api/waitlist',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});const result=await response.json();if(!response.ok)throw new Error(result.error||'Your request could not be sent.');form.innerHTML='<h3>Thanks for getting in touch.</h3><p>Your details have been received. We’ll get back to you to arrange a time to talk.</p>';}
+  catch(error){status.classList.add('error');status.textContent=(error.message||'Something went wrong.')+' Please try again or email aiden@lumorasolutions.tech.';submit.disabled=false;}
+ });
+});
+})();
+</script>
 </body>
 </html>
