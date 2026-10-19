@@ -109,6 +109,11 @@ try{
       }
     }
   });
+  // Prompt the model to greet the caller immediately after the Live session is ready.
+  session.sendClientContent({
+    turns: [{ role: "user", parts: [{ text: "The caller has just connected. Speak first with a brief, natural greeting: \"Hi, thanks for calling MKA Electrical. You’re speaking with our AI receptionist. How can I help you today?\" Then pause and listen for their reply." }] }],
+    turnComplete: true
+  });
   processor.onaudioprocess=(event)=>{if(!session||muted||id!==attemptId)return;const input=event.inputBuffer.getChannelData(0);session.sendRealtimeInput({audio:{data:pcm16ToBase64(input),mimeType:"audio/pcm;rate=16000"}});};
 }catch(e){console.error("[Gemini demo]",e);if(id===attemptId){finishCall(e?.message?.includes("GEMINI_API_KEY")?"Gemini isn't configured yet. Add GEMINI_API_KEY in Vercel project settings.":e?.message||"Couldn't connect. Check the microphone and try again.");if(state==="ended")setState("idle");}}}
 function finishCall(message=""){attemptId++;const s=session;session=null;try{s?.close();}catch{}stopAudio();clearInterval(timerId);startedAt=0;setState("ended");els.notice.textContent=message;muted=false;els.mute.setAttribute("aria-pressed","false");els.muteLabel.textContent="Mute";}
