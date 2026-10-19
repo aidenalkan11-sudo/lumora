@@ -147,6 +147,34 @@ body.lumora-motion-ready .button:hover, body.lumora-motion-ready .main-button:ho
 .contact-aside .link-card{margin-top:0}
 @media(max-width:760px){.comparison{padding:22px 16px;border-radius:22px}.comparison-grid{grid-template-columns:1fr}.comparison-card{padding:21px}.content-grid{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr;gap:16px}.full-field{grid-column:auto}.enquiry-panel{padding:23px 18px}}
 
+
+/* Staggered text reveals inspired by the redesign */
+.lumora-text-reveal { visibility: visible; }
+.lumora-text-reveal .lumora-text-reveal-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding-bottom: .08em;
+  margin-bottom: -.08em;
+}
+.lumora-text-reveal .lumora-text-reveal-word > span {
+  display: inline-block;
+  opacity: 0;
+  transform: translate3d(0, 110%, 0);
+  transition: transform .8s cubic-bezier(.16,1,.3,1), opacity .55s ease;
+  transition-delay: var(--word-delay, 0ms);
+}
+.lumora-text-reveal.lumora-text-revealed .lumora-text-reveal-word > span {
+  opacity: 1;
+  transform: translate3d(0,0,0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .lumora-text-reveal .lumora-text-reveal-word > span {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
 </style>
 </head>
 <body>
@@ -239,6 +267,48 @@ form.addEventListener('submit',async function(event){
   form.innerHTML='<div class="eyebrow">Enquiry received</div><h2 style="margin-top:12px">Thanks for getting in touch.</h2><p class="muted">Your details have been received. We’ll review your enquiry and get back to you as soon as we can.</p><p style="margin-top:22px"><a class="text-link" href="/">Return to the homepage</a></p>';
  }catch(error){status.classList.add('error');status.textContent=(error.message||'Something went wrong.')+' Please try again or email aiden@lumorasolutions.tech.';submit.disabled=false;}
 });
+})();
+</script>
+
+
+<script>
+(function () {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const headings = document.querySelectorAll('main h1, main h2, main h3, main .hero p, main .homepage-booking-heading p');
+  headings.forEach((el) => {
+    if (el.children.length || !el.textContent.trim() || el.closest('button, a, label')) return;
+    const original = el.textContent.trim().replace(/\s+/g, ' ');
+    el.setAttribute('aria-label', original);
+    el.setAttribute('data-lumora-text-reveal', 'true');
+    el.classList.add('lumora-text-reveal');
+    el.setAttribute('aria-hidden', 'true');
+    const words = original.split(' ');
+    el.textContent = '';
+    words.forEach((word, index) => {
+      const clip = document.createElement('span');
+      clip.className = 'lumora-text-reveal-word';
+      clip.style.setProperty('--word-delay', (Math.min(index, 12) * 32) + 'ms');
+      const inner = document.createElement('span');
+      inner.textContent = word;
+      clip.appendChild(inner);
+      el.appendChild(clip);
+      if (index < words.length - 1) el.appendChild(document.createTextNode(' '));
+    });
+    el.removeAttribute('aria-hidden');
+  });
+  if (reduceMotion || !('IntersectionObserver' in window)) {
+    document.querySelectorAll('.lumora-text-reveal').forEach(el => el.classList.add('lumora-text-revealed'));
+    return;
+  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('lumora-text-revealed');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -24px 0px' });
+  document.querySelectorAll('.lumora-text-reveal').forEach(el => observer.observe(el));
 })();
 </script>
 
