@@ -494,15 +494,6 @@
 .lumora-text-reveal.lumora-text-revealed .lumora-text-reveal-word > span.lumora-highlight-word {
   background-size: 100% 100%;
 }
-/* Ensure the hero's existing emphasized phrase is visibly highlighted too. */
-main h1 > span {
-  background-image: linear-gradient(transparent 24%, #78e4cf 24%, #78e4cf 92%, transparent 92%);
-  background-repeat: no-repeat;
-  background-position: 0 100%;
-  background-size: 100% 100%;
-  border-radius: 2px;
-  padding: 0 .06em;
-}
 @media (prefers-reduced-motion: reduce) {
   .lumora-text-reveal .lumora-text-reveal-word > span {
     opacity: 1 !important;
@@ -811,30 +802,31 @@ document.querySelectorAll('.homepage-contact-form').forEach(function(form){
 <script>
 (function () {
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const headings = document.querySelectorAll('main h1, main h2, main h3, main .hero p, main .homepage-booking-heading p');
+  const headings = document.querySelectorAll('main h1, main h2, main h3');
+  const importantWords = /^(ai|receptionist|receptionists|automation|automations|automate|automated|business|businesses|calls|call|bookings|booking|leads|lead|follow-ups|follow-up|workflow|workflows|custom|systems|practical|simple|built|design|discover|launch|optimise|optimize|customer|customers|contact|better|time|team|teams)$/i;
   headings.forEach((el) => {
-    if (el.children.length || !el.textContent.trim() || el.closest('button, a, label')) return;
+    if (el.closest('form, .homepage-booking, article, .blog-post, .post-card, .blog-card, .blog-grid') || el.children.length || !el.textContent.trim() || el.closest('button, a, label')) return;
     const original = el.textContent.trim().replace(/\s+/g, ' ');
     el.setAttribute('aria-label', original);
-    el.setAttribute('data-lumora-text-reveal', 'true');
     el.classList.add('lumora-text-reveal');
-    el.setAttribute('aria-hidden', 'true');
     const words = original.split(' ');
     el.textContent = '';
+    let highlighted = 0;
     words.forEach((word, index) => {
       const clip = document.createElement('span');
       clip.className = 'lumora-text-reveal-word';
       clip.style.setProperty('--word-delay', (Math.min(index, 12) * 32) + 'ms');
       const inner = document.createElement('span');
       inner.textContent = word;
-      if (/^(ai|receptionist|receptionists|automation|automations|automate|automated|business|businesses|calls|call|bookings|booking|leads|lead|follow-ups|follow-up|workflow|workflows|custom|systems|practical|simple|built|design|discover|launch|optimise|optimize|customer|customers|contact|better|time|team|teams)$/i.test(word.replace(/[^a-z-]/gi, ''))) {
+      const cleanWord = word.replace(/[^a-z-]/gi, '');
+      if (highlighted < 2 && importantWords.test(cleanWord)) {
         inner.classList.add('lumora-highlight-word');
+        highlighted++;
       }
       clip.appendChild(inner);
       el.appendChild(clip);
       if (index < words.length - 1) el.appendChild(document.createTextNode(' '));
     });
-    el.removeAttribute('aria-hidden');
   });
   if (reduceMotion || !('IntersectionObserver' in window)) {
     document.querySelectorAll('.lumora-text-reveal').forEach(el => el.classList.add('lumora-text-revealed'));
