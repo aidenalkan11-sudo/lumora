@@ -9,9 +9,20 @@
 
   <!-- Vercel Web Analytics -->
   <script>
-    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    (function () {
+      try {
+        var params = new URLSearchParams(window.location.search);
+        if (params.get('lumora-analytics') === 'off') window.localStorage.setItem('lumora_ignore_analytics', '1');
+        else if (params.get('lumora-analytics') === 'on') window.localStorage.removeItem('lumora_ignore_analytics');
+        if (window.localStorage.getItem('lumora_ignore_analytics') === '1') return;
+      } catch (error) {}
+      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+      var script = document.createElement('script');
+      script.defer = true;
+      script.src = '/_vercel/insights/script.js';
+      document.head.appendChild(script);
+    })();
   </script>
-  <script defer src="/_vercel/insights/script.js"></script>
   <link rel="icon" type="image/png" href="/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
