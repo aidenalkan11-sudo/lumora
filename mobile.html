@@ -481,29 +481,12 @@
   opacity: 1;
   transform: translate3d(0,0,0);
 }
-.lumora-text-reveal .lumora-text-reveal-word > span.lumora-highlight-word {
-  background-image: linear-gradient(transparent 24%, #78e4cf 24%, #78e4cf 92%, transparent 92%);
-  background-repeat: no-repeat;
-  background-position: 0 100%;
-  background-size: 0% 100%;
-  border-radius: 2px;
-  padding: 0 .06em;
-  transition: transform .8s cubic-bezier(.16,1,.3,1), opacity .55s ease, background-size .85s cubic-bezier(.16,1,.3,1);
-  transition-delay: var(--word-delay, 0ms), var(--word-delay, 0ms), calc(var(--word-delay, 0ms) + 180ms);
-}
-.lumora-text-reveal.lumora-text-revealed .lumora-text-reveal-word > span.lumora-highlight-word {
-  background-size: 100% 100%;
-}
 @media (prefers-reduced-motion: reduce) {
   .lumora-text-reveal .lumora-text-reveal-word > span {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
-  }
-   .lumora-text-reveal .lumora-text-reveal-word > span.lumora-highlight-word {
-    background-size: 100% 100% !important;
-  }
-}
+  }}
 </style>
 </head>
 
@@ -803,7 +786,6 @@ document.querySelectorAll('.homepage-contact-form').forEach(function(form){
 (function () {
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const headings = document.querySelectorAll('main h1, main h2, main h3');
-  const importantWords = /^(ai|receptionist|receptionists|automation|automations|automate|automated|business|businesses|calls|call|bookings|booking|leads|lead|follow-ups|follow-up|workflow|workflows|custom|systems|practical|simple|built|design|discover|launch|optimise|optimize|customer|customers|contact|better|time|team|teams)$/i;
   headings.forEach((el) => {
     if (el.closest('form, .homepage-booking, article, .blog-post, .post-card, .blog-card, .blog-grid') || el.children.length || !el.textContent.trim() || el.closest('button, a, label')) return;
     const original = el.textContent.trim().replace(/\s+/g, ' ');
@@ -811,18 +793,12 @@ document.querySelectorAll('.homepage-contact-form').forEach(function(form){
     el.classList.add('lumora-text-reveal');
     const words = original.split(' ');
     el.textContent = '';
-    let highlighted = 0;
     words.forEach((word, index) => {
       const clip = document.createElement('span');
       clip.className = 'lumora-text-reveal-word';
       clip.style.setProperty('--word-delay', (Math.min(index, 12) * 32) + 'ms');
       const inner = document.createElement('span');
       inner.textContent = word;
-      const cleanWord = word.replace(/[^a-z-]/gi, '');
-      if (highlighted < 2 && importantWords.test(cleanWord)) {
-        inner.classList.add('lumora-highlight-word');
-        highlighted++;
-      }
       clip.appendChild(inner);
       el.appendChild(clip);
       if (index < words.length - 1) el.appendChild(document.createTextNode(' '));
