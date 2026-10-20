@@ -1,5 +1,13 @@
 [
   {
+    "slug": "test-post-2",
+    "title": "Test Post 2",
+    "excerpt": "A short excerpt.",
+    "category": "Insights",
+    "date": "2026-10-20T11:32:57.655Z",
+    "content": "This is the body content."
+  },
+  {
     "slug": "real-estate-agent-open-house",
     "title": "Real Estate Agent on the Go: Why Your Open House Is Losing You Enquiries",
     "excerpt": "Open houses lose you calls – an AI receptionist captures every lead, even when you're in the kitchen.",
