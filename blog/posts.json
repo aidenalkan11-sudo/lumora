@@ -1,13 +1,5 @@
 [
   {
-    "slug": "test",
-    "title": "test",
-    "excerpt": "test",
-    "category": "Insights",
-    "date": "2026-10-27T20:31:20.918Z",
-    "content": "test"
-  },
-  {
     "slug": "how-ai-receptionist-works-setup-integrations",
     "title": "How AI Receptionists Work: A Simple Guide to Setup, Integrations and Call Flow",
     "excerpt": "AI receptionists aren't magic. Here's exactly how they work from the moment a phone rings to the moment a caller gets what they need.",
