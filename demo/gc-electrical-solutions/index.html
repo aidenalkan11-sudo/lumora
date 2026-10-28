@@ -444,6 +444,74 @@
       .statusbar { justify-content: flex-end; }
     }
 
+    /* ---------- Post-call booking modal ---------- */
+    .lead-modal[hidden] { display: none !important; }
+    .lead-modal {
+      position: fixed; inset: 0; z-index: 100;
+      display: grid; place-items: center;
+      padding: 18px;
+      background: rgba(5, 7, 10, .78);
+      backdrop-filter: blur(8px);
+      overflow-y: auto;
+    }
+    .lead-panel {
+      position: relative;
+      width: min(100%, 460px);
+      max-height: min(90dvh, 780px);
+      overflow-y: auto;
+      padding: 28px;
+      border: 1px solid rgba(229, 138, 58, .35);
+      border-radius: 22px;
+      background: #f6f4f1;
+      color: #1b1d20;
+      box-shadow: 0 28px 90px rgba(0,0,0,.48);
+    }
+    .lead-close {
+      position: absolute; top: 12px; right: 14px;
+      width: 36px; height: 36px; border-radius: 50%;
+      color: #565b62; font-size: 26px; line-height: 1;
+      background: #e9e5df;
+    }
+    .lead-eyebrow {
+      color: #a65d20; font: 500 10px/1.4 var(--mono);
+      letter-spacing: .16em; text-transform: uppercase;
+    }
+    .lead-panel h2 {
+      margin: 10px 36px 8px 0;
+      color: #1b1d20; font: 750 clamp(25px, 6vw, 32px)/1.05 var(--display);
+      letter-spacing: -.025em;
+    }
+    .lead-intro { color: #68645f; font-size: 14px; line-height: 1.5; margin-bottom: 20px; }
+    .lead-form { display: grid; gap: 12px; }
+    .lead-field { display: grid; gap: 5px; min-width: 0; }
+    .lead-field label { color: #4c4844; font-size: 12px; font-weight: 600; }
+    .lead-field input, .lead-field select, .lead-field textarea {
+      width: 100%; min-width: 0;
+      border: 1px solid #d8d1c8; border-radius: 10px;
+      padding: 11px 12px; background: #fff;
+      color: #1b1d20; font: 400 14px/1.4 var(--body);
+      outline: none;
+    }
+    .lead-field input:focus, .lead-field select:focus, .lead-field textarea:focus {
+      border-color: #b96c2b; box-shadow: 0 0 0 3px rgba(229,138,58,.15);
+    }
+    .lead-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .lead-submit {
+      display: flex; justify-content: center; align-items: center;
+      width: 100%; margin-top: 4px; padding: 13px 16px;
+      border-radius: 11px; background: #e58a3a; color: #1b1d20;
+      font-weight: 750; font-size: 14px; transition: opacity .2s;
+    }
+    .lead-submit:disabled { opacity: .6; cursor: wait; }
+    .lead-status { min-height: 1.4em; color: #4f5d46; font-size: 12px; line-height: 1.45; }
+    .lead-status.error { color: #b42318; }
+    .lead-privacy { color: #77716a; font-size: 11px; line-height: 1.45; }
+    .lead-honeypot { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    @media (max-width: 420px) {
+      .lead-panel { padding: 24px 18px; border-radius: 18px; }
+      .lead-grid { grid-template-columns: 1fr; }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { transition-duration: 1ms !important; animation: none !important; }
     }
@@ -530,6 +598,29 @@
       <div class="home-bar" aria-hidden="true"></div>
     </div>
   </main>
+
+  <section class="lead-modal" id="lead-modal" role="dialog" aria-modal="true" aria-labelledby="lead-title" aria-describedby="lead-intro" hidden>
+    <div class="lead-panel">
+      <button class="lead-close" id="lead-close" type="button" aria-label="Close booking form">&times;</button>
+      <p class="lead-eyebrow">Demo complete · Lumora Solutions</p>
+      <h2 id="lead-title">Want this for your business?</h2>
+      <p class="lead-intro" id="lead-intro">Leave your details and Aiden will get in touch to arrange a discovery call. This form sends a real enquiry; it does not instantly reserve a calendar slot.</p>
+      <form class="lead-form" id="lead-form">
+        <div class="lead-field"><label for="lead-name">Your name *</label><input id="lead-name" name="name" autocomplete="name" required maxlength="120" placeholder="Alex Smith"></div>
+        <div class="lead-field"><label for="lead-business">Business name *</label><input id="lead-business" name="businessName" autocomplete="organization" required maxlength="160" placeholder="Your business"></div>
+        <div class="lead-grid">
+          <div class="lead-field"><label for="lead-email">Email address *</label><input id="lead-email" name="email" type="email" autocomplete="email" required maxlength="160" placeholder="you@business.com"></div>
+          <div class="lead-field"><label for="lead-phone">Phone number *</label><input id="lead-phone" name="phone" type="tel" autocomplete="tel" required maxlength="50" placeholder="04xx xxx xxx"></div>
+        </div>
+        <div class="lead-field"><label for="lead-time">Best time to contact you</label><select id="lead-time" name="preferredTime"><option value="">No preference</option><option>Weekday mornings</option><option>Weekday afternoons</option><option>Weekday evenings</option></select></div>
+        <div class="lead-field"><label for="lead-notes">What would you like to automate? (optional)</label><textarea id="lead-notes" name="notes" rows="2" maxlength="2000" placeholder="e.g. missed calls, enquiries, booking requests"></textarea></div>
+        <div class="lead-honeypot" aria-hidden="true"><label for="lead-website">Website</label><input id="lead-website" name="website" tabindex="-1" autocomplete="off"></div>
+        <button class="lead-submit" id="lead-submit" type="submit">Request a discovery call <span aria-hidden="true">&nbsp;→</span></button>
+        <p class="lead-status" id="lead-status" role="status" aria-live="polite"></p>
+        <p class="lead-privacy">Your details will be used to respond to this enquiry.</p>
+      </form>
+    </div>
+  </section>
 
   <p class="credit">Live demo · AI receptionist by <b>Lumora Solutions</b></p>
 
@@ -930,16 +1021,73 @@
     }
 
     function finishCall(message = "") {
+      const wasLive = state === "live";
       attemptId++;
       const c = convo; convo = null;
       c?.endSession().catch(() => {});
       clearInterval(timerId);
-      if (startedAt && state === "live") els.timer.textContent = formatTime(Date.now() - startedAt);
+      if (startedAt && wasLive) els.timer.textContent = formatTime(Date.now() - startedAt);
       startedAt = 0;
-      setState(state === "live" ? "ended" : "idle");
+      setState(wasLive ? "ended" : "idle");
       els.notice.textContent = message;
       try { wakeLock?.release(); } catch {}
+      if (wasLive) openLeadModal();
     }
+
+    // ---------- Post-call discovery-call form ----------
+    const leadModal = document.getElementById("lead-modal");
+    const leadForm = document.getElementById("lead-form");
+    const leadClose = document.getElementById("lead-close");
+    const leadStatus = document.getElementById("lead-status");
+    const leadSubmit = document.getElementById("lead-submit");
+    let leadPreviousFocus = null;
+
+    function openLeadModal() {
+      leadPreviousFocus = document.activeElement;
+      leadModal.hidden = false;
+      document.getElementById("lead-name")?.focus({ preventScroll: true });
+    }
+    function closeLeadModal() {
+      leadModal.hidden = true;
+      leadPreviousFocus?.focus?.({ preventScroll: true });
+    }
+    leadClose.addEventListener("click", closeLeadModal);
+    leadModal.addEventListener("click", (event) => {
+      if (event.target === leadModal) closeLeadModal();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !leadModal.hidden) closeLeadModal();
+    });
+    leadForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      leadStatus.classList.remove("error");
+      leadStatus.textContent = "Sending your request…";
+      leadSubmit.disabled = true;
+      const data = Object.fromEntries(new FormData(leadForm));
+      const details = [
+        "Source: AI receptionist demo",
+        "Receptionist tested: " + VOICES[voiceKey].name,
+        data.preferredTime ? "Preferred contact time: " + data.preferredTime : "",
+        data.notes ? "Interested in: " + data.notes : ""
+      ].filter(Boolean).join("\n");
+      data.notes = details;
+      delete data.preferredTime;
+      try {
+        const response = await fetch("/api/waitlist", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(result.error || "Your request could not be sent.");
+        leadForm.innerHTML = '<h3 style="margin:4px 0 8px;color:#1b1d20;font:750 25px/1.1 var(--display)">Request received</h3><p style="color:#68645f;font-size:14px;line-height:1.55">Thanks for your interest. Your details have been sent to Lumora, and Aiden can follow up to arrange a time to talk.</p><button class="lead-submit" id="lead-done" type="button">Done</button>';
+        document.getElementById("lead-done").addEventListener("click", closeLeadModal);
+      } catch (error) {
+        leadStatus.textContent = (error?.message || "Something went wrong.") + " Please try again.";
+        leadStatus.classList.add("error");
+        leadSubmit.disabled = false;
+      }
+    });
 
     els.call.addEventListener("click", startCall);
     els.hang.addEventListener("click", () => finishCall());
