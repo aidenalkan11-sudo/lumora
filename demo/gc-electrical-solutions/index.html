@@ -1080,8 +1080,7 @@
         });
         const result = await response.json().catch(() => ({}));
         if (!response.ok) throw new Error(result.error || "Your request could not be sent.");
-        leadForm.innerHTML = '<h3 style="margin:4px 0 8px;color:#1b1d20;font:750 25px/1.1 var(--display)">Request received</h3><p style="color:#68645f;font-size:14px;line-height:1.55">Thanks for your interest. Your details have been sent to Lumora, and Aiden can follow up to arrange a time to talk.</p><button class="lead-submit" id="lead-done" type="button">Done</button>';
-        document.getElementById("lead-done").addEventListener("click", closeLeadModal);
+        window.top.location.assign("/thank-you.html");
       } catch (error) {
         leadStatus.textContent = (error?.message || "Something went wrong.") + " Please try again.";
         leadStatus.classList.add("error");
