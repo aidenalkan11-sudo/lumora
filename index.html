@@ -498,7 +498,7 @@
     transition: none !important;
   }}
 
-</style>
+.demo-prompts{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;list-style:none;padding:0;margin:18px 0 0}.demo-prompts li{padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--charcoal);font-size:13px}.demo-after-cta{margin:26px auto 0;padding:24px;border-radius:20px;background:var(--cream-dark);text-align:center;max-width:720px}.demo-after-cta h3{margin:0 0 6px;color:var(--charcoal)}.demo-after-cta p{margin:0 0 16px;color:var(--muted)}.value-section,.product-explainer,.faq-section{padding-top:72px;padding-bottom:72px}.value-grid,.product-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:28px}.value-card,.product-steps>div{padding:22px;border:1px solid var(--line);border-radius:18px;background:#fff}.value-card strong{color:var(--charcoal)}.value-card p,.product-steps p{margin:8px 0 0;color:var(--muted);font-size:14px}.value-note{font-size:12px;color:var(--muted);text-align:center;margin-top:18px}.product-steps{grid-template-columns:repeat(4,minmax(0,1fr))}.product-steps span{display:grid;place-items:center;width:34px;height:34px;border-radius:11px;background:var(--cream-dark);color:var(--orange);font-weight:800}.product-steps h3{font-size:17px;color:var(--charcoal);margin:14px 0 0}.industry-examples{margin-top:20px;padding:24px;border-radius:18px;background:var(--cream-dark)}.industry-examples h3{margin:0 0 8px;color:var(--charcoal)}.industry-examples p{margin:0;color:var(--muted)}.setup-highlight{margin:20px 0;padding:18px 22px;border-left:3px solid var(--orange);background:#fff;border-radius:0 12px 12px 0}.faq-section details{padding:18px 0;border-bottom:1px solid var(--line)}.faq-section summary{cursor:pointer;font-weight:700;color:var(--charcoal)}.faq-section details p{margin:10px 0 0;color:var(--muted)}@media(max-width:760px){.value-grid,.product-steps{grid-template-columns:1fr}.value-section,.product-explainer,.faq-section{padding-top:48px;padding-bottom:48px}.demo-prompts{justify-content:flex-start}.demo-after-cta{text-align:left}}</style>
 </head>
 
 <body>
@@ -540,15 +540,11 @@
       Never miss another call.
     </h1>
 
-    <p>
-      Meet Lumora — Australia's most realistic AI receptionist, built to answer calls, handle common questions and capture enquiries when your team is busy.
-    </p>
+    <p>Meet Lumora — Australia's most realistic AI receptionist. It answers incoming calls, handles common questions and captures caller details when your team is busy or unavailable, so fewer potential jobs slip through.</p>
 
     <div class="hero-buttons">
 
-      <a class="button" href="/contact.html">
-        Book a call
-      </a>
+      <a class="button" href="/contact.html">Request a free consultation</a>
 
       <a class="secondary-button" href="#ai-receptionist-demo">
         Try it yourself
@@ -566,16 +562,12 @@
 <!-- BEGIN HOMEPAGE AI RECEPTIONIST DEMO SECTION
      This section is independent. Remove this entire section to undo the homepage demo embed. -->
 <section class="container live-demo-section reveal-on-scroll" id="ai-receptionist-demo">
-  <div class="live-demo-heading">
-    <div class="eyebrow">Hear the difference</div>
-    <h2>Try an AI receptionist that sounds real.</h2>
-    <p>Ask it the kinds of questions a new client would ask. You can hear exactly how natural the conversation feels before you book a call.</p>
-  </div>
+  <div class="live-demo-heading"><div class="eyebrow">Try it yourself</div><h2>Hear how Lumora handles a real business enquiry.</h2><p>This interactive example shows how an AI receptionist can greet a caller, understand what they need, answer business questions and collect the details your team needs to follow up. Try asking:</p><ul class="demo-prompts"><li>“Do you service my area?”</li><li>“I need an electrician to look at a fault.”</li><li>“Can I get a quote?”</li><li>“Can someone call me back?”</li></ul></div>
   <div class="live-demo-frame">
     <iframe src="/demo/gc-electrical-solutions/" title="Interactive AI receptionist demo" loading="lazy" allow="microphone; autoplay" allowfullscreen></iframe>
   </div>
-  <p class="live-demo-note">This is a demonstration only. It does not make real bookings or send your details to a business.</p>
-</section>
+  <p class="live-demo-note">This is a demonstration only. It does not make real bookings or send your details to a business. Your own receptionist is configured with your services, service area, FAQs, call rules and preferred enquiry process.</p><div class="demo-after-cta"><h3>Want this answering calls for your business?</h3><p>We’ll walk through your call flow and show you what a tailored setup could look like.</p><a class="button" href="/contact.html">Request a free consultation</a></div></section>
+<section class="container value-section reveal-on-scroll"><div class="section-heading"><div class="eyebrow">The cost of a missed call</div><h2>One missed call could be one missed job.</h2><p>When a customer cannot get through, they may simply call the next business. Lumora helps capture the enquiry, the caller’s details and what they need — giving your team a chance to follow up.</p></div><div class="value-grid"><div class="value-card"><strong>Capture the opportunity</strong><p>Answer calls your team cannot get to and collect the details behind the enquiry.</p></div><div class="value-card"><strong>Keep work moving</strong><p>Give your team a clear summary instead of relying on missed-call notifications and memory.</p></div><div class="value-card"><strong>Make follow-up easier</strong><p>Know who called, what they need and how to contact them back.</p></div></div><p class="value-note">Lumora captures and organises enquiries; it does not guarantee new customers or booked jobs.</p></section>
 <!-- END HOMEPAGE AI RECEPTIONIST DEMO SECTION -->
 <a class="scroll-cue scroll-cue-after-demo" href="#services" aria-label="Scroll down to explore more of Lumora">
   <span>Scroll to explore</span>
@@ -640,6 +632,8 @@
 
 </section>
 
+<section class="container product-explainer reveal-on-scroll"><div class="section-heading"><div class="eyebrow">How it works</div><h2>From incoming call to a clear enquiry.</h2><p>A straightforward process, configured around how your business handles customers.</p></div><div class="product-steps"><div><span>01</span><h3>A customer calls</h3><p>The receptionist answers using your chosen greeting and call flow.</p></div><div><span>02</span><h3>It handles the conversation</h3><p>It answers approved FAQs, asks relevant questions and identifies what the caller needs.</p></div><div><span>03</span><h3>Details are captured</h3><p>Caller details and the reason for the call are recorded and sent through the agreed notification or workflow.</p></div><div><span>04</span><h3>Your team follows up</h3><p>Your team receives the enquiry and can call the customer back, arrange the next step or take over when needed.</p></div></div><div class="industry-examples"><h3>Built around the calls your industry receives</h3><p><strong>Plumbers:</strong> service area, type of issue and urgency. <strong>Electricians:</strong> job type, property details and callback information. <strong>Clinics:</strong> appointment enquiries and approved practice information, with sensitive matters directed to staff.</p></div><p class="setup-highlight"><strong>Fast setup:</strong> for straightforward businesses, we can configure and test your receptionist within an hour of the consultation. More complex integrations or call flows may take longer.</p><p><a class="text-link" href="/how-it-works.html">See the full process →</a></p></section>
+<section class="container faq-section reveal-on-scroll"><div class="section-heading"><div class="eyebrow">Common questions</div><h2>What businesses want to know.</h2></div><details><summary>Will callers know they are speaking with AI?</summary><p>The greeting and wording can be configured to suit your business. We recommend being transparent that callers are speaking with an AI assistant.</p></details><details><summary>Can it answer calls after hours?</summary><p>Yes. It can be configured to answer after-hours calls as well as calls your team cannot get to, depending on your phone setup and call-routing preferences.</p></details><details><summary>How long does setup take?</summary><p>For a straightforward setup, we can configure and test the receptionist within an hour of your consultation. Custom integrations or more involved workflows can take longer.</p></details><details><summary>Can I keep my existing business number?</summary><p>In many cases, yes. The available options depend on your current provider and phone setup. We’ll check this during the consultation before recommending a change.</p></details><details><summary>What if a caller asks something unusual?</summary><p>The receptionist can be instructed not to guess. It can collect the caller’s details and flag the enquiry for your team, with a live handoff or transfer where the configured phone system supports it.</p></details><details><summary>How much does it cost?</summary><p>Pricing depends on call volume, the workflow you need and any integrations. We’ll explain the relevant costs before you decide whether to proceed.</p></details><details><summary>What happens when someone wants a real person?</summary><p>We can configure the call flow to collect a message, request a callback or transfer the caller where supported by the phone setup.</p></details></section>
 <section class="container homepage-booking reveal-on-scroll" id="book-a-call">
   <div class="homepage-booking-heading"><div class="eyebrow">Book a call</div><h2>Let’s talk about your business.</h2><p>Tell us a little about your business and we’ll get back to you to arrange a time to talk.</p></div>
   <div class="homepage-booking-grid">
