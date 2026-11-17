@@ -37,7 +37,9 @@ export default async function handler(req, res) {
       // must not make a successful form submission appear to fail.
       const telegramToken = process.env.TELEGRAM_BOT_TOKEN;
       const telegramChatId = process.env.TELEGRAM_CHAT_ID;
-      if (telegramToken && telegramChatId) {
+      let telegramNotified = false;
+      const notificationConfigured = Boolean(telegramToken && telegramChatId);
+      if (notificationConfigured) {
         const lead = entries[0];
         const message = [
           'New Lumora website enquiry',
@@ -55,17 +57,17 @@ export default async function handler(req, res) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ chat_id: telegramChatId, text: message })
           });
-          if (!telegramResponse.ok) {
-            console.error('Telegram notification failed:', await telegramResponse.text());
-          }
+          const telegramResult = await telegramResponse.json().catch(() => ({}));
+          telegramNotified = telegramResponse.ok && telegramResult.ok === true;
+          if (!telegramNotified) console.error('Telegram notification failed:', telegramResult.description || telegramResponse.statusText);
         } catch (telegramError) {
-          console.error('Telegram notification failed:', telegramError);
+          console.error('Telegram notification failed:', telegramError?.message || telegramError);
         }
       } else {
         console.warn('Telegram notification skipped: TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID is missing');
       }
 
-      return res.status(201).json({ success: true });
+      return res.status(201).json({ success: true, notificationConfigured, telegramNotified });
     }
     if (req.method === 'GET') {
       const { entries } = await readStore();
