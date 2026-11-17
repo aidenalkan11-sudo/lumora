@@ -2,15 +2,7 @@
 <html lang="en">
 <head>
 
-  <script>
-    (function () {
-      const isDesktop = window.innerWidth >= window.innerHeight;
-
-      if (isDesktop) {
-        window.location.replace("/");
-      }
-    })();
-  </script>
+  <script>(function(){if(window.innerWidth>760)window.location.replace("/");})();</script>
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -501,251 +493,16 @@
     transform: none !important;
     transition: none !important;
   }}
-.demo-prompts{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:18px 0 0}.demo-prompts li{padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--charcoal);font-size:13px}.demo-after-cta{margin:24px 0;padding:22px;border-radius:18px;background:var(--cream-dark)}.demo-after-cta h3{margin:0 0 6px;color:var(--charcoal)}.demo-after-cta p{margin:0 0 14px;color:var(--muted)}.value-section{padding-top:48px;padding-bottom:48px}.value-grid{display:grid;gap:12px;margin-top:22px}.value-card{padding:18px;border:1px solid var(--line);border-radius:16px;background:#fff}.value-card strong{color:var(--charcoal)}.value-card p,.value-note{color:var(--muted);font-size:14px}.value-note{font-size:12px}.faq-section{padding-top:48px;padding-bottom:48px}.faq-section details{padding:16px 0;border-bottom:1px solid var(--line)}.faq-section summary{font-weight:700;color:var(--charcoal)}.faq-section details p{color:var(--muted);margin:8px 0 0}</style>
+.demo-prompts{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:18px 0 0}.demo-prompts li{padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--charcoal);font-size:13px}.demo-after-cta{margin:24px 0;padding:22px;border-radius:18px;background:var(--cream-dark)}.demo-after-cta h3{margin:0 0 6px;color:var(--charcoal)}.demo-after-cta p{margin:0 0 14px;color:var(--muted)}.value-section{padding-top:48px;padding-bottom:48px}.value-grid{display:grid;gap:12px;margin-top:22px}.value-card{padding:18px;border:1px solid var(--line);border-radius:16px;background:#fff}.value-card strong{color:var(--charcoal)}.value-card p,.value-note{color:var(--muted);font-size:14px}.value-note{font-size:12px}.faq-section{padding-top:48px;padding-bottom:48px}.faq-section details{padding:16px 0;border-bottom:1px solid var(--line)}.faq-section summary{font-weight:700;color:var(--charcoal)}.faq-section details p{color:var(--muted);margin:8px 0 0}<style>.site-footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px;padding:28px 0;border-top:1px solid var(--line);color:var(--muted);font-size:13px}.site-footer nav{display:flex;flex-wrap:wrap;gap:14px}.hero-buttons{display:flex;gap:12px;flex-wrap:wrap}.secondary-button{display:inline-flex;align-items:center;justify-content:center;padding:13px 21px;border:1px solid var(--line);border-radius:999px;background:white;color:var(--charcoal);font-weight:700}.homepage-booking{padding:54px 0 76px;scroll-margin-top:24px}.homepage-booking-heading{max-width:650px;margin:0 auto 24px;text-align:center}.homepage-booking-heading h2{margin:10px 0;color:var(--charcoal);font-family:Cause,sans-serif;font-size:clamp(32px,5vw,46px)}.homepage-booking-heading p{color:var(--muted)}.homepage-booking-panel{max-width:760px;margin:0 auto;padding:clamp(20px,4vw,34px);border:1px solid var(--line);border-radius:22px;background:white}.homepage-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.homepage-field{display:grid;gap:7px}.homepage-field label{font-size:13px;font-weight:700;color:var(--charcoal)}.homepage-field input,.homepage-field select,.homepage-field textarea{width:100%;min-width:0;border:1px solid var(--line);border-radius:11px;padding:12px;background:var(--cream);font:inherit;font-size:14px}.homepage-full{grid-column:1/-1}.homepage-honeypot{position:absolute!important;left:-10000px!important}.homepage-form-privacy,.live-demo-note{font-size:12px;color:var(--muted)}.live-demo-section{padding:12px 0 38px}.live-demo-heading{text-align:center;margin:0 auto 24px}.live-demo-frame{overflow:hidden;border:1px solid var(--line);border-radius:20px;background:#111}.live-demo-frame iframe{display:block;width:100%;height:660px;border:0;background:#111}.live-demo-note{text-align:center}.demo-prompts{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:16px 0}.demo-prompts li{padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:white;color:var(--charcoal);font-size:13px}.demo-after-cta{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:20px 0;padding:20px 22px;border-radius:16px;background:var(--cream-dark)}.demo-after-cta h3{margin:0;color:var(--charcoal)}@media(max-width:760px){.site-footer{display:grid}.homepage-form-grid{grid-template-columns:1fr}.homepage-full{grid-column:1}.homepage-booking-heading{text-align:left}.live-demo-frame iframe{height:590px}.demo-after-cta{display:grid}.hero-buttons{display:grid;grid-template-columns:1fr}.hero-buttons>*{width:100%;text-align:center}}</style></style>
 </head>
 
 <body>
 
-<header class="container navbar">
+<header class="container navbar"><a class="brand" href="/"><img src="/lumora-icon.png" alt="Lumora Solutions"><div class="brand-name">Lumora<span> Solutions</span></div></a><a class="nav-cta" href="#enquiry-form">Get Started</a></header>
 
-  <a class="brand" href="/mobile.html">
+<main><section class="container hero"><div class="eyebrow">Australia’s most realistic AI receptionist</div><h1>Never miss another call.</h1><p>Meet Lumora — Australia’s most realistic AI receptionist. It answers incoming calls, handles common questions and captures enquiries when your team is busy.</p><div class="hero-buttons"><a class="main-button" href="#ai-receptionist-demo">Try the Demo</a><a class="secondary-button" href="#enquiry-form">Get Started</a></div></section><section class="container live-demo-section" id="ai-receptionist-demo"><div class="live-demo-heading"><div class="eyebrow">Live demo</div><h2>Try a conversation with Lumora.</h2><p>Tap the microphone and try asking:</p><ul class="demo-prompts"><li>“Do you service my area?”</li><li>“Can I get a quote?”</li><li>“I need an electrician.”</li><li>“Can someone call me back?”</li></ul></div><div class="live-demo-frame"><iframe src="/demo/gc-electrical-solutions/" title="Interactive AI receptionist demo" loading="eager" allow="microphone; autoplay" allowfullscreen></iframe></div><p class="live-demo-note">This is a demonstration only. It does not create real bookings or send enquiry details to a business.</p><div class="demo-after-cta"><h3>Want this answering calls for your business?</h3><a class="main-button" href="#enquiry-form">Get Started</a></div></section><section class="container homepage-booking" id="enquiry-form"><div class="homepage-booking-heading"><div class="eyebrow">Get started</div><h2>Tell us about your business.</h2><p>We’ll review your enquiry and follow up using your preferred contact method.</p></div><section class="homepage-booking-panel"><form class="homepage-contact-form"><div class="homepage-form-grid"><div class="homepage-field"><label>Your name *</label><input name="name" required autocomplete="name" placeholder="Your name"></div><div class="homepage-field"><label>Business name *</label><input name="businessName" required autocomplete="organization" placeholder="Your business"></div><div class="homepage-field homepage-full"><label>Preferred contact method</label><select name="contactPreference"><option value="text" selected>Text message</option><option value="email">Email</option><option value="phone">Phone call</option></select></div><div class="homepage-field"><label>Mobile number <span class="phone-required">*</span></label><input name="phone" type="tel" autocomplete="tel" placeholder="04xx xxx xxx"></div><div class="homepage-field"><label>Email address <span class="email-required">*</span></label><input name="email" type="email" autocomplete="email" placeholder="you@example.com"></div><div class="homepage-field homepage-full"><label>What would you like help with? (optional)</label><textarea name="notes" rows="3" placeholder="What would you like your receptionist to handle?"></textarea></div><div class="homepage-honeypot" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div><div class="homepage-full"><button class="main-button" type="submit">Send enquiry</button><p class="homepage-form-privacy">We’ll contact you by your selected method.</p><div class="homepage-form-status" role="status" aria-live="polite"></div></div></div></form></section></section></main>
 
-    <img
-      src="/lumora-icon.png"
-      alt="Lumora Solutions"
-    >
-
-    <div class="brand-name">
-      Lumora<span> Solutions</span>
-    </div>
-
-  </a>
-
-  <div style="display:flex;align-items:center;gap:8px;">
-    <a href="/blog/" style="padding:10px 12px;color:var(--charcoal);font-size:12px;font-weight:700;">Blog</a>
-    <a
-      class="nav-cta"
-      href="/waitlist.html"
-    >
-      Contact us
-    </a>
-  </div>
-
-</header>
-
-<main>
-
-<section class="container hero">
-
-  <div class="eyebrow">
-    AI receptionists built for Australian businesses
-  </div>
-
-  <h1>Never miss another call.</h1><p>Meet Lumora — Australia's most realistic AI receptionist. It answers incoming calls, handles common questions and captures caller details when your team is busy or unavailable, so fewer potential jobs slip through.</p>
-
-  <a
-    class="main-button"
-    href="/contact.html"
-  >
-    Request a free consultation
-  </a>
-
-
-
-</section>
-
-
-<!-- BEGIN MOBILE HOMEPAGE AI RECEPTIONIST DEMO SECTION
-     Independent from the desktop homepage section. Remove this entire section to undo the mobile homepage demo embed. -->
-<section class="container live-demo-section reveal-on-scroll" id="ai-receptionist-demo">
-  <div class="live-demo-heading"><div class="section-label">Try it yourself</div><h2>Hear how Lumora handles a real business enquiry.</h2><p>This interactive example shows how an AI receptionist can greet a caller, understand what they need, answer business questions and collect the details your team needs to follow up. Try asking:</p><ul class="demo-prompts"><li>“Do you service my area?”</li><li>“I need an electrician to look at a fault.”</li><li>“Can I get a quote?”</li><li>“Can someone call me back?”</li></ul></div>
-  <div class="live-demo-frame">
-    <iframe src="/demo/gc-electrical-solutions/" title="Interactive AI receptionist demo" loading="lazy" allow="microphone; autoplay" allowfullscreen></iframe>
-  </div>
-  <p class="live-demo-note">This is a demonstration only. It does not make real bookings or send your details to a business. Your own receptionist is configured with your services, service area, FAQs, call rules and preferred enquiry process.</p><div class="demo-after-cta"><h3>Want this answering calls for your business?</h3><p>We’ll walk through your call flow and show you what a tailored setup could look like.</p><a class="button" href="/contact.html">Request a free consultation</a></div></section>
-<section class="container value-section reveal-on-scroll"><div class="section-heading"><div class="section-label">The cost of a missed call</div><h2>One missed call could be one missed job.</h2><p>When a customer cannot get through, they may simply call the next business. Lumora helps capture the enquiry, the caller’s details and what they need — giving your team a chance to follow up.</p></div><div class="value-grid"><div class="value-card"><strong>Capture the opportunity</strong><p>Answer calls your team cannot get to and collect the details behind the enquiry.</p></div><div class="value-card"><strong>Keep work moving</strong><p>Give your team a clear summary instead of relying on missed-call notifications and memory.</p></div><div class="value-card"><strong>Make follow-up easier</strong><p>Know who called, what they need and how to contact them back.</p></div></div><p class="value-note">Lumora captures and organises enquiries; it does not guarantee new customers or booked jobs.</p><p class="setup-highlight"><strong>Fast setup:</strong> for straightforward businesses, we can configure and test your receptionist within an hour of the consultation. More complex integrations or call flows may take longer.</p></section>
-<section class="container faq-section reveal-on-scroll"><div class="section-heading"><div class="section-label">Common questions</div><h2>What businesses want to know.</h2></div><details><summary>Can it answer after hours?</summary><p>Yes. It can be configured for after-hours calls and calls your team cannot get to, depending on your phone setup.</p></details><details><summary>How long does setup take?</summary><p>A straightforward setup can be configured and tested within an hour of your consultation. More involved workflows may take longer.</p></details><details><summary>Can callers speak to a person?</summary><p>We can configure a callback or a live transfer where the phone setup supports it.</p></details><details><summary>What if it cannot answer?</summary><p>It can collect the caller’s details and flag the enquiry for your team rather than guessing.</p></details></section>
-<!-- END MOBILE HOMEPAGE AI RECEPTIONIST DEMO SECTION -->
-<a class="scroll-cue scroll-cue-after-demo" href="#services" aria-label="Scroll down to explore more of Lumora">
-  <span>Scroll to explore</span>
-  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-</a>
-
-
-
-
-<section class="services reveal-on-scroll" id="services">
-
-  <div class="container">
-
-    <div class="section-label">
-      What we automate
-    </div>
-
-    <h2 class="section-title">
-      AI that sounds real.
-    </h2>
-
-    <p class="section-text">
-      We build natural-sounding AI receptionists for Australian businesses, then automate the repetitive work around them.
-    </p>
-
-    <div class="service-list">
-
-      <div class="service">
-        <div class="service-number">01</div>
-
-        <h3>Answer every call</h3>
-
-        <p>
-          Answer common questions, capture caller details and route enquiries to your team.
-        </p>
-      </div>
-
-      <div class="service">
-        <div class="service-number">02</div>
-
-        <h3>Follow-ups</h3>
-
-        <p>
-          Keep leads moving with timely automated follow-ups.
-        </p>
-      </div>
-
-      <div class="service">
-        <div class="service-number">03</div>
-
-        <h3>Custom AI systems</h3>
-
-        <p>
-          From other AI systems to wider business automation, we can build around your needs.
-        </p>
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<section class="process reveal-on-scroll">
-
-  <div class="container">
-
-    <div class="section-label">
-      How it works
-    </div>
-
-    <h2 class="section-title">
-      Simple from start to finish.
-    </h2>
-
-    <div class="steps">
-
-      <div class="step">
-
-        <div class="step-number">
-          01
-        </div>
-
-        <div>
-
-          <h3>
-            Discover
-          </h3>
-
-          <p>
-            We find the repetitive tasks and bottlenecks
-            costing your business time.
-          </p>
-
-        </div>
-
-      </div>
-
-
-      <div class="step">
-
-        <div class="step-number">
-          02
-        </div>
-
-        <div>
-
-          <h3>
-            Build
-          </h3>
-
-          <p>
-            We design and build an automation around
-            your existing workflow.
-          </p>
-
-        </div>
-
-      </div>
-
-
-      <div class="step">
-
-        <div class="step-number">
-          03
-        </div>
-
-        <div>
-
-          <h3>
-            Launch
-          </h3>
-
-          <p>
-            Your new system goes live and handles the
-            repetitive work automatically.
-          </p>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<section class="container homepage-booking reveal-on-scroll" id="book-a-call">
-  <div class="homepage-booking-heading"><div class="eyebrow">Request a free consultation</div><h2>Let’s talk about your business.</h2><p>Tell us a little about your business and we’ll get back to you to arrange a time to talk.</p></div>
-  <div class="homepage-booking-grid">
-    <section class="homepage-booking-panel">
-      <div class="eyebrow">Request a free consultation</div><h3>Request a free consultation with Lumora.</h3>
-      <form class="homepage-contact-form"><div class="homepage-form-grid">
-        <div class="homepage-field"><label>Your name <span>*</span></label><input name="name" required autocomplete="name" placeholder="e.g. Alex Smith"></div>
-        <div class="homepage-field"><label>Business name <span>*</span></label><input name="businessName" required autocomplete="organization" placeholder="Your business"></div>
-        <div class="homepage-field"><label>Email address <span>*</span></label><input name="email" type="email" required autocomplete="email" placeholder="you@business.com"></div>
-        <div class="homepage-field"><label>Phone number <span>*</span></label><input name="phone" type="tel" required autocomplete="tel" placeholder="Best number to reach you"></div>
-        <div class="homepage-field homepage-full"><label>What kind of business do you run?</label><select name="businessType"><option value="">Choose your industry (optional)</option><option>Trades and home services</option><option>Health and wellbeing</option><option>Professional services</option><option>Property and real estate</option><option>Retail and hospitality</option><option>Fitness and education</option><option>Other</option></select></div>
-        <div class="homepage-field homepage-full"><label>What would you like help with?</label><textarea name="notes" rows="4" placeholder="Tell us what you’d like to improve."></textarea></div>
-        <div class="homepage-honeypot" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div>
-        <div class="homepage-full"><button class="button" type="submit">Request a free consultation <span aria-hidden="true">→</span></button><p class="homepage-form-privacy">Your details will be used to review and respond to your enquiry.</p><div class="homepage-form-status" role="status" aria-live="polite"></div></div>
-      </div></form>
-    </section>
-    <aside class="homepage-booking-panel homepage-next"><h3>Prefer to contact us directly?</h3>
-      <p>Call or text Aiden, or send an email if that’s easier for you.</p>
-      <div class="homepage-step"><div><strong>Phone/text</strong><p><a href="tel:+61447301791">0447 301 791</a></p></div></div>
-      <div class="homepage-step"><div><strong>Email</strong><p><a href="mailto:aiden@lumorasolutions.tech">aiden@lumorasolutions.tech</a></p></div></div>
-      <p><a class="button" href="/how-it-works.html"><strong>See how it works</strong> <span aria-hidden="true">→</span></a></p>
-    </aside>
-  </div>
-</section></main>
-
-<footer class="container">
-
-  Lumora Solutions · Melbourne, Victoria<br>
-  © 2026 Lumora Solutions · <a href="/privacy">Privacy</a> · <a href="/contact">Contact</a>
-
-<div class="footer-contact" style="margin-top: 8px;">Phone/text: <a href="tel:+61447301791">0447 301 791</a> · Email: <a href="mailto:aiden@lumorasolutions.tech">aiden@lumorasolutions.tech</a></div></footer>
+<footer class="container site-footer"><div>Lumora Solutions · Melbourne, Victoria</div><nav aria-label="Footer navigation"><a href="/">Home</a><a href="/services.html">Services</a><a href="/how-it-works.html">How It Works</a><a href="/results.html">Results</a><a href="/faq.html">FAQ</a><a href="/contact.html">Contact</a><a href="/privacy.html">Privacy</a></nav><div>Text: <a href="sms:+61447301791">0447 301 791</a> · <a href="mailto:aiden@lumorasolutions.tech">Email</a></div></footer>
 
 
 <script>
@@ -770,19 +527,7 @@
   })();
 </script>
 
-<script>
-(function(){
-document.querySelectorAll('.homepage-contact-form').forEach(function(form){
- const status=form.querySelector('.homepage-form-status'),submit=form.querySelector('button[type="submit"]');
- form.addEventListener('submit',async function(event){
-  event.preventDefault();status.style.display='block';status.classList.remove('error');status.textContent='Sending your request…';submit.disabled=true;
-  const data=Object.fromEntries(new FormData(form));data.notes=[data.businessType?'Business type: '+data.businessType:'',data.notes||''].filter(Boolean).join('\\n\\n');
-  try{const response=await fetch('/api/waitlist',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});const result=await response.json();if(!response.ok)throw new Error(result.error||'Your request could not be sent.');form.innerHTML='<h3>Thanks for getting in touch.</h3><p>Your details have been received. We’ll get back to you to arrange a time to talk.</p>';}
-  catch(error){status.classList.add('error');status.textContent=(error.message||'Something went wrong.')+' Please try again or email aiden@lumorasolutions.tech.';submit.disabled=false;}
- });
-});
-})();
-</script>
+<script>(function(){document.querySelectorAll('.homepage-contact-form').forEach(function(form){const pref=form.querySelector('[name="contactPreference"]'),phone=form.querySelector('[name="phone"]'),email=form.querySelector('[name="email"]'),pm=form.querySelector('.phone-required'),em=form.querySelector('.email-required'),status=form.querySelector('.homepage-form-status'),submit=form.querySelector('button[type="submit"]);function sync(){phone.required=pref.value!=='email';email.required=pref.value==='email';pm.style.display=phone.required?'inline':'none';em.style.display=email.required?'inline':'none'}pref.addEventListener('change',sync);sync();form.addEventListener('submit',async function(e){e.preventDefault();status.style.display='block';status.textContent='Sending your enquiry…';submit.disabled=true;const data=Object.fromEntries(new FormData(form));try{const r=await fetch('/api/waitlist',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}),j=await r.json();if(!r.ok)throw new Error(j.error||'Unable to send enquiry');form.innerHTML='<h3>Enquiry received.</h3><p>We’ll follow up by '+(data.contactPreference==='text'?'text message':data.contactPreference==='email'?'email':'phone')+'.</p>'}catch(err){status.textContent=(err.message||'Something went wrong')+' Please try again or text 0447 301 791.';submit.disabled=false}})})})();</script>
 
 <script>
 (function () {
