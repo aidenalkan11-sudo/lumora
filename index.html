@@ -497,6 +497,34 @@
     transform: none !important;
     transition: none !important;
   }}
+
+    .lumora-realistic-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 22px;
+      padding: 9px 14px;
+      border: 1px solid rgba(243,121,34,.28);
+      border-radius: 999px;
+      background: #fff8f1;
+      color: var(--charcoal);
+      font-size: 12px;
+      line-height: 1.2;
+      box-shadow: 0 5px 18px rgba(80,50,30,.06);
+    }
+    .lumora-realistic-badge strong { color: var(--orange); }
+    .lumora-badge-dot {
+      width: 7px;
+      height: 7px;
+      flex: 0 0 7px;
+      border-radius: 50%;
+      background: var(--orange);
+      box-shadow: 0 0 0 4px rgba(243,121,34,.12);
+    }
+    @media (max-width: 760px) {
+      .lumora-realistic-badge { font-size: 11px; padding: 8px 12px; }
+    }
+
 </style>
 </head>
 
@@ -536,13 +564,18 @@
     </div>
 
     <h1>
-      Meet Lumora —<br>
-      <span>the AI that sounds real.</span>
+      Never miss another call.<br>
+      <span>Let Lumora answer.</span>
     </h1>
 
     <p>
-      Lumora is an AI receptionist built to sound like a real receptionist — answering calls, handling common questions and capturing enquiries when your team is busy.
+      Meet Lumora — one of Australia's most realistic AI receptionists, built to answer calls, handle common questions and capture enquiries when your team is busy.
     </p>
+
+    <div class="lumora-realistic-badge" aria-label="Australia's most realistic AI receptionist">
+      <span class="lumora-badge-dot"></span>
+      <span><strong>Australia's most realistic</strong> AI receptionist</span>
+    </div>
 
     <div class="hero-buttons">
 
