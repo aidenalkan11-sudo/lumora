@@ -24,10 +24,13 @@ export default async function handler(req, res) {
   try {
     if (req.method === 'POST') {
       const b = req.body || {};
-      for (const key of ['name','businessName','phone','email']) if (!String(b[key] || '').trim()) return res.status(400).json({ error: `Missing ${key}` });
+      for (const key of ['name','businessName']) if (!String(b[key] || '').trim()) return res.status(400).json({ error: `Missing ${key}` });
+      const preference = ['text','email','phone'].includes(String(b.contactPreference || 'text')) ? String(b.contactPreference || 'text') : 'text';
+      if (preference !== 'email' && !String(b.phone || '').trim()) return res.status(400).json({ error: 'A phone number is required for your selected contact method' });
+      if (preference === 'email' && !String(b.email || '').trim()) return res.status(400).json({ error: 'An email address is required for email contact' });
       if (String(b.website || '').trim()) return res.status(400).json({ error: 'Invalid submission' });
       const { entries, sha } = await readStore();
-      entries.unshift({ id: crypto.randomUUID(), submittedAt: new Date().toISOString(), name: String(b.name).trim().slice(0,120), businessName: String(b.businessName).trim().slice(0,160), phone: String(b.phone).trim().slice(0,50), email: String(b.email).trim().slice(0,160), checked: false, notes: String(b.notes || '').trim().slice(0,4000) });
+      entries.unshift({ id: crypto.randomUUID(), submittedAt: new Date().toISOString(), name: String(b.name).trim().slice(0,120), businessName: String(b.businessName).trim().slice(0,160), contactPreference: preference, phone: String(b.phone || '').trim().slice(0,50), email: String(b.email || '').trim().slice(0,160), checked: false, notes: String(b.notes || '').trim().slice(0,4000) });
       await writeStore(entries, sha);
 
       // Send a Telegram alert after the lead is safely saved. Notification failures
@@ -41,8 +44,9 @@ export default async function handler(req, res) {
           '',
           `Name: ${lead.name}`,
           `Business: ${lead.businessName}`,
-          `Phone: ${lead.phone}`,
-          `Email: ${lead.email}`,
+          `Preferred contact: ${lead.contactPreference}`,
+          `Phone: ${lead.phone || 'Not provided'}`,
+          `Email: ${lead.email || 'Not provided'}`,
           lead.notes ? `Details: ${lead.notes}` : ''
         ].filter(Boolean).join('\n').slice(0, 4000);
         try {
