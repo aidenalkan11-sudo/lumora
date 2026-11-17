@@ -529,33 +529,12 @@ body.lumora-motion-ready .lumora-reveal.lumora-visible { opacity: 1; transform: 
 body.lumora-motion-ready .button, body.lumora-motion-ready .main-button, body.lumora-motion-ready .link-card, body.lumora-motion-ready .card { transition: transform .25s ease, box-shadow .25s ease; }
 body.lumora-motion-ready .button:hover, body.lumora-motion-ready .main-button:hover { transform: translateY(-2px); }
 @media (prefers-reduced-motion: reduce) { body.lumora-motion-ready *, body.lumora-motion-ready *::before, body.lumora-motion-ready *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } body.lumora-motion-ready .lumora-reveal { opacity: 1; transform: none; } }
-</style>
+<style>.process-roadmap{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px auto 48px}.roadmap-step{display:flex;align-items:center;gap:10px;padding:16px 12px;border:1px solid var(--line);border-radius:14px;background:#fff}.roadmap-step span{display:grid;place-items:center;flex:0 0 32px;height:32px;border-radius:50%;background:var(--cream-dark);color:var(--orange);font-weight:800;font-size:12px}.roadmap-step strong{color:var(--charcoal);font-size:13px}@media(max-width:700px){.process-roadmap{grid-template-columns:repeat(2,1fr)}.roadmap-step{align-items:flex-start;flex-direction:column}}.site-footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px;padding:28px 0;border-top:1px solid var(--line);color:var(--muted);font-size:13px}.site-footer nav{display:flex;flex-wrap:wrap;gap:14px}</style>
 </head>
 
 <body>
 
-<header class="container navbar">
-
-  <a class="brand" href="/">
-    <img src="/lumora-icon.png" alt="Lumora Solutions">
-
-    <div class="brand-name">
-      Lumora<span> Solutions</span>
-    </div>
-  </a>
-
-  <nav class="nav-links">
-    <a href="/">Home</a>
-    <a href="/how-it-works.html" class="active">How It Works</a>
-    <a href="/results.html">Results</a>
-    <a href="/blog/">Blog</a>
-  </nav>
-
-  <a class="button" href="/contact.html">
-    Request a free consultation
-  </a>
-
-</header>
+<header class="container navbar"><a class="brand" href="/"><img src="/lumora-icon.png" alt="Lumora Solutions"><div class="brand-name">Lumora<span> Solutions</span></div></a><nav class="nav-links" aria-label="Main navigation"><a href="/">Home</a><a href="/services.html">Services</a><a href="/how-it-works.html">How It Works</a><a href="/results.html">Results</a><a href="/faq.html">FAQ</a></nav><a class="button" href="/contact.html">Get Started</a></header>
 
 <main>
 
@@ -588,7 +567,7 @@ body.lumora-motion-ready .button:hover, body.lumora-motion-ready .main-button:ho
 </section>
 <!-- END HOW-IT-WORKS AI RECEPTIONIST DEMO SECTION -->
 
-<section class="process">
+<section class="container process-roadmap" aria-label="Four stages"><div class="roadmap-step"><span>01</span><strong>Discover</strong></div><div class="roadmap-step"><span>02</span><strong>Design</strong></div><div class="roadmap-step"><span>03</span><strong>Build &amp; Test</strong></div><div class="roadmap-step"><span>04</span><strong>Launch &amp; Optimise</strong></div></section><section class="process">
 
   <div class="container">
 
@@ -871,17 +850,7 @@ body.lumora-motion-ready .button:hover, body.lumora-motion-ready .main-button:ho
 
 </main>
 
-<footer class="container">
-
-  <div>
-    Lumora Solutions · Melbourne, Victoria
-  </div>
-
-  <div>
-    © 2026 Lumora Solutions · <a href="/privacy">Privacy</a> · <a href="/contact">Contact</a>
-  </div>
-
-<div class="footer-contact" style="margin-top: 8px;">Phone/text: <a href="tel:+61447301791">0447 301 791</a> · Email: <a href="mailto:aiden@lumorasolutions.tech">aiden@lumorasolutions.tech</a></div></footer>
+<footer class="container site-footer"><div>Lumora Solutions · Melbourne, Victoria</div><nav aria-label="Footer navigation"><a href="/">Home</a><a href="/services.html">Services</a><a href="/how-it-works.html">How It Works</a><a href="/results.html">Results</a><a href="/faq.html">FAQ</a><a href="/contact.html">Contact</a><a href="/privacy.html">Privacy</a></nav><div>Text: <a href="sms:+61447301791">0447 301 791</a> · <a href="mailto:aiden@lumorasolutions.tech">Email</a></div></footer>
 
 
 <script>
