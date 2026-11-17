@@ -65,7 +65,7 @@ export default async function handler(req, res) {
         console.warn('Telegram notification skipped: TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID is missing');
       }
 
-      return res.status(201).json({ success: true, notificationConfigured, telegramNotified });
+      return res.status(201).json({ success: true });
     }
     if (req.method === 'GET') {
       const { entries } = await readStore();
