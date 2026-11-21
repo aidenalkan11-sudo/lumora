@@ -515,6 +515,148 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { transition-duration: 1ms !important; animation: none !important; }
     }
+
+    /* Lumora site-wide visual system */
+    :root {
+      --studio:#000000;
+      --studio-deep:#000000;
+      --handset:#040910;
+      --screen:#000000;
+      --screen-lift:#040910;
+      --ink:#ffffff;
+      --muted:#858585;
+      --hair:rgba(255,255,255,.12);
+      --copper:#0063e1;
+      --copper-soft:rgba(0,99,225,.16);
+      --display:"Diatype REKKI","Inter",Arial,sans-serif;
+      --body:"Inter",Arial,sans-serif;
+    }
+    body {
+      background:#000000;
+      color:#ffffff;
+      font-family:var(--body);
+    }
+    .phone {
+      background:#040910;
+      box-shadow:0 0 0 1.5px #2b2c2e,0 0 0 3px #000,0 30px 70px -30px rgba(0,0,0,.8);
+    }
+    .screen {
+      background:#000000;
+    }
+    .demo-tag {
+      color:#ffffff;
+      border-color:#0063e1;
+      background:rgba(0,99,225,.12);
+    }
+    .monogram {
+      background:#040910;
+      box-shadow:inset 0 0 0 1px #2b2c2e;
+    }
+    .monogram svg path { fill:#0063e1; }
+    .biz {
+      font-family:"Diatype REKKI","Inter",Arial,sans-serif;
+      font-weight:400;
+      letter-spacing:-.055em;
+    }
+    .biz .l2 {
+      color:#858585;
+      font-family:"Inter",Arial,sans-serif;
+      font-weight:500;
+      letter-spacing:.22em;
+    }
+    .who b { color:#ffffff; }
+    .voice {
+      background:#040910;
+      box-shadow:inset 0 0 0 1px #2b2c2e;
+      border-radius:12px;
+    }
+    .voice[aria-checked="true"] {
+      background:rgba(0,99,225,.13);
+      box-shadow:inset 0 0 0 1.5px #0063e1;
+    }
+    .voice[aria-checked="true"] .vd { color:#9bbff0; }
+    .captions { color:#ffffff; scrollbar-color:rgba(0,99,225,.55) transparent; }
+    .captions .you { color:#858585; }
+    .card {
+      background:#040910;
+      color:#ffffff;
+      border:1px solid #2b2c2e;
+    }
+    .card-head { border-bottom-color:#2b2c2e; }
+    .card dt { color:#858585; }
+    .card dd { color:#ffffff; }
+    .ctl { color:#858585; }
+    .call .disc {
+      background:#0063e1;
+      box-shadow:0 10px 30px -8px rgba(0,99,225,.45);
+    }
+    .mute .disc { background:#24304a; }
+    .mute[aria-pressed="true"] .disc { background:#ffffff; }
+    .mute[aria-pressed="true"] .disc svg { color:#000000; }
+    .call.busy .disc { animation:ring 1.1s ease-in-out infinite; }
+    @keyframes ring {
+      0%,100% { box-shadow:0 0 0 0 rgba(0,99,225,.5); }
+      50% { box-shadow:0 0 0 5cqw rgba(0,99,225,0); }
+    }
+    .notice { color:#ffb4ad; }
+    .home-bar { background:#ffffff; }
+    .lock-icon { color:#0063e1; }
+    .lock input:focus { border-color:#0063e1; }
+    .lock button {
+      background:#0063e1;
+      color:#ffffff;
+      border-radius:999px;
+    }
+    .lock-err { color:#ffb4ad; }
+    .credit { color:#858585; }
+    .credit b { color:#ffffff; }
+
+    /* Post-call form uses the same dark surfaces and blue action colour. */
+    .lead-modal { background:rgba(0,0,0,.84); }
+    .lead-panel {
+      border:1px solid #2b2c2e;
+      border-radius:18px;
+      background:#040910;
+      color:#ffffff;
+    }
+    .lead-close {
+      color:#ffffff;
+      background:#111a2e;
+    }
+    .lead-eyebrow { color:#7fb2ff; }
+    .lead-panel h2 {
+      color:#ffffff;
+      font-family:"Diatype REKKI","Inter",Arial,sans-serif;
+      font-weight:400;
+      letter-spacing:-.045em;
+    }
+    .lead-intro,.lead-privacy { color:#858585; }
+    .lead-field label { color:#ffffff; }
+    .lead-field input,.lead-field select,.lead-field textarea {
+      border-color:#2b2c2e;
+      border-radius:10px;
+      background:#1f1f1f;
+      color:#ffffff;
+      font-family:"Inter",Arial,sans-serif;
+    }
+    .lead-field input::placeholder,.lead-field textarea::placeholder { color:#858585; }
+    .lead-field input:focus,.lead-field select:focus,.lead-field textarea:focus {
+      border-color:#0063e1;
+      box-shadow:0 0 0 3px rgba(0,99,225,.18);
+    }
+    .lead-submit {
+      border-radius:999px;
+      background:#0063e1;
+      color:#ffffff;
+      font-family:"Inter",Arial,sans-serif;
+      font-weight:700;
+    }
+    .lead-status { color:#9bbff0; }
+    .lead-status.error { color:#ff8d85; }
+    @media (max-width:520px) {
+      body { background:#000000; }
+      .phone { background:#000000; }
+    }
   </style>
 </head>
 <body>
