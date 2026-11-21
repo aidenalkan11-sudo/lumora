@@ -105,6 +105,102 @@ body.lumora-motion-ready .button:hover, body.lumora-motion-ready .main-button:ho
   }}
 </style>
 <style id="lumora-regular-button-text">button,.button,.main-button,.secondary-button,.btn{font-family:Inter,sans-serif!important;font-weight:400!important}</style>
+<style id="lumora-rekki-reference">
+  :root{
+    --cream:#000000;
+    --cream-dark:#040910;
+    --orange:#0063e1;
+    --orange-light:#2678e8;
+    --charcoal:#ffffff;
+    --text:#ffffff;
+    --muted:#858585;
+    --line:#2b2c2e;
+    --white:#ffffff;
+  }
+
+  body{background:#000000;color:#ffffff}
+
+  /* REKKI typography scale: Diatype Medium display and Diatype Regular text. */
+  .hero h1,
+  .section-heading h2,
+  .service-card h3,
+  .cta h2,
+  .live-demo-heading h2,
+  .homepage-booking-heading h2{
+    font-family:"Diatype REKKI","Inter",Arial,sans-serif;
+    font-weight:400;
+    -webkit-text-stroke:0;
+    font-synthesis:none;
+    font-feature-settings:"case";
+    font-optical-sizing:auto;
+    color:#ffffff;
+  }
+
+  /* 86px REKKI display: -0.064em tracking, 1.0 line-height. */
+  .hero h1{
+    width:100%;
+    max-width:100%;
+    font-size:clamp(56px,8vw,86px);
+    letter-spacing:-0.064em;
+    line-height:1;
+  }
+
+  /* REKKI section heading: 56px, -0.040em, 1.25 line-height. */
+  .section-heading h2{
+    font-size:56px;
+    letter-spacing:-0.040em;
+    line-height:1.25;
+  }
+
+  /* Smaller REKKI heading scale. */
+  .service-card h3{
+    font-size:24px;
+    letter-spacing:-0.027em;
+    line-height:1.33;
+  }
+  .cta h2,.live-demo-heading h2,.homepage-booking-heading h2{
+    font-size:clamp(32px,5vw,56px);
+    letter-spacing:-0.040em;
+    line-height:1.25;
+  }
+
+  .hero p,.section-heading p,.service-card p,.live-demo-heading p,
+  .live-demo-note,.homepage-booking-heading p,.homepage-form-privacy,
+  .homepage-step p,.value-card p,.product-steps p,.industry-examples p,
+  .faq-section details p,.cta p{color:#858585}
+
+  .brand-name,.brand-name span,.nav-links a,.nav-links a:hover,
+  .nav-links a.active,.eyebrow,.hero h1,.hero h1 span,
+  .section-heading h2,.service-card h3,.service-number,
+  .live-demo-heading h2,.homepage-booking-heading h2,
+  .homepage-booking-panel h3,.homepage-field label,
+  .homepage-step strong,.demo-after-cta h3,.value-card strong,
+  .product-steps h3,.industry-examples h3,.faq-section summary,
+  footer,.site-footer,.site-footer a,.secondary-button{color:#ffffff}
+
+  .button,.homepage-booking .button{
+    background:#0063e1;color:#ffffff;box-shadow:none
+  }
+  .button:hover{background:#2678e8}
+  .secondary-button,.service-card,.homepage-booking-panel,.demo-prompts li,
+  .value-card,.product-steps>div{background:#040910;border-color:#2b2c2e}
+  .services,.demo-after-cta,.industry-examples{background:#040910}
+  .cta{background:#0d0d0d}
+  .setup-highlight{background:#040910;border-left-color:#0063e1}
+  .homepage-field input,.homepage-field select,.homepage-field textarea{
+    background:#1f1f1f;color:#ffffff;border-color:#2b2c2e
+  }
+  .homepage-field input::placeholder,.homepage-field textarea::placeholder{color:#858585;opacity:1}
+  .homepage-field input:focus,.homepage-field select:focus,.homepage-field textarea:focus{
+    border-color:#0063e1;box-shadow:0 0 0 2px rgba(0,99,225,.2)
+  }
+  .secondary-button:hover,.nav-links a:hover,.nav-links a.active{color:#0063e1}
+  .site-footer{border-top-color:#2b2c2e}
+  .live-demo-frame{border-color:#2b2c2e}
+  .homepage-form-status{background:#040910;border-color:#2b2c2e}
+  .homepage-step>span{background:#0d0d0d;color:#0063e1}
+</style>
+<style id="lumora-sitewide-rekki-theme">:root{--cream:#000!important;--cream-dark:#040910!important;--orange:#0063e1!important;--orange-light:#2678e8!important;--charcoal:#fff!important;--text:#fff!important;--muted:#858585!important;--line:#2b2c2e!important;--white:#fff!important;color-scheme:dark}html,body{background:#000!important;color:#fff!important}body{font-family:Inter,Arial,sans-serif!important}h1,h2,h3,h4,h5,h6{font-family:"Diatype REKKI","Inter",Arial,sans-serif!important;font-weight:400!important;letter-spacing:-.04em}button,.button,.main-button,.secondary-button,.btn{font-family:Inter,Arial,sans-serif!important;font-weight:400!important}input,select,textarea{background:#1f1f1f!important;color:#fff!important;border-color:#2b2c2e!important}input::placeholder,textarea::placeholder{color:#858585!important}footer{color:#fff!important;border-color:#2b2c2e!important}.card,.panel,.content-card,.service-card,.faq-item,.form-card,.contact-card,.waitlist-card,.homepage-booking-panel{background:#040910!important;border-color:#2b2c2e!important;color:#fff!important}a:hover{color:#0063e1}</style>
 </head>
 <body>
 <header class="container navbar">
