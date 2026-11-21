@@ -524,26 +524,58 @@
     --line:#2b2c2e;
     --white:#ffffff;
   }
+
   body{background:#000000;color:#ffffff}
-  .hero h1,.section-heading h2,.service-card h3,.cta h2,
-  .live-demo-heading h2,.homepage-booking-heading h2{
-    font-family:"Diatype REKKI","ABC Diatype",Inter,system-ui,sans-serif;
+
+  /* REKKI typography scale: Diatype Medium display and Diatype Regular text. */
+  .hero h1,
+  .section-heading h2,
+  .service-card h3,
+  .cta h2,
+  .live-demo-heading h2,
+  .homepage-booking-heading h2{
+    font-family:"Diatype REKKI","Inter",Arial,sans-serif;
     font-weight:400;
     -webkit-text-stroke:0;
+    font-synthesis:none;
+    font-feature-settings:"case";
+    font-optical-sizing:auto;
+    color:#ffffff;
+  }
+
+  /* 86px REKKI display: -0.064em tracking, 1.0 line-height. */
+  .hero h1{
+    width:100%;
+    max-width:100%;
+    font-size:clamp(56px,8vw,86px);
     letter-spacing:-0.064em;
     line-height:1;
-    font-feature-settings:"case";
   }
-  .hero h1{font-size:clamp(56px,8vw,86px)}
-  .section-heading h2{letter-spacing:-0.04em;line-height:1.25}
-  .service-card h3,.cta h2,.live-demo-heading h2,.homepage-booking-heading h2{
-    letter-spacing:-0.027em;
+
+  /* REKKI section heading: 56px, -0.040em, 1.25 line-height. */
+  .section-heading h2{
+    font-size:56px;
+    letter-spacing:-0.040em;
     line-height:1.25;
   }
+
+  /* Smaller REKKI heading scale. */
+  .service-card h3{
+    font-size:24px;
+    letter-spacing:-0.027em;
+    line-height:1.33;
+  }
+  .cta h2,.live-demo-heading h2,.homepage-booking-heading h2{
+    font-size:clamp(32px,5vw,56px);
+    letter-spacing:-0.040em;
+    line-height:1.25;
+  }
+
   .hero p,.section-heading p,.service-card p,.live-demo-heading p,
   .live-demo-note,.homepage-booking-heading p,.homepage-form-privacy,
   .homepage-step p,.value-card p,.product-steps p,.industry-examples p,
   .faq-section details p,.cta p{color:#858585}
+
   .brand-name,.brand-name span,.nav-links a,.nav-links a:hover,
   .nav-links a.active,.eyebrow,.hero h1,.hero h1 span,
   .section-heading h2,.service-card h3,.service-number,
@@ -552,6 +584,7 @@
   .homepage-step strong,.demo-after-cta h3,.value-card strong,
   .product-steps h3,.industry-examples h3,.faq-section summary,
   footer,.site-footer,.site-footer a,.secondary-button{color:#ffffff}
+
   .button,.homepage-booking .button{
     background:#0063e1;color:#ffffff;box-shadow:none
   }
@@ -576,23 +609,7 @@
 </style>
 
 
-<style id="lumora-rekki-heading-type">
-  /* REKKI uses a custom Diatype REKKI typeface for its display typography.
-     This uses the same family name with a clean system fallback where the
-     proprietary font is not available. */
-  .hero h1,
-  .section-heading h2,
-  .service-card h3,
-  .cta h2,
-  .live-demo-heading h2,
-  .homepage-booking-heading h2 {
-    font-family: "Diatype REKKI", "Arial", "Helvetica Neue", sans-serif;
-    font-weight: 900;
-    -webkit-text-stroke: 0.65px currentColor;
-    letter-spacing: -0.055em;
-    line-height: 0.98;
-  }
-</style>
+
 
 </head>
 
