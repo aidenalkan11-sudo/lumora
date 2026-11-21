@@ -512,56 +512,67 @@
 .setup-highlight{background:#111A2E}
 </style>
 
-<style id="lumora-black-white-blocky">
-  @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+<style id="lumora-rekki-reference">
   :root{
     --cream:#000000;
-    --cream-dark:#000000;
-    --orange:#3B82F6;
-    --orange-light:#60A5FA;
-    --charcoal:#FFFFFF;
-    --text:#FFFFFF;
-    --muted:#FFFFFF;
-    --line:#2A2A2A;
-    --white:#FFFFFF;
+    --cream-dark:#040910;
+    --orange:#0063e1;
+    --orange-light:#2678e8;
+    --charcoal:#ffffff;
+    --text:#ffffff;
+    --muted:#858585;
+    --line:#2b2c2e;
+    --white:#ffffff;
   }
-  body{background:#000000;color:#FFFFFF}
-  .brand-name,.brand-name span,
-  .nav-links a,.nav-links a:hover,.nav-links a.active,
-  .eyebrow,.hero h1,.hero h1 span,.hero p,
-  .section-heading h2,.section-heading p,
-  .service-card h3,.service-card p,.service-number,
-  .live-demo-heading h2,.live-demo-heading p,.live-demo-note,
-  .homepage-booking-heading h2,.homepage-booking-heading p,
-  .homepage-booking-panel h3,.homepage-field label,
-  .homepage-form-privacy,.homepage-form-status,
-  .homepage-step strong,.homepage-step p,
-  .demo-prompts li,.demo-after-cta h3,
-  .value-card strong,.value-card p,.product-steps h3,.product-steps p,
-  .industry-examples h3,.industry-examples p,
-  .faq-section summary,.faq-section details p,
-  footer,.site-footer,.site-footer a,
-  .secondary-button{color:#FFFFFF}
+  body{background:#000000;color:#ffffff}
   .hero h1,.section-heading h2,.service-card h3,.cta h2,
   .live-demo-heading h2,.homepage-booking-heading h2{
-    font-family:Anton, Impact, "Arial Black", sans-serif;
+    font-family:"Diatype REKKI","ABC Diatype",Inter,system-ui,sans-serif;
     font-weight:400;
-    letter-spacing:-0.01em;
+    -webkit-text-stroke:0;
+    letter-spacing:-0.064em;
+    line-height:1;
+    font-feature-settings:"case";
   }
-  .hero h1{font-size:clamp(64px,10vw,112px);line-height:.92}
-  .service-card,.homepage-booking-panel,.secondary-button,.demo-prompts li,
-  .value-card,.product-steps>div{background:#000000;border-color:#2A2A2A}
-  .services,.demo-after-cta,.industry-examples{background:#000000}
-  .cta{background:#111111}
-  .setup-highlight{background:#000000}
+  .hero h1{font-size:clamp(56px,8vw,86px)}
+  .section-heading h2{letter-spacing:-0.04em;line-height:1.25}
+  .service-card h3,.cta h2,.live-demo-heading h2,.homepage-booking-heading h2{
+    letter-spacing:-0.027em;
+    line-height:1.25;
+  }
+  .hero p,.section-heading p,.service-card p,.live-demo-heading p,
+  .live-demo-note,.homepage-booking-heading p,.homepage-form-privacy,
+  .homepage-step p,.value-card p,.product-steps p,.industry-examples p,
+  .faq-section details p,.cta p{color:#858585}
+  .brand-name,.brand-name span,.nav-links a,.nav-links a:hover,
+  .nav-links a.active,.eyebrow,.hero h1,.hero h1 span,
+  .section-heading h2,.service-card h3,.service-number,
+  .live-demo-heading h2,.homepage-booking-heading h2,
+  .homepage-booking-panel h3,.homepage-field label,
+  .homepage-step strong,.demo-after-cta h3,.value-card strong,
+  .product-steps h3,.industry-examples h3,.faq-section summary,
+  footer,.site-footer,.site-footer a,.secondary-button{color:#ffffff}
+  .button,.homepage-booking .button{
+    background:#0063e1;color:#000000;box-shadow:none
+  }
+  .button:hover{background:#2678e8}
+  .secondary-button,.service-card,.homepage-booking-panel,.demo-prompts li,
+  .value-card,.product-steps>div{background:#040910;border-color:#2b2c2e}
+  .services,.demo-after-cta,.industry-examples{background:#040910}
+  .cta{background:#0d0d0d}
+  .setup-highlight{background:#040910;border-left-color:#0063e1}
   .homepage-field input,.homepage-field select,.homepage-field textarea{
-    background:#000000;color:#FFFFFF;border-color:#2A2A2A;
+    background:#1f1f1f;color:#ffffff;border-color:#2b2c2e
   }
-  .homepage-field input::placeholder,.homepage-field textarea::placeholder{color:#FFFFFF;opacity:.7}
-  .secondary-button{background:#000000}
-  .site-footer{border-top-color:#2A2A2A}
-  .live-demo-frame{border-color:#2A2A2A}
-  .homepage-form-status{background:#000000;border-color:#2A2A2A}
+  .homepage-field input::placeholder,.homepage-field textarea::placeholder{color:#858585;opacity:1}
+  .homepage-field input:focus,.homepage-field select:focus,.homepage-field textarea:focus{
+    border-color:#0063e1;box-shadow:0 0 0 2px rgba(0,99,225,.2)
+  }
+  .secondary-button:hover,.nav-links a:hover,.nav-links a.active{color:#0063e1}
+  .site-footer{border-top-color:#2b2c2e}
+  .live-demo-frame{border-color:#2b2c2e}
+  .homepage-form-status{background:#040910;border-color:#2b2c2e}
+  .homepage-step>span{background:#0d0d0d;color:#0063e1}
 </style>
 
 
