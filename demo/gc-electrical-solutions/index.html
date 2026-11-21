@@ -701,6 +701,7 @@
       .phone { background:#000000; }
     }
   </style>
+<style id="lumora-regular-button-text">button,.button,.main-button,.secondary-button,.btn{font-family:Inter,sans-serif!important;font-weight:400!important}</style>
 </head>
 <body>
   <main class="phone" aria-label="AI receptionist demo">
@@ -798,7 +799,7 @@
           <div class="lead-field"><label for="lead-phone">Phone number *</label><input id="lead-phone" name="phone" type="tel" autocomplete="tel" required maxlength="50" placeholder="04xx xxx xxx"></div>
         </div>
         <div class="lead-field"><label for="lead-time">Best time to contact you</label><select id="lead-time" name="preferredTime"><option value="">No preference</option><option>Weekday mornings</option><option>Weekday afternoons</option><option>Weekday evenings</option></select></div>
-        <div class="lead-field"><label for="lead-notes">What would you like to automate? (optional)</label><textarea id="lead-notes" name="notes" rows="2" maxlength="2000" placeholder="e.g. missed calls, enquiries, booking requests"></textarea></div>
+        <div class="lead-field"><label for="lead-notes">Any other information? (optional)</label><textarea id="lead-notes" name="notes" rows="2" maxlength="2000" placeholder="e.g. missed calls, enquiries, booking requests"></textarea></div>
         <div class="lead-honeypot" aria-hidden="true"><label for="lead-website">Website</label><input id="lead-website" name="website" tabindex="-1" autocomplete="off"></div>
         <button class="lead-submit" id="lead-submit" type="submit">Request a discovery call <span aria-hidden="true">&nbsp;→</span></button>
         <p class="lead-status" id="lead-status" role="status" aria-live="polite"></p>
