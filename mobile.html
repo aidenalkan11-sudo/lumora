@@ -602,6 +602,133 @@ footer{color:#fff!important;border-color:#2b2c2e!important}
 .card,.panel,.content-card,.service-card,.faq-item,.form-card,.contact-card,.waitlist-card,.homepage-booking-panel{background:#040910!important;border-color:#2b2c2e!important;color:#fff!important}
 a:hover{color:#0063e1}
 </style>
+
+<style id="lumora-mobile-spacing-overflow-fix">
+  html, body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  .container {
+    width: calc(100% - 32px);
+    max-width: 520px;
+    min-width: 0;
+  }
+  .navbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 12px;
+    row-gap: 8px;
+    min-height: 0;
+    padding: 12px 0 10px;
+  }
+  .navbar .brand {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .navbar .brand-name {
+    min-width: 0;
+    font-size: clamp(16px, 5vw, 20px);
+    white-space: nowrap;
+  }
+  .navbar .mobile-nav-links {
+    grid-column: 1 / -1;
+    width: 100%;
+    min-width: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 8px 14px;
+    padding: 3px 0 5px;
+    font-size: 11px;
+    line-height: 1.4;
+  }
+  .navbar .nav-cta {
+    justify-self: end;
+    padding: 9px 13px;
+    min-height: 36px;
+    font-size: 11px;
+  }
+  .hero {
+    min-height: 0;
+    padding: clamp(38px, 9vw, 58px) 0 48px;
+  }
+  .hero h1 {
+    max-width: 100%;
+    font-size: clamp(40px, 12vw, 58px);
+    line-height: .98;
+    letter-spacing: -.055em;
+    overflow-wrap: break-word;
+    text-wrap: balance;
+  }
+  .hero p {
+    max-width: 100%;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .hero-buttons {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    width: 100%;
+  }
+  .hero-buttons > * {
+    width: 100%;
+    min-width: 0;
+  }
+  .live-demo-heading h2,
+  .homepage-booking-heading h2,
+  .cta h2 {
+    font-size: clamp(30px, 8vw, 42px);
+    line-height: 1.08;
+    overflow-wrap: break-word;
+  }
+  .live-demo-frame,
+  .live-demo-frame iframe {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+  .live-demo-frame iframe { display: block; }
+  .homepage-booking-panel {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 18px;
+  }
+  .homepage-form-grid,
+  .homepage-field,
+  .homepage-full {
+    min-width: 0;
+    width: 100%;
+  }
+  .homepage-field input,
+  .homepage-field select,
+  .homepage-field textarea {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .site-footer,
+  .site-footer nav {
+    min-width: 0;
+    max-width: 100%;
+  }
+  @media (max-width: 360px) {
+    .container { width: calc(100% - 28px); }
+    .navbar { column-gap: 8px; }
+    .navbar .brand { gap: 6px; }
+    .navbar .brand img { width: 28px; height: 28px; flex-basis: 28px; }
+    .navbar .brand-name { font-size: 15px; }
+    .navbar .nav-cta { padding-inline: 10px; font-size: 10px; }
+    .navbar .mobile-nav-links { gap: 7px 11px; font-size: 10px; }
+    .hero h1 { font-size: clamp(38px, 11.5vw, 44px); }
+    .homepage-booking-panel { padding: 15px; }
+  }
+</style>
+
 </head>
 
 <body>
