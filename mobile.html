@@ -732,15 +732,9 @@ a:hover{color:#0063e1}
 
 <style id="lumora-mobile-layout-rework">
 @media (max-width:760px) {
-  html,body {
-    width:100%;
-    max-width:100%;
-    overflow-x:hidden;
-  }
-
+  html,body { width:100%; max-width:100%; overflow-x:hidden; }
   body { font-size:16px; }
 
-  /* Keep the mobile layout comfortably inside the viewport. */
   .container {
     width:100%!important;
     max-width:520px;
@@ -748,28 +742,22 @@ a:hover{color:#0063e1}
     padding-inline:20px!important;
   }
 
-  /* Compact header: one-line logo and breathing room at both edges. */
   .navbar {
     display:grid!important;
     grid-template-columns:minmax(0,1fr) auto!important;
     gap:10px!important;
     padding:14px 20px!important;
   }
-  .navbar .brand {
-    min-width:0;
-    gap:7px!important;
-  }
+  .navbar .brand { min-width:0; gap:7px!important; }
   .navbar .brand img {
-    width:30px!important;
-    height:30px!important;
-    flex-basis:30px!important;
+    width:30px!important; height:30px!important; flex-basis:30px!important;
   }
   .navbar .brand-name {
     min-width:0;
-    font-size:16px!important;
+    font-size:15px!important;
     line-height:1!important;
     white-space:nowrap!important;
-    letter-spacing:-.03em!important;
+    letter-spacing:-.035em!important;
   }
   .navbar .mobile-nav-links {
     grid-column:1/-1!important;
@@ -788,15 +776,14 @@ a:hover{color:#0063e1}
     white-space:nowrap!important;
   }
 
-  /* Hero: 20px side margins, smaller type, and tighter buttons. */
   .hero {
-    padding:48px 20px 48px!important;
+    padding:48px 20px 88px!important;
     min-height:0!important;
   }
   .hero .eyebrow {
-    font-size:10px!important;
+    font-size:9px!important;
     line-height:1.35!important;
-    letter-spacing:.11em!important;
+    letter-spacing:.08em!important;
     white-space:nowrap!important;
   }
   .hero h1 {
@@ -832,9 +819,7 @@ a:hover{color:#0063e1}
     justify-content:center;
   }
 
-  .live-demo-section {
-    padding:24px 20px 64px!important;
-  }
+  .live-demo-section { padding:24px 20px 64px!important; }
   .live-demo-heading {
     margin:0 0 26px!important;
     text-align:left!important;
@@ -845,14 +830,8 @@ a:hover{color:#0063e1}
     line-height:1.12!important;
     overflow-wrap:break-word;
   }
-  .live-demo-heading p {
-    font-size:15px!important;
-    line-height:1.7!important;
-  }
-  .live-demo-frame {
-    width:100%!important;
-    border-radius:14px!important;
-  }
+  .live-demo-heading p { font-size:15px!important; line-height:1.7!important; }
+  .live-demo-frame { width:100%!important; border-radius:14px!important; }
   .live-demo-frame iframe {
     width:100%!important;
     height:640px!important;
@@ -863,21 +842,14 @@ a:hover{color:#0063e1}
     line-height:1.6!important;
   }
 
-  .homepage-booking {
-    padding:66px 20px 70px!important;
-  }
-  .homepage-booking-heading {
-    margin:0 0 26px!important;
-  }
+  .homepage-booking { padding:66px 20px 70px!important; }
+  .homepage-booking-heading { margin:0 0 26px!important; }
   .homepage-booking-heading h2 {
     margin:12px 0!important;
     font-size:clamp(31px,8.5vw,40px)!important;
     line-height:1.12!important;
   }
-  .homepage-booking-heading p {
-    font-size:15px!important;
-    line-height:1.7!important;
-  }
+  .homepage-booking-heading p { font-size:15px!important; line-height:1.7!important; }
   .homepage-booking-panel {
     width:100%;
     max-width:100%;
@@ -888,15 +860,20 @@ a:hover{color:#0063e1}
   .homepage-form-grid { gap:20px!important; }
   .homepage-field { gap:9px!important; }
   .homepage-field label { font-size:14px!important; }
+  .homepage-field label span { color:#0063e1!important; }
   .homepage-field input,
   .homepage-field select,
   .homepage-field textarea {
     min-height:48px;
     padding:13px 14px!important;
     font-size:16px!important;
+    line-height:1.45!important;
     border-radius:11px!important;
   }
-  .homepage-field textarea { min-height:120px!important; }
+  .homepage-field input::placeholder,
+  .homepage-field textarea::placeholder {
+    font-size:16px!important;
+  }
   .homepage-booking .main-button { min-height:52px!important; }
 
   .site-footer {
@@ -913,7 +890,7 @@ a:hover{color:#0063e1}
     .hero,
     .live-demo-section,
     .homepage-booking { padding-inline:16px!important; }
-    .navbar .brand-name { font-size:15px!important; }
+    .navbar .brand-name { font-size:14px!important; }
     .navbar .nav-cta { padding-inline:10px!important; }
   }
 }
